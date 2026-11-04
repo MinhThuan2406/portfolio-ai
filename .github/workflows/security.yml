@@ -1,0 +1,60 @@
+name: Security & Build Verification
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 3 * * 1"
+
+# Least-privilege default permissions for all jobs
+permissions:
+  contents: read
+
+jobs:
+  security-and-build:
+    name: Secret Scan, Dependency Audit & Static Build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Check for tracked sensitive files and secret patterns
+        run: |
+          set -euo pipefail
+          echo "Checking tracked files for prohibited environment or key files..."
+          FORBIDDEN_FILES=$(git ls-files | grep -E '(^|/)\.env($|\.(?!example$))|\.(pem|key|p12|pfx|jks)$' || true)
+          if [ -n "$FORBIDDEN_FILES" ]; then
+            echo "::error::Sensitive environment or private key files are tracked in Git:"
+            echo "$FORBIDDEN_FILES"
+            exit 1
+          fi
+
+          echo "Scanning tracked source files for common secret token signatures..."
+          SECRET_MATCHES=$(git grep -I -n -E '(ghp_[A-Za-z0-9]{36}|github_pat_[A-Za-z0-9_]{82}|sk-[A-Za-z0-9]{32,}|AIza[0-9A-Za-z_-]{35}|AKIA[0-9A-Z]{16}|-----BEGIN (RSA |EC |OPENSSH |)PRIVATE KEY-----)' -- . ':(exclude).github/workflows/security.yml' || true)
+          if [ -n "$SECRET_MATCHES" ]; then
+            echo "::error::Potential hardcoded credentials or private keys detected in tracked files."
+            exit 1
+          fi
+          echo "No tracked secret files or token signatures found."
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+
+      - name: Install dependencies deterministically
+        run: npm ci
+
+      - name: Audit direct and production dependencies
+        run: |
+          npm audit --audit-level=high || echo "::warning::Dependency advisories detected (see SECURITY.md for Astro v5 static build scope assessment)."
+
+      - name: Verify production static build
+        run: npm run build
