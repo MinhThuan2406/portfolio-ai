@@ -12,7 +12,7 @@
     "astro": "^5.0.0"
   },
   "devDependencies": {
-    "simple-icons": "^16.35.0"
+    "simple-icons": "^16.36.0"
   },
   "overrides": {
     "esbuild": "^0.28.2",
