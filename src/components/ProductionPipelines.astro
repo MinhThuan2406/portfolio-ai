@@ -1,0 +1,214 @@
+---
+import { projects } from "../data/portfolio";
+---
+
+<section class="pipelines-section" id="pipelines" aria-labelledby="pipelines-heading">
+  <div class="frame-container">
+    <!-- 24-Column Section Header (No Eyebrow Kicker above H2!) -->
+    <div class="grid-24 section-header-grid" data-section-header>
+      <div class="section-header-left">
+        <h2 id="pipelines-heading" class="section-title" data-rolling-title>
+          Production systems &amp; internship experience.
+        </h2>
+      </div>
+      <div class="section-header-right">
+        <p class="section-lead" data-section-lead>
+          Shipped during engineering internships at <strong>ITP (VNU-HCM)</strong> and <strong>HIPTECH</strong>.
+          Every metric below is backed by real Apache JMeter stress tests, production MySQL/PostgreSQL tables,
+          and containerized vector endpoints.
+        </p>
+      </div>
+    </div>
+
+    <!-- Nualt Case-Study Row Pattern: Dashed Blueprint Dividers + Falling Isometric Stat Cubes -->
+    <div class="pipeline-rows">
+      {
+        projects.map((project) => (
+          <article class="pipeline-case-row grid-24" data-case-row>
+            <!-- Left 10 Columns: Isometric 2.5D Stat Cubes + Metric Breakdown -->
+            <div class="case-cubes-col" data-case-panel>
+              <div class="case-index-header mono">
+                <span class="case-index-pixel">{project.index}</span>
+                <span>{project.code}</span>
+                <span class="case-period">{project.period}</span>
+              </div>
+
+              <div
+                class="isometric-cubes-box"
+                role="img"
+                aria-label={`Key benchmark metrics for ${project.title}`}
+              >
+                <svg
+                  class="stat-cubes-svg"
+                  viewBox="0 0 380 155"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <!-- Isometric Floor Grid -->
+                  <line
+                    x1="12"
+                    y1="138"
+                    x2="368"
+                    y2="138"
+                    stroke="currentColor"
+                    stroke-opacity="0.25"
+                    stroke-dasharray="3 3"
+                  />
+                  <line
+                    x1="40"
+                    y1="146"
+                    x2="340"
+                    y2="146"
+                    stroke="currentColor"
+                    stroke-opacity="0.14"
+                    stroke-dasharray="2 4"
+                  />
+
+                  <!-- Cube 1 (Left) -->
+                  <g transform="translate(14, 24)">
+                    <g data-stat-cube="0">
+                      <polygon
+                        points="52,8 96,30 52,52 8,30"
+                        fill="currentColor"
+                        fill-opacity="0.14"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                      <polygon
+                        points="8,30 52,52 52,106 8,84"
+                        fill="currentColor"
+                        fill-opacity="0.06"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                      <polygon
+                        points="52,52 96,30 96,84 52,106"
+                        fill="currentColor"
+                        fill-opacity="0.22"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                      <text
+                        x="52"
+                        y="35"
+                        text-anchor="middle"
+                        fill="currentColor"
+                        font-family="var(--font-pixel)"
+                        font-size="13">{project.metrics[0].value}</text
+                      >
+                    </g>
+                  </g>
+
+                  <!-- Cube 2 (Center - Elevated) -->
+                  <g transform="translate(138, 10)">
+                    <g data-stat-cube="1">
+                      <polygon
+                        points="52,8 96,30 52,52 8,30"
+                        fill="currentColor"
+                        fill-opacity="0.2"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      />
+                      <polygon
+                        points="8,30 52,52 52,118 8,96"
+                        fill="currentColor"
+                        fill-opacity="0.09"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      />
+                      <polygon
+                        points="52,52 96,30 96,96 52,118"
+                        fill="currentColor"
+                        fill-opacity="0.28"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                      />
+                      <text
+                        x="52"
+                        y="35"
+                        text-anchor="middle"
+                        fill="currentColor"
+                        font-family="var(--font-pixel)"
+                        font-size="13">{project.metrics[1].value}</text
+                      >
+                    </g>
+                  </g>
+
+                  <!-- Cube 3 (Right) -->
+                  <g transform="translate(262, 28)">
+                    <g data-stat-cube="2">
+                      <polygon
+                        points="52,8 96,30 52,52 8,30"
+                        fill="currentColor"
+                        fill-opacity="0.14"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                      <polygon
+                        points="8,30 52,52 52,102 8,80"
+                        fill="currentColor"
+                        fill-opacity="0.06"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                      <polygon
+                        points="52,52 96,30 96,80 52,102"
+                        fill="currentColor"
+                        fill-opacity="0.22"
+                        stroke="currentColor"
+                        stroke-width="1.4"
+                      />
+                      <text
+                        x="52"
+                        y="35"
+                        text-anchor="middle"
+                        fill="currentColor"
+                        font-family="var(--font-pixel)"
+                        font-size="13">{project.metrics[2].value}</text
+                      >
+                    </g>
+                  </g>
+                </svg>
+
+                <div class="cube-metrics-legend">
+                  {project.metrics.map((m) => (
+                    <div class="cube-metric-item" data-cube-metric>
+                      <span class="cube-metric-val mono">{m.value}</span>
+                      <span class="cube-metric-lbl mono">{m.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <!-- Right 13 Columns (col-start-12): Project Narrative & Systems Tags -->
+            <div class="case-content-col">
+              <div class="case-role-bar mono" data-case-copy>
+                <span class="case-role-badge">{project.role}</span>
+              </div>
+
+              <h3 class="case-title" data-case-copy>{project.title}</h3>
+
+              <p class="case-description" data-case-copy>{project.description}</p>
+
+              <ul
+                class="case-systems-list"
+                data-case-copy
+                aria-label={`${project.title} system components`}
+              >
+                {project.systems.map((system) => (
+                  <li class="case-system-tag mono">{system}</li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="section-footnote mono">
+      * METRICS MEASURED VIA APACHE JMETER LOAD TESTS, MYSQL 8.0 LOGS, AND PRODUCTION DOCKER ENDPOINTS.
+    </p>
+  </div>
+</section>

@@ -1,0 +1,230 @@
+---
+import IconArrow from "./IconArrow.astro";
+---
+
+<div id="cv-modal" class="cv-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Resume PDF Viewer">
+  <div class="cv-modal-backdrop" id="cv-modal-backdrop"></div>
+
+  <div class="cv-modal-window">
+    <!-- Top Header Bar -->
+    <div class="cv-modal-header mono">
+      <div class="cv-header-left">
+        <div class="os-window-controls" aria-hidden="true">
+          <span class="os-dot"></span>
+          <span class="os-dot"></span>
+          <span class="os-dot"></span>
+        </div>
+        <span class="cv-title">RESUME // NGUYEN_MINH_THUAN.PDF</span>
+      </div>
+
+      <div class="cv-header-actions">
+        <a
+          class="cv-btn mono"
+          href="/cv.pdf"
+          download="Nguyen_Minh_Thuan_Resume.pdf"
+          aria-label="Download CV as PDF file"
+        >
+          <span>DOWNLOAD ↓</span>
+        </a>
+        <a
+          class="cv-btn mono"
+          href="/cv.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="Open CV PDF in new tab"
+        >
+          <span>NEW TAB</span>
+          <span class="btn-arrow-wrap" aria-hidden="true">
+            <IconArrow width={10} height={10} />
+          </span>
+        </a>
+        <button
+          type="button"
+          id="cv-modal-close"
+          class="cv-close-btn mono"
+          aria-label="Close CV Viewer"
+        >
+          <span>CLOSE [ESC] ✕</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main PDF Viewer Body -->
+    <div class="cv-modal-body">
+      <iframe
+        id="cv-iframe"
+        data-src="/cv.pdf#view=FitH&toolbar=1"
+        title="Nguyen Minh Thuan - Curriculum Vitae"
+        class="cv-iframe"
+      >
+        <p class="mono cv-fallback">
+          Your browser does not support inline PDF viewing.
+          <a href="/cv.pdf" target="_blank" rel="noopener noreferrer">Click here to view or download the PDF directly.</a>
+        </p>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<style>
+  .cv-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.24s ease;
+  }
+
+  .cv-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .cv-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: rgba(7, 19, 36, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  html[data-theme="light"] .cv-modal-backdrop {
+    background-color: rgba(244, 242, 232, 0.85);
+  }
+
+  .cv-modal-window {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 960px;
+    height: 90vh;
+    max-height: 1000px;
+    background-color: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--border-solid);
+    box-shadow: 0 24px 64px var(--border-strong);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: scale(0.98) translateY(12px);
+    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cv-modal.is-open .cv-modal-window {
+    transform: scale(1) translateY(0);
+  }
+
+  .cv-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 44px;
+    padding-inline: 1rem;
+    border-bottom: 1px solid var(--border-solid);
+    background-color: var(--surface-tint);
+    flex-shrink: 0;
+    gap: 1rem;
+  }
+
+  .cv-header-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    min-width: 0;
+  }
+
+  .cv-title {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .cv-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .cv-btn,
+  .cv-close-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid var(--border-solid);
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+  }
+
+  .cv-btn:hover {
+    background-color: var(--surface-tint-hover);
+  }
+
+  .cv-close-btn {
+    background-color: var(--fg);
+    color: var(--bg);
+    border-color: var(--fg);
+  }
+
+  .cv-close-btn:hover {
+    opacity: 0.9;
+  }
+
+  .cv-modal-body {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+    background-color: var(--dark-surface, #181a1f);
+    position: relative;
+  }
+
+  .cv-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    background-color: var(--dark-surface, #181a1f);
+  }
+
+  .cv-fallback {
+    padding: 2rem;
+    color: var(--neutral-paper, #f7f8fa);
+    text-align: center;
+    font-size: 15px;
+  }
+
+  .cv-fallback a {
+    color: var(--primary, #1c52b0);
+    text-decoration: underline;
+  }
+
+  @media (max-width: 768px) {
+    .cv-modal {
+      padding: 0.5rem;
+    }
+    .cv-modal-window {
+      height: 96vh;
+    }
+    .cv-btn span {
+      display: none;
+    }
+    .cv-close-btn span {
+      display: inline;
+    }
+  }
+</style>

@@ -80,6 +80,7 @@ This visual system treats software engineering as an empirical discipline. It de
 The interface prioritizes clarity, intellectual restraint, and verified technical outcomes. System flows and evaluation benchmarks lead the presentation, backed by high-contrast serif headlines and legible monospace technical annotations.
 
 **Key Characteristics:**
+
 - Off-white paper reading surface (`#f7f8fa`) paired with crisp ink (`#141619`) and technical cobalt (`#1c52b0`).
 - Hairline rules (1px) establish structure and hierarchy without heavy card containers.
 - Strict typography division: Book serif for editorial titles, clean sans-serif for reading text, and monospace reserved exclusively for telemetry, codes, and metrics.
@@ -90,13 +91,16 @@ The interface prioritizes clarity, intellectual restraint, and verified technica
 The palette is derived from technical drafting paper, printer's ink, and mathematical blueprint accents.
 
 ### Primary
+
 - **Technical Cobalt Blue** (`#1c52b0`): Primary accent for action links, active state indicators, and directional vectors in architecture diagrams. Contrast ratio > 5.5:1 on paper background.
 - **Cobalt Wash** (`#edf3fc`): High-transparency tint for active pipeline processing nodes and table highlights.
 
 ### Secondary
+
 - **Verification Green** (`#235841`): Specialized semantic color reserved exclusively for successful checkmarks and verified benchmark assertions.
 
 ### Neutral
+
 - **Drafting Paper** (`#f7f8fa`): Base canvas hue. Warmer and less fatiguing to the eye than pure `#ffffff`.
 - **Card Paper** (`#fcfdfe`): Subtle elevated neutral for technical diagram frames and code inspection blocks.
 - **Deep Printer's Ink** (`#141619`): High-contrast typographic ink for headlines and primary text.
@@ -105,6 +109,7 @@ The palette is derived from technical drafting paper, printer's ink, and mathema
 - **Dark Grounding Surface** (`#181a1f`): Deep graphite neutral used only for the global status banner and grounding footer.
 
 ### Named Rules
+
 **The Monospace-for-Measurement Rule.** Monospace type is reserved exclusively for code, measurements, status badges, and system identifiers. It is never used as ornamental body text.
 **The No-Halo Rule.** No glowing text or zero-blur neon halos. Visual prominence is achieved strictly through scale contrast, weight, and deliberate negative space.
 
@@ -117,6 +122,7 @@ The palette is derived from technical drafting paper, printer's ink, and mathema
 **Character:** The pairing of an academic editorial serif with a legible neo-grotesque sans and tabular monospace creates an authoritative, research-grade voice.
 
 ### Hierarchy
+
 - **Display** (500 weight, `clamp(54px, 6.2vw, 84px)`, line-height 1.01, tracking -0.034em): Main hero thesis statement.
 - **Headline** (500 weight, `clamp(40px, 4.2vw, 56px)`, line-height 1.02, tracking -0.032em): Case study titles and section headers.
 - **Title** (500 weight, 24px - 26px, line-height 1.2, tracking -0.02em): Component subheadings and secondary project titles.
@@ -124,6 +130,7 @@ The palette is derived from technical drafting paper, printer's ink, and mathema
 - **Label / Monospace** (500 weight, 10.5px - 11px, line-height 1.5, uppercase, letter-spacing 0.06em): Metadata tags, latency figures, and timeline indices.
 
 ### Named Rules
+
 **The Eyebrow Ban.** Never place decorative kicker labels or floating micro-tags directly above primary titles. Let titles carry their own semantic weight.
 
 ## Layout
@@ -146,25 +153,30 @@ The palette is derived from technical drafting paper, printer's ink, and mathema
 ## Components
 
 ### Action Links
+
 - **Primary:** Inline text link with a 1.6px stroke directional vector arrow (`12x12 SVG`). Smooth translation on hover (`translate(2px, -2px)` for external, `translateY(2px)` for down-anchors).
 - **Secondary:** Slate-toned variant for secondary communication channels.
 
 ### System Diagram Map
+
 - **Frame:** 1px hairline container with a slightly elevated `#fcfdfe` canvas.
 - **Flow:** Monospace caption header, source node glyph, directional vector line with 45-degree arrow head, process box with highlighted blue border, and circular green checkmark badge.
 
 ### Expandable System Notes
+
 - **Control:** Native HTML `<details>` and `<summary>` elements with animated plus/minus icons (`transform: rotate(90deg)` transition).
 - **Content:** Strict 3-part retrospective structure: Problem, Architecture, Trade-offs & Limits.
 
 ## Do's and Don'ts
 
-### Do:
+### Do
+
 - **Do** state exact quantitative metrics and verified conditions (e.g., "76% → 100% on evaluation benchmark", "Latency <5ms").
 - **Do** represent system architecture with clean geometric vectors and explicit data flows.
 - **Do** keep all system areas on a unified paper background, anchoring the composition with the dark footer.
 
-### Don't:
+### Don't
+
 - **Don't** use arbitrary percentage skill bars (e.g., "Python 90%"). Group skills by architectural system layer instead.
 - **Don't** use neon purple/cyan glowing gradients or decorative AI badge tropes.
 - **Don't** introduce floating cards or heavy drop shadows outside the hairline technical design system.

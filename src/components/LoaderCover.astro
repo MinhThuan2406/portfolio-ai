@@ -1,0 +1,184 @@
+---
+// Nualt Exact 100% HomeLoaderCover (3 Centered Tetris Slots + Bottom-Right Logo + Clean Air Space)
+---
+
+<div id="home-loader-cover" class="loader-cover" aria-hidden="true">
+  <!-- Dead Center: 3 Tetris Piece Slots ONLY (Clean open space above, no colliding text!) -->
+  <div class="loader-slots" id="loader-slots">
+    <!-- Slot 0: T piece (cells: [[0,0],[1,0],[2,0],[1,1]], starts at 180deg) -->
+    <div class="loader-slot" style="--cells: 3;" data-slot="0">
+      <div class="slot-outline">
+        <svg viewBox="0 0 3 2">
+          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+        </svg>
+      </div>
+      <div class="slot-piece" data-piece="0">
+        <svg viewBox="0 0 3 2">
+          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Slot 1: Z piece (cells: [[1,0],[2,0],[0,1],[1,1]], starts at 90deg) -->
+    <div class="loader-slot" style="--cells: 3;" data-slot="1">
+      <div class="slot-outline">
+        <svg viewBox="0 0 3 2">
+          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+        </svg>
+      </div>
+      <div class="slot-piece" data-piece="1">
+        <svg viewBox="0 0 3 2">
+          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Slot 2: L piece (cells: [[0,0],[0,1],[1,1],[2,1]], starts at 270deg) -->
+    <div class="loader-slot" style="--cells: 3;" data-slot="2">
+      <div class="slot-outline">
+        <svg viewBox="0 0 3 2">
+          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+          <rect x="2.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045" stroke-dasharray="0.1 0.1"></rect>
+        </svg>
+      </div>
+      <div class="slot-piece" data-piece="2">
+        <svg viewBox="0 0 3 2">
+          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
+          <rect x="2.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom-Right Architectural Wordmark (Exact Nualt Placement) -->
+  <div class="loader-logo-window">
+    <div class="loader-logo mono" id="loader-logo">
+      <span class="logo-name">THUAN</span><span class="logo-sub">.DEV</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .loader-cover {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background-color: var(--ivory, #f4f2e8);
+    color: var(--cobalt, #0755b5);
+    display: grid;
+    place-content: center;
+    user-select: none;
+    pointer-events: all;
+    will-change: transform;
+  }
+
+  html[data-theme="dark"] .loader-cover {
+    background-color: #071324;
+    color: #f4f2e8;
+  }
+
+  /* Once dismissed, hide entirely */
+  .loader-cover.is-dismissed {
+    display: none !important;
+    pointer-events: none !important;
+  }
+
+  /* Exact Nualt Loader Slots CSS */
+  .loader-slots {
+    align-items: flex-end;
+    gap: 24px;
+    display: flex;
+    will-change: transform;
+  }
+
+  .loader-slot {
+    width: calc(var(--cells, 3) * 16px);
+    height: 32px;
+    display: block;
+    position: relative;
+  }
+
+  .loader-slot svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .slot-outline {
+    position: absolute;
+    inset: 0;
+    opacity: 0.28;
+  }
+
+  .slot-piece {
+    position: absolute;
+    inset: 0;
+    translate: 0 -64px;
+    opacity: 1; /* Pieces are visible from the start, hovering at -64px */
+    will-change: rotate, translate;
+  }
+
+  /* Initial rotations in Nualt */
+  .slot-piece[data-piece="0"] {
+    rotate: 180deg;
+  }
+  .slot-piece[data-piece="1"] {
+    rotate: 90deg;
+  }
+  .slot-piece[data-piece="2"] {
+    rotate: 270deg;
+  }
+
+  /* Exact Nualt Logo Window in bottom-right corner */
+  .loader-logo-window {
+    position: absolute;
+    bottom: 2.5rem;
+    right: 4rem;
+    overflow: hidden;
+    padding-block: 0.25rem;
+  }
+
+  .loader-logo {
+    display: flex;
+    align-items: baseline;
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    will-change: transform;
+  }
+
+  .logo-name {
+    font-family: var(--font-heading, 'yellix', sans-serif);
+    font-size: 1.25rem;
+  }
+
+  .logo-sub {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    opacity: 0.65;
+    margin-left: 0.25rem;
+  }
+
+  @media (max-width: 768px) {
+    .loader-logo-window {
+      bottom: 1.5rem;
+      right: 1.5rem;
+    }
+  }
+</style>

@@ -1,0 +1,69 @@
+---
+import { checkpoints } from "../data/portfolio";
+import IconArrow from "./IconArrow.astro";
+---
+
+<section class="trajectory-section" id="background" aria-labelledby="trajectory-heading">
+  <div class="frame-container">
+    <!-- 24-Column Section Header (No Eyebrow Kicker above H2!) -->
+    <div class="grid-24 section-header-grid" data-section-header>
+      <div class="section-header-left">
+        <h2 id="trajectory-heading" class="section-title" data-rolling-title>
+          Chronology &amp; engineering journey.
+        </h2>
+      </div>
+      <div class="section-header-right">
+        <p class="section-lead" data-section-lead>
+          Academic foundations at <strong>International University (VNU-HCM)</strong>, industry
+          internships at <strong>HIPTECH</strong> and <strong>ITP</strong>, and national hackathon
+          leadership leading up to graduation in late 2026.
+        </p>
+      </div>
+    </div>
+
+    <!-- Nualt Numbered Exposed Blueprint Frame (00 to 04) -->
+    <div class="trajectory-ledger-frame" data-ledger-frame>
+      {
+        checkpoints.map((cp) => (
+          <article
+            id={cp.id}
+            data-trace-row
+            class:list={[
+              "trajectory-row",
+              "grid-24",
+              { "trajectory-row-highlight on-blue": cp.isHighlight },
+            ]}
+          >
+            <!-- Left 6 Columns: Pixel Index & Time Window (border-r) -->
+            <div class="trajectory-index-col" data-row-head>
+              <span class="trajectory-pixel-num">{cp.index}</span>
+              <div class="trajectory-period-meta mono">
+                <span class="trajectory-period">{cp.period}</span>
+                <span class="trajectory-badge">{cp.badge}</span>
+              </div>
+            </div>
+
+            <!-- Right 18 Columns: Milestone Title, Narrative & Optional Action -->
+            <div class="trajectory-content-col" data-row-body>
+              <div class="trajectory-content-inner">
+                <h3 class="trajectory-title">{cp.title}</h3>
+                <p class="trajectory-desc">{cp.description}</p>
+
+                {cp.ctaText && cp.ctaHref && (
+                  <div class="trajectory-cta-wrap">
+                    <a class="btn-blueprint-inverted mono" href={cp.ctaHref} data-pixel-btn>
+                      <span class="btn-label">{cp.ctaText}</span>
+                      <span class="btn-arrow-wrap" aria-hidden="true">
+                        <IconArrow width={12} height={12} />
+                      </span>
+                    </a>
+                  </div>
+                )}
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

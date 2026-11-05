@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "responsive-motion": {
+      "source": "nualt/responsive-motion",
+      "sourceType": "github",
+      "skillPath": "skills/responsive-motion/SKILL.md",
+      "computedHash": "51675dee3f66444093a2aab6815a9e600630f1dd6775ee4d321c9d3832687308"
+    }
+  }
+}

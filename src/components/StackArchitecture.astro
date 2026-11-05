@@ -1,0 +1,116 @@
+---
+import { capabilityGroups } from "../data/portfolio";
+import IconArrow from "./IconArrow.astro";
+---
+
+<section
+  class="architecture-section on-blue"
+  id="practice"
+  data-nav-blue
+  aria-labelledby="architecture-heading"
+>
+  <div class="frame-container">
+    <!-- 24-Column Section Header (No Eyebrow Kicker above H2!) -->
+    <div class="grid-24 section-header-grid" data-section-header>
+      <div class="section-header-left">
+        <h2 id="architecture-heading" class="section-title" data-rolling-title>
+          Engineering stack &amp; architectural layers.
+        </h2>
+      </div>
+      <div class="section-header-right">
+        <p class="section-lead" data-section-lead>
+          Engineering competency is not an arbitrary percentage bar like &ldquo;Python 90%&rdquo;.
+          It is defined by the bottlenecks you can diagnose, the trade-offs you can justify,
+          and the services you can keep running reliably under production load.
+        </p>
+      </div>
+    </div>
+
+    <!-- Retro Technical Workstation Window Frame (Nualt Open-Source / OS Frame Pattern) -->
+    <div class="os-window-wrapper" data-os-window-wrap>
+      <div class="os-window-shadow" data-os-shadow aria-hidden="true"></div>
+
+      <div class="os-window" data-os-window>
+        <!-- Top Window Title Bar with 3 Circular Outline Controls -->
+        <div class="os-window-bar mono">
+          <div class="os-window-controls" aria-hidden="true">
+            <span class="os-dot"></span>
+            <span class="os-dot"></span>
+            <span class="os-dot"></span>
+          </div>
+          <div class="os-window-title">
+            <span>WORKSTATION // GITHUB.COM/MINHTHUAN2406 — PRODUCTION STACK &amp; CAPABILITY MAP</span>
+          </div>
+          <a
+            class="os-window-link"
+            href="https://github.com/MinhThuan2406"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>GITHUB REPOS</span>
+            <span class="btn-arrow-wrap" aria-hidden="true">
+              <IconArrow width={10} height={10} />
+            </span>
+          </a>
+        </div>
+
+        <!-- Root Node Banner inside Window -->
+        <div class="os-topology-root">
+          <div class="root-node-box mono" data-tree-root>
+            <span class="root-node-indicator" aria-hidden="true"></span>
+            <span class="root-node-path">thuannm@workstation:~$</span>
+            <span class="root-node-cmd">cat /etc/production-stack.conf</span>
+          </div>
+          <div class="root-node-meta mono">
+            <span>4 ARCHITECTURAL LAYERS</span>
+            <span class="strip-sep">·</span>
+            <span>24 VERIFIED TECHNOLOGIES</span>
+          </div>
+        </div>
+
+        <!-- Nualt OpenSourceTree Animated Orthogonal Dependency Bus Canvas -->
+        <div class="os-tree-bus" aria-hidden="true">
+          <canvas class="os-tree-canvas" data-os-tree-canvas></canvas>
+        </div>
+
+        <!-- 4-Column Architectural Dependency Tree Grid -->
+        <div class="architecture-layers-grid">
+          {
+            capabilityGroups.map((group, idx) => (
+              <div class="arch-layer-cell" data-tree-node={idx}>
+                <div class="layer-cell-header mono">
+                  <span class="layer-index-pixel">0{idx + 1}</span>
+                  <span class="layer-code">{group.code}</span>
+                </div>
+
+                <h3 class="layer-title">{group.label}</h3>
+                <p class="layer-summary">{group.summary}</p>
+
+                <ul class="layer-items-list" aria-label={`${group.label} technologies`}>
+                  {group.items.map((item) => (
+                    <li class="layer-item" data-tree-leaf>
+                      <span class="tree-branch mono" aria-hidden="true">├─</span>
+                      <span class="layer-item-name mono">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </div>
+
+        <!-- Bottom Workstation Telemetry Bar -->
+        <div class="os-window-footer mono">
+          <div class="os-footer-left">
+            <span>IDE WORKFLOW: ANTIGRAVITY IDE &amp; CURSOR</span>
+            <span class="strip-sep">·</span>
+            <span>OS: LINUX / ANDROID AUTOMOTIVE OS</span>
+          </div>
+          <div class="os-footer-right">
+            <span>STATUS: ZERO UNHANDLED RUNTIME EXCEPTIONS</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
