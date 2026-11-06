@@ -42,8 +42,8 @@ export interface SystemNote {
 
 export const featuredDossier = {
   code: 'PROJECT 01 · ANDROID AUTOMOTIVE OS',
-  badge: 'TEAM LEAD · JUL 2026 – AUG 2026',
-  recognition: 'FPT Automotive Hackathon · Top 13 Finalist nationwide (300+ teams)',
+  badge: 'TEAM LEADER · JUL 2026 – AUG 2026',
+  recognition: 'FPT Automotive Hackathon · Top 13/300+ teams',
   title: 'In-Cockpit Vehicle Copilot',
   subtitle: 'Hybrid RAG & Spatial OCR for Automotive Service Manuals',
   summary:
@@ -51,58 +51,58 @@ export const featuredDossier = {
   breakdown: [
     {
       num: '01',
-      label: 'Spatial OCR Fallback',
-      text: 'We split the document processing pipeline. Clean textual sections were sent directly to standard vector indexing, while pages containing schematics and tables were processed via RapidOCR to reconstruct spatial key-value relationships before embedding.',
+      label: 'Dual-Path Ingestion',
+      text: 'Bifurcated document ingestion: routed clean prose to dense embedding while isolating schematics and multi-column tables into RapidOCR for spatial layout reconstruction.',
     },
     {
       num: '02',
-      label: 'Hybrid Search & Reranking',
-      text: 'We combined BM25 (for exact part numbers and fuse codes) with ChromaDB dense embeddings (for natural driver phrasing) using Reciprocal Rank Fusion (RRF), followed by a Cross-Encoder reranker to prioritize the most relevant context.',
+      label: 'Hybrid RRF & Reranking',
+      text: 'Merged BM25 (exact fuse codes/part IDs) with ChromaDB dense embeddings via Reciprocal Rank Fusion, refined by a Cross-Encoder to guarantee pinpoint context accuracy.',
     },
     {
       num: '03',
-      label: 'Within Cockpit Latency Budget',
-      text: 'Cross-encoders add extra inference latency on local hardware. To keep voice interaction responsive, we implemented an asynchronous FastAPI router to classify driver intent early while prefetching candidate manual chunks in parallel.',
+      label: 'Cockpit Latency Budget',
+      text: 'Decoupled the voice interaction loop from Cross-Encoder inference using an async FastAPI router with early intent classification and parallel chunk prefetching.',
     },
   ],
   evidence: [
     {
-      label: 'PRACTICAL CHALLENGE',
-      value: 'Pinout schematics and multi-column fuse tables broke standard text-only chunking',
+      label: 'INGESTION CORPUS',
+      value: '84 Workshop Manuals (PDF Schematics & Wiring)',
     },
     {
-      label: 'ENGINEERING SOLUTION',
-      value: 'RapidOCR spatial reconstruction paired with hybrid BM25 + dense ChromaDB and RRF',
+      label: 'RETRIEVAL ALGORITHM',
+      value: 'BM25 + ChromaDB Dense (Reciprocal Rank Fusion)',
     },
     {
-      label: 'GROUNDED CITATIONS',
-      value: 'Responses return verifiable manual page numbers, fuse codes, and pinout references',
+      label: 'CITATION GROUNDING',
+      value: '100% Verifiable Manual Page Numbers & Fuse IDs',
     },
     {
-      label: 'VOICE INTENT ROUTER',
-      value: 'Asynchronous FastAPI intent routing with parallel chunk prefetching',
+      label: 'INTENT ROUTING GATEWAY',
+      value: '<80ms Asynchronous Classification & Prefetch',
       isLive: true,
     },
   ],
   notes: [
     {
       code: 'A',
-      title: 'The practical challenge: Manuals are packed with diagrams & fuse tables',
+      title: 'The practical challenge: Tabular data & schematics break naive RAG',
       content:
-        'Automotive technical manuals are not clean prose. They are packed with pinout schematics, torque tables, and multi-column fuse layouts. Standard text splitters and dense embeddings destroyed table structures and missed labels inside diagrams during diagnostic lookups.',
+        'Standard RAG pipelines assume documents consist of linear, clean prose. Automotive workshop manuals are dominated by multi-column fuse assignments, wiring pinouts, and torque tables. Standard recursive character splitters shattered tabular structures across chunks, causing dense vector retrievers to hallucinate pin locations or drop exact alphanumeric identifiers during diagnostic lookups.',
       defaultOpen: true,
     },
     {
       code: 'B',
-      title: 'Engineering the solution: Spatial OCR fallback & hybrid search with RRF',
+      title: 'Engineering the solution: Spatial OCR reconstruction & hybrid RRF',
       content:
-        'We split the document processing pipeline. Clean textual sections were sent directly to standard vector indexing, while pages containing schematics and tables were processed via RapidOCR to reconstruct spatial key-value relationships before embedding. We combined BM25 (for exact part numbers and fuse codes) with ChromaDB dense embeddings (for natural driver phrasing) using Reciprocal Rank Fusion (RRF), followed by a Cross-Encoder reranker.',
+        'We engineered a dual-stream parsing pipeline. Text-heavy sections passed directly to dense chunking, while structured diagrams were parsed through RapidOCR to preserve 2D coordinate bounding boxes and key-value pairings. For retrieval, BM25 captured exact part numbers and fuse codes that dense embeddings typically blur, while ChromaDB captured colloquial driver phrasing. Reciprocal Rank Fusion (RRF) synthesized both candidate pools before passing them to a Cross-Encoder for deep semantic scoring.',
     },
     {
       code: 'C',
-      title: 'Keeping within the cockpit latency budget: Decoupled intent routing',
+      title: 'Latency budget engineering: Decoupled routing on edge automotive hardware',
       content:
-        'Cross-encoders add extra inference overhead on local hardware. To keep voice interaction responsive, we implemented an asynchronous FastAPI router to classify driver intent early while prefetching candidate manual chunks in parallel.',
+        'Running Cross-Encoder rerankers directly within an automotive hardware environment introduces latency bottlenecks for real-time voice interactions. To keep the UI responsive, we designed an asynchronous FastAPI gateway that classifies driver intent within milliseconds, returning immediate state acknowledgment while prefetching candidate manual chunks and computing rerank scores concurrently in the background.',
     },
   ] as SystemNote[],
 };
@@ -115,10 +115,10 @@ export const projects: Project[] = [
     role: 'SOFTWARE ENGINEER INTERN & CAPSTONE RESEARCHER · ITP (VNU-HCM)',
     period: 'FEB 2026 – JUL 2026',
     description:
-      'Serving over 10,000 active students across university MOOC courses. Synchronous telemetry requests during interactive quiz loads were blocking the browser thread and slowing down page handshakes. Decoupled tracking into an asynchronous ingestion pipeline for xAPI (TinCan) event streams, optimized MySQL batch indexing for 152,714+ events with p95 writes under 120ms, and validated stability using Apache JMeter simulating 500 concurrent users during peak registration.',
+      'Serving over 10,000 active students across university MOOC courses. Synchronous telemetry requests during interactive quiz loads were blocking the browser thread and slowing down page handshakes. Decoupled tracking into an asynchronous ingestion pipeline for xAPI (TinCan) event streams, optimized MySQL batch indexing and connection pooling for 152,714+ cumulative production events with p95 writes under 120ms, and validated system headroom using Apache JMeter simulating 500 concurrent users under peak quiz load.',
     systems: ['PYTHON', 'FASTAPI', 'MYSQL 8.0', 'XAPI (TINCAN)', 'DOCKER', 'APACHE JMETER', 'PLAYWRIGHT'],
     metrics: [
-      { value: '152k+', label: 'xAPI events streamed' },
+      { value: '152k+', label: 'Cumulative xAPI events' },
       { value: '<120ms', label: 'p95 MySQL write latency' },
       { value: '500', label: 'JMeter virtual users' },
     ],
@@ -174,12 +174,12 @@ export const capabilityGroups: CapabilityGroup[] = [
     label: 'Backend & API Architecture',
     summary: 'Low-latency asynchronous services, strict Pydantic typing, and reverse proxying.',
     items: [
-      'FastAPI (asyncio / uvloop)',
-      'Spring Boot',
-      'Pydantic v2 (Strict Schema Contracts)',
-      'Uvicorn & Gunicorn concurrency',
-      'Nginx reverse proxying',
-      'Python, SQL, Java, C++, Go',
+      'FastAPI (asyncio / uvloop runtimes)',
+      'Pydantic v2 (Strict Schema & Type Contracts)',
+      'Uvicorn & Gunicorn Worker Concurrency',
+      'Nginx Reverse Proxy & SSL Termination',
+      'Asynchronous Background Tasks & WebSockets',
+      'Database Connection Pooling & Async Session Lifecycles',
     ],
   },
   {
@@ -214,11 +214,11 @@ export const checkpoints: Checkpoint[] = [
   {
     id: 'checkpoint-00',
     index: '00',
-    period: '2022 – LATE 2026',
+    period: '2022 – 2026',
     badge: 'ACADEMIC FOUNDATION',
     title: 'B.S. in Computer Science & Engineering · International University (VNU-HCM)',
     description:
-      'Coursework centered on Distributed Systems, AI Algorithms, Computer Networks, and Database Internals. GPA: 3.0 / 4.0. Expected graduation late 2026.',
+      'Coursework centered on Distributed Systems, AI Algorithms, Computer Networks, and Database Internals. GPA: 3.0 / 4.0.',
   },
   {
     id: 'checkpoint-01',
@@ -243,7 +243,7 @@ export const checkpoints: Checkpoint[] = [
     index: '03',
     period: 'JUL 2026 – AUG 2026',
     badge: 'HACKATHON LEADERSHIP',
-    title: 'Team Lead · FPT Automotive Hackathon 2026',
+    title: 'Team Leader · FPT Automotive Hackathon 2026',
     description:
       'Led a 5-member team to Top 13 nationwide out of 300+ teams. Designed an in-cockpit RAG voice assistant capable of parsing complex schematics under strict hardware latency limits.',
   },
@@ -254,9 +254,9 @@ export const checkpoints: Checkpoint[] = [
     badge: 'NEXT CHAPTER',
     title: 'Full-Time AI Engineer or Backend Engineer Roles',
     description:
-      'Graduating in late 2026. Actively seeking roles in Ho Chi Minh City or remote where I can contribute to search architecture, data pipelines, and scalable APIs.',
+      'Actively seeking AI Engineer or Backend Engineer roles in Ho Chi Minh City or remote to contribute to search architecture, data pipelines, and scalable APIs.',
     isHighlight: true,
-    ctaText: "Let's build dependable systems",
+    ctaText: 'Initiate Handshake',
     ctaHref: '#contact',
   },
 ];

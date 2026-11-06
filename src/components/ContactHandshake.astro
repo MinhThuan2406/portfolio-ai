@@ -41,19 +41,6 @@ import IconArrow from "./IconArrow.astro";
           >
             <span class="btn-label" id="copy-email-label">COPY EMAIL</span>
           </button>
-
-          <button
-            type="button"
-            class="btn-inverted-outline mono"
-            data-open-cv
-            data-pixel-btn
-            aria-label="View Resume PDF"
-          >
-            <span class="btn-label">VIEW RESUME (PDF)</span>
-            <span class="btn-arrow-wrap" aria-hidden="true">
-              <IconArrow width={11} height={11} />
-            </span>
-          </button>
         </div>
 
         <div class="contact-direct-meta mono" data-contact-appear>
@@ -94,9 +81,8 @@ import IconArrow from "./IconArrow.astro";
             <div class="code-typing-stage" id="cta-code-typing">
               <pre class="code-pre mono" id="cta-code-pre" aria-label="TypeScript engineering profile specification"><code><span class="c-kw">interface</span> <span class="c-type">EngineerProfile</span> &#123;
   <span class="c-prop">candidate</span>: <span class="c-str">"Nguyen Minh Thuan"</span>;
-  <span class="c-prop">university</span>: <span class="c-str">"International University (VNU-HCM)"</span>;
-  <span class="c-prop">graduation</span>: <span class="c-str">"Late 2026 (B.S. CSE · GPA 3.0/4.0)"</span>;
-  <span class="c-prop">focus</span>: [<span class="c-str">"Hybrid RAG"</span>, <span class="c-str">"FastAPI"</span>, <span class="c-str">"High-Load Telemetry"</span>];
+  <span class="c-prop">degree</span>: <span class="c-str">"B.S. Computer Science & Engineering (VNU-HCM)"</span>;
+  <span class="c-prop">focus</span>: [<span class="c-str">"Hybrid RAG & Vector Search"</span>, <span class="c-str">"FastAPI / uvloop"</span>, <span class="c-str">"Async Telemetry"</span>];
 &#125;
 
 <span class="c-kw">export async function</span> <span class="c-fn">initiateHandshake</span>(

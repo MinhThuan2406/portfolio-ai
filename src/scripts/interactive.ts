@@ -21,17 +21,16 @@ function initCvModal(): void {
   const modal = document.getElementById('cv-modal');
   const backdrop = document.getElementById('cv-modal-backdrop');
   const closeBtn = document.getElementById('cv-modal-close');
-  const iframe = document.getElementById('cv-iframe') as HTMLIFrameElement | null;
+  const modalBody = document.getElementById('cv-modal-body');
   if (!modal) return;
 
   function openModal(): void {
-    if (iframe && !iframe.src.includes('cv.pdf')) {
-      const dataSrc = iframe.getAttribute('data-src') || '/cv.pdf#view=FitH&toolbar=1';
-      iframe.src = dataSrc;
-    }
     modal!.classList.add('is-open');
     modal!.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+    if (modalBody) {
+      modalBody.scrollTop = 0;
+    }
   }
 
   function closeModal(): void {
