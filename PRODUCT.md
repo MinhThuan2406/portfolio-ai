@@ -28,7 +28,7 @@ Technical Editorial & Monospace Systems. Distinguishes from generic AI portfolio
 - Featured Dossier: Traceable Voice Copilot for Digital Cockpit (Android Automotive OS, Agentic RAG, FPT Automotive Hackathon Top 13/300+).
 - Supporting Case Studies: Capstone Learning Telemetry Platform (ITP), WARP Multi-Agent Recommendation Engine (HIPTECH), Corsair Hardware Scanner (HIPTECH).
 - Strict privacy: Personal referee/reference contact details are omitted from public publication.
-- Verified contact channels: thuanmm0426@gmail.com, GitHub (MinhThuan2406), LinkedIn (nguyenthuan2406), phone (+84 819-786-704).
+- Verified contact channels: thuannm0426@gmail.com, GitHub (MinhThuan2406), LinkedIn (nguyenthuan2406), phone (+84 819-786-704).
 
 ## Evidence on Hand
 

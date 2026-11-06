@@ -7,9 +7,11 @@ import IconArrow from "./IconArrow.astro";
   class="architecture-section on-blue"
   id="practice"
   data-nav-blue
+  data-blue-expand
   aria-labelledby="architecture-heading"
 >
-  <div class="frame-container">
+  <div class="shaded-grid-layer" data-shaded-grid aria-hidden="true"></div>
+  <div class="frame-container architecture-content-layer">
     <!-- 24-Column Section Header (No Eyebrow Kicker above H2!) -->
     <div class="grid-24 section-header-grid" data-section-header>
       <div class="section-header-left">
@@ -64,7 +66,7 @@ import IconArrow from "./IconArrow.astro";
           <div class="root-node-meta mono">
             <span>4 ARCHITECTURAL LAYERS</span>
             <span class="strip-sep">·</span>
-            <span>24 VERIFIED TECHNOLOGIES</span>
+            <span>24 CORE TECHNOLOGIES</span>
           </div>
         </div>
 
@@ -107,7 +109,7 @@ import IconArrow from "./IconArrow.astro";
             <span>OS: LINUX / ANDROID AUTOMOTIVE OS</span>
           </div>
           <div class="os-footer-right">
-            <span>STATUS: ZERO UNHANDLED RUNTIME EXCEPTIONS</span>
+            <span>RUNTIME: DOCKER COMPOSE &amp; UVICORN WORKERS</span>
           </div>
         </div>
       </div>

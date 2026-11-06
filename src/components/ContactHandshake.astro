@@ -24,8 +24,8 @@ import IconArrow from "./IconArrow.astro";
         </p>
 
         <div class="contact-cta-group" data-contact-appear>
-          <a class="btn-inverted-solid" href="mailto:thuanmm0426@gmail.com" data-pixel-btn>
-            <span class="btn-label">thuanmm0426@gmail.com</span>
+          <a class="btn-inverted-solid" href="mailto:thuannm0426@gmail.com" data-pixel-btn>
+            <span class="btn-label">thuannm0426@gmail.com</span>
             <span class="btn-arrow-wrap" aria-hidden="true">
               <IconArrow width={12} height={12} />
             </span>
@@ -35,19 +35,21 @@ import IconArrow from "./IconArrow.astro";
             type="button"
             id="copy-email-btn"
             class="btn-inverted-outline mono"
-            data-email="thuanmm0426@gmail.com"
+            data-email="thuannm0426@gmail.com"
+            data-pixel-btn
             aria-label="Copy email address to clipboard"
           >
-            <span id="copy-email-label">COPY EMAIL</span>
+            <span class="btn-label" id="copy-email-label">COPY EMAIL</span>
           </button>
 
           <button
             type="button"
             class="btn-inverted-outline mono"
             data-open-cv
+            data-pixel-btn
             aria-label="View Resume PDF"
           >
-            <span>VIEW RESUME (PDF)</span>
+            <span class="btn-label">VIEW RESUME (PDF)</span>
             <span class="btn-arrow-wrap" aria-hidden="true">
               <IconArrow width={11} height={11} />
             </span>
@@ -101,18 +103,20 @@ import IconArrow from "./IconArrow.astro";
   <span class="c-prop">role</span>: <span class="c-str">"AI Engineer"</span> | <span class="c-str">"Backend Engineer"</span>
 ) &#123;
   <span class="c-kw">return await</span> <span class="c-fn">dispatchOffer</span>(&#123;
-    <span class="c-prop">email</span>: <span class="c-str">"thuanmm0426@gmail.com"</span>,
+    <span class="c-prop">email</span>: <span class="c-str">"thuannm0426@gmail.com"</span>,
     <span class="c-prop">phone</span>: <span class="c-str">"+84 819-786-704"</span>,
-    <span class="c-prop">latencyBudget</span>: <span class="c-str">"&lt;5ms"</span>,
-    <span class="c-prop">hallucinationRate</span>: <span class="c-num">0.0</span>,
+    <span class="c-prop">workMode</span>: <span class="c-str">"HCMC | Remote"</span>,
+    <span class="c-prop">availability</span>: <span class="c-str">"Late 2026"</span>,
   &#125;);
 &#125;</code></pre>
             </div>
           </div>
         </div>
 
-        <!-- 3-Cell Social & Channel Bento Row -->
-        <div class="social-bento-grid mono" data-cta-icons>
+        <!-- Nualt Live Sliding TetrisBorder Strip + 3-Cell Social & Channel Bento Row -->
+        <div class="social-bento-frame">
+          <div class="cta-tetris-strip" data-tetris-border="cta" aria-hidden="true"></div>
+          <div class="social-bento-grid mono" data-cta-icons>
           <a
             class="social-bento-cell"
             data-bento-cell
@@ -160,14 +164,15 @@ import IconArrow from "./IconArrow.astro";
               </span>
             </strong>
           </button>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Lower Blueprint Footer with Vertical Pixel Checkerboard Gutter -->
-  <div class="blueprint-footer-bar">
-    <div class="footer-checkerboard-gutter" aria-hidden="true"></div>
+  <!-- Lower Blueprint Footer with Live Animated Nualt TetrisBorder Gutter -->
+  <div class="blueprint-footer-bar" data-footer>
+    <div class="footer-checkerboard-gutter" data-tetris-border="gutter" aria-hidden="true"></div>
 
     <div class="footer-bar-main">
       <div class="footer-col">
@@ -182,7 +187,7 @@ import IconArrow from "./IconArrow.astro";
 
       <div class="footer-col">
         <span class="footer-lbl mono">SHORTCUTS</span>
-        <span class="footer-val mono">KEYS [1–4] JUMP SECTIONS · [T] POLARITY</span>
+        <span class="footer-val mono">KEYS [1–5] JUMP SECTIONS</span>
       </div>
 
       <div class="footer-col footer-col-right">

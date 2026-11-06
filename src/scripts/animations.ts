@@ -1,18 +1,19 @@
 /**
  * NGUYEN MINH THUAN · PAGE-WIDE ARCHITECTURAL BLUEPRINT ANIMATION ENGINE
- * Inspired by Nualt (https://nualt.fr/en) interactive blueprint choreography:
- *  0. Nualt HomeLoaderCover (3 Tetris Piece Slots + Rotating Drop + Curtain Lowering)
+ * Exact decompiled choreography & interactive effects from Nualt (https://nualt.fr/en):
+ *  0. Nualt HomeLoaderCover (3 Tetris Piece Slots + Step-Rotation + Hard Drop + Curtain Lowering)
  *  1. Native Momentum Smooth Scroll (Clean zero-dependency Inertia Scroll)
  *  2. Global Scroll-Velocity Accelerator (1x -> 3.5x stream & tetris boost)
- *  3. Slot-Machine Word-Mask Heading Reveals & Section Header Line Traces
- *  4. Radial 8px Pixel-Matrix Button Wave & Diagonal Arrow Nudge
- *  5. Live Hero Falling Tetris / Telemetry Block Matrix (O, T, L, I, J, S, Z)
- *  6. Live 2D Canvas Cubic-Bezier Hex Streams & 4x4 Data Packet Buses
- *  7. Isometric 2.5D Layer Assembly & Phase-Shifted Levitation
- *  8. Case-Study Blueprint Wipe & Falling Isometric Stat Cubes
- *  9. Workstation OS Window Shadow Separation & Live Canvas Dependency Tree
- * 10. Blueprint Frame Traces, Counter Roll-Ups & Smooth Accordions
- * 11. Live Self-Correcting Typewriter Code Window, Bento Wave & Footer Watermark Rise
+ *  3. Nualt RollingText Dual-Glyph Character Slot-Machine Reels & Section Rule Clip-Path Wipes
+ *  4. Nualt ShadedGrid Deterministic Clustered Blueprint Grid Generator
+ *  5. Nualt TetrisBorder Live Sliding Pixel Blocks (CTA Strip & Footer Gutter)
+ *  6. Nualt Radial 8px Pixel-Matrix Button Wave (Instant Opacity Snap, Zero Seams)
+ *  7. Live Hero Falling Tetris / Telemetry Block Matrix (O, T, L, I, S, Z)
+ *  8. Live 2D Canvas De Casteljau Cubic-Bezier Hex Streams & Data Packet Buses
+ *  9. Isometric 2.5D Layer Assembly & Phase-Shifted Levitation
+ * 10. Case-Study Blueprint Wipe & Falling Isometric Stat Cubes
+ * 11. Workstation OS Window Hachure Shadow Separation & Live Canvas Dependency Tree
+ * 12. Live Self-Correcting Typewriter Code Window (22ms/80ms), Bento Hint & Footer Watermark Rise
  */
 
 interface SmoothScrollState {
@@ -161,7 +162,7 @@ function lockScroll(locked: boolean): void {
    - Slot 2 starts at 270deg (L-piece)
    - Discrete 80ms 90deg step-rotation: mimics arcade Tetris button press
    - Hard drop into slot: translate: "0 -64px" -> "0 0" in 200ms with cubic-bezier(.55, 0, 1, .45)
-   - Curtain drop: 800ms with cubic-bezier(.76, 0, .24, 1), delay 350ms
+   - Curtain drop to [data-hero-panel] top: 800ms with cubic-bezier(.76, 0, .24, 1), delay 350ms
    ========================================================================== */
 function initLoaderCover(): void {
   const cover = document.getElementById('home-loader-cover');
@@ -243,6 +244,10 @@ function initLoaderCover(): void {
     // 120ms pause after all 3 docked (exact Nualt timing)
     await sleep(120);
 
+    const heroPanel = document.querySelector<HTMLElement>('[data-hero-panel]');
+    const panelTop = heroPanel ? Math.max(0, heroPanel.getBoundingClientRect().top) : window.innerHeight;
+    const dropDistance = panelTop > 120 ? `${panelTop}px` : '100vh';
+
     // Exit logo and slots downward
     if (logo) {
       logo.animate(
@@ -252,21 +257,22 @@ function initLoaderCover(): void {
     }
     if (slotsContainer) {
       slotsContainer.animate(
-        [{ transform: 'translateY(0)' }, { transform: 'translateY(60vh)' }],
+        [{ transform: 'translateY(0)' }, { transform: `translateY(${Math.round(window.innerHeight * 0.6)}px)` }],
         { duration: 450, easing: easeDrop, fill: 'forwards' }
       );
     }
 
-    // Curtain drop: translateY(0) -> translateY(100vh)
+    // Curtain drop: translateY(0) -> translateY(dropDistance), then fade out smoothly
     const curtain = cover.animate(
       [
-        { transform: 'translateY(0)' },
-        { transform: 'translateY(100vh)' },
+        { transform: 'translateY(0)', opacity: 1 },
+        { transform: `translateY(${dropDistance})`, opacity: 1, offset: 0.88 },
+        { transform: 'translateY(100vh)', opacity: 0 },
       ],
-      { duration: 800, delay: 350, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
+      { duration: 820, delay: 350, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
     );
 
-    // At 630ms: trigger hero reveal and unlock scroll
+    // At 630ms: trigger hero reveal and unlock scroll (exact Nualt handoff)
     setTimeout(() => {
       document.documentElement.setAttribute('data-loader', 'open');
       document.documentElement.removeAttribute('data-loader');
@@ -283,16 +289,26 @@ function initLoaderCover(): void {
 function triggerHeroReveal(): void {
   const heroTitle = document.querySelector<HTMLElement>('.hero-section [data-rolling-title]');
   const heroAppears = document.querySelectorAll<HTMLElement>('[data-hero-appear]');
-  const heroBoundary = document.querySelector<HTMLElement>('[data-hero-boundary]');
+  const heroTetris = document.querySelector<HTMLElement>('[data-hero-tetris]');
 
   heroTitle?.classList.add('is-revealed');
-  heroBoundary?.classList.add('is-revealed');
   heroAppears.forEach((el, idx) => {
     el.style.transitionDelay = `${120 + idx * 90}ms`;
     el.classList.add('is-revealed');
   });
 
-  // Nualt Hairline Boundary Clip-Path wipe
+  // Exact Nualt [data-hero-tetris] upward slide
+  if (heroTetris) {
+    heroTetris.animate(
+      [
+        { translate: '0 40px', opacity: 0 },
+        { translate: '0 0', opacity: 1 },
+      ],
+      { duration: 900, delay: 180, easing: 'cubic-bezier(0.16, 1, 0.3, 1)', fill: 'both' }
+    );
+  }
+
+  // Exact Nualt Hairline Boundary Clip-Path wipes
   document.querySelectorAll<HTMLElement>('[data-hero-boundary="vertical"]').forEach((el) => {
     el.animate(
       [{ clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0 0 0 0)' }],
@@ -309,7 +325,6 @@ function triggerHeroReveal(): void {
 
 function isLiteMotion(): boolean {
   if (typeof window === 'undefined') return true;
-  // Always return false in development/preview unless specifically requested by user query
   if (window.location.search.includes('motion=lite')) return true;
   if (document.documentElement.getAttribute('data-motion') === 'lite') return true;
   return false;
@@ -351,15 +366,23 @@ function getScrollBoost(): number {
 }
 
 /* ==========================================================================
-   2. SLOT-MACHINE WORD-MASK HEADING REVEALS & SECTION ENTRANCES
+   2. NUALT ROLLINGTEXT DUAL-GLYPH CHARACTER SLOT-MACHINE REELS & ENTRANCES
+   Exact decompiled Nualt RollingText formula:
+   - Splits words into .rolling-word and characters into .rolling-char > .rolling-reel
+   - Each .rolling-reel holds two stacked <span data-g> copies of the character
+   - Deterministic per-character timing:
+     --d: 0.5 * (1 + ((7 * i) % 5) * 0.09) s
+     --x1: 0.32 + ((3 * i) % 5) * 0.055
+     --delay: i * 0.014 s
    ========================================================================== */
-function splitHeadingIntoWordMasks(heading: HTMLElement): HTMLElement[] {
-  if (heading.dataset.wordsSplit === 'true') {
-    return Array.from(heading.querySelectorAll<HTMLElement>('.word-inner'));
+function splitHeadingIntoCharacterReels(heading: HTMLElement): HTMLElement[] {
+  if (heading.dataset.reelsSplit === 'true') {
+    return Array.from(heading.querySelectorAll<HTMLElement>('.rolling-reel'));
   }
-  heading.dataset.wordsSplit = 'true';
+  heading.dataset.reelsSplit = 'true';
 
-  const wordSpans: HTMLElement[] = [];
+  const reels: HTMLElement[] = [];
+  let charIdx = 0;
 
   function processNode(node: Node, targetParent: HTMLElement): void {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -370,14 +393,32 @@ function splitHeadingIntoWordMasks(heading: HTMLElement): HTMLElement[] {
         if (/^\s+$/.test(token)) {
           targetParent.appendChild(document.createTextNode(token));
         } else {
-          const mask = document.createElement('span');
-          mask.className = 'word-mask';
-          const inner = document.createElement('span');
-          inner.className = 'word-inner';
-          inner.textContent = token;
-          mask.appendChild(inner);
-          targetParent.appendChild(mask);
-          wordSpans.push(inner);
+          const wordSpan = document.createElement('span');
+          wordSpan.className = 'rolling-word';
+
+          for (const ch of Array.from(token)) {
+            const charWrap = document.createElement('span');
+            charWrap.className = 'rolling-char';
+
+            const reel = document.createElement('span');
+            reel.className = 'rolling-reel';
+            reel.setAttribute('data-reel', '');
+
+            const d = (0.5 * (1 + ((7 * charIdx) % 5) * 0.09)).toFixed(3);
+            const x1 = (0.32 + ((3 * charIdx) % 5) * 0.055).toFixed(3);
+            const delay = (charIdx * 0.014).toFixed(3);
+            reel.style.setProperty('--d', `${d}s`);
+            reel.style.setProperty('--x1', x1);
+            reel.style.setProperty('--delay', `${delay}s`);
+            reel.textContent = ch;
+
+            charWrap.appendChild(reel);
+            wordSpan.appendChild(charWrap);
+            reels.push(reel);
+            charIdx++;
+          }
+
+          targetParent.appendChild(wordSpan);
         }
       }
     } else if (node.nodeType === Node.ELEMENT_NODE) {
@@ -392,11 +433,7 @@ function splitHeadingIntoWordMasks(heading: HTMLElement): HTMLElement[] {
   heading.innerHTML = '';
   originalChildren.forEach((child) => processNode(child, heading));
 
-  wordSpans.forEach((word, idx) => {
-    word.style.transitionDelay = `${idx * 24}ms`;
-  });
-
-  return wordSpans;
+  return reels;
 }
 
 function initSectionAndHeadingEntrances(): void {
@@ -411,33 +448,30 @@ function initSectionAndHeadingEntrances(): void {
     return;
   }
 
-  headings.forEach((h) => splitHeadingIntoWordMasks(h));
+  headings.forEach((h) => splitHeadingIntoCharacterReels(h));
 
-  // Hero immediate entrance on load
-  const heroTitle = document.querySelector<HTMLElement>('.hero-section [data-rolling-title]');
-  const heroAppears = document.querySelectorAll<HTMLElement>('[data-hero-appear]');
-  const heroBoundary = document.querySelector<HTMLElement>('[data-hero-boundary]');
-
-  requestAnimationFrame(() => {
-    heroTitle?.classList.add('is-revealed');
-    heroBoundary?.classList.add('is-revealed');
-    heroAppears.forEach((el, idx) => {
-      el.style.transitionDelay = `${160 + idx * 110}ms`;
-      el.classList.add('is-revealed');
+  // If loader cover is not present, reveal hero immediately
+  if (!document.getElementById('home-loader-cover')) {
+    requestAnimationFrame(() => {
+      triggerHeroReveal();
     });
-  });
+  }
 
-  // Scroll-triggered section headers
+  // Scroll-triggered section headers with Nualt horizontal rule clipPath wipe
   const sectionHeaders = document.querySelectorAll<HTMLElement>('[data-section-header]');
+  function revealSectionHeader(container: HTMLElement): void {
+    if (container.classList.contains('is-revealed')) return;
+    container.classList.add('is-revealed');
+    const title = container.querySelector<HTMLElement>('[data-rolling-title]');
+    title?.classList.add('is-revealed');
+    headerObserver.unobserve(container);
+  }
+
   const headerObserver = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting && entry.boundingClientRect.top > 0) return;
-        const container = entry.target as HTMLElement;
-        container.classList.add('is-revealed');
-        const title = container.querySelector<HTMLElement>('[data-rolling-title]');
-        title?.classList.add('is-revealed');
-        headerObserver.unobserve(container);
+        revealSectionHeader(entry.target as HTMLElement);
       });
     },
     { threshold: 0.05, rootMargin: '0px 0px -5% 0px' }
@@ -449,16 +483,42 @@ function initSectionAndHeadingEntrances(): void {
   function checkSkippedHeaders(): void {
     const triggerY = window.innerHeight * 0.92;
     sectionHeaders.forEach((container) => {
-      if (container.classList.contains('is-revealed')) return;
-      if (container.getBoundingClientRect().top <= triggerY) {
-        container.classList.add('is-revealed');
-        container.querySelector<HTMLElement>('[data-rolling-title]')?.classList.add('is-revealed');
-        headerObserver.unobserve(container);
+      if (!container.classList.contains('is-revealed') && container.getBoundingClientRect().top <= triggerY) {
+        revealSectionHeader(container);
       }
     });
   }
   window.addEventListener('scroll', checkSkippedHeaders, { passive: true });
   checkSkippedHeaders();
+
+  // Nualt Horizontal .on-blue Section Curtain Expansion ([data-blue-expand])
+  const blueSections = document.querySelectorAll<HTMLElement>('[data-blue-expand]');
+  blueSections.forEach((sec) => {
+    let expanded = false;
+    function expandBlueSection(): void {
+      if (expanded) return;
+      expanded = true;
+      sec.animate(
+        [
+          { clipPath: 'inset(0% 100% 0% 0%)' },
+          { clipPath: 'inset(0% 0% 0% 0%)' },
+        ],
+        { duration: 780, easing: 'cubic-bezier(0.65, 0, 0.35, 1)', fill: 'both' }
+      );
+      blueIo.unobserve(sec);
+    }
+
+    const blueIo = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting && entry.boundingClientRect.top > 0) return;
+          expandBlueSection();
+        });
+      },
+      { threshold: 0.05, rootMargin: '0px 0px -5% 0px' }
+    );
+    blueIo.observe(sec);
+  });
 
   // Contact copy & title entrance
   const contactStage = document.querySelector<HTMLElement>('.contact-copy-col');
@@ -483,7 +543,242 @@ function initSectionAndHeadingEntrances(): void {
 }
 
 /* ==========================================================================
-   3. RADIAL 8PX PIXEL-MATRIX BUTTON WAVE (Nualt Button Transition Matrix)
+   3. NUALT SHADEDGRID GENERATOR (Deterministic Clustered Blueprint Grid)
+   Exact decompiled algorithm from Nualt module 439972:
+   - 40x40px SVG <pattern> grid lines
+   - Seed = 11 PRNG (t = 16807 * t % 2147483647) generating 14 organic cell clusters
+   - 6 color-mix(in srgb, currentColor X%, transparent) shades
+   ========================================================================== */
+function initShadedGrids(): void {
+  const containers = document.querySelectorAll<HTMLElement>('[data-shaded-grid]');
+  if (!containers.length) return;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const CELL = 40;
+  const COLS = 40;
+  const ROWS = 32;
+  const SHADES = [3, 6, 9, 13, 18, 24].map(
+    (pct) => `color-mix(in srgb, currentColor ${pct}%, transparent)`
+  );
+
+  // Run exact Nualt PRNG once to produce deterministic cell shades
+  let seed = 11;
+  const rand = (): number => {
+    seed = (16807 * seed) % 2147483647;
+    return seed / 2147483647;
+  };
+
+  const cellMap = new Map<string, number>();
+  for (let c = 0; c < 14; c++) {
+    const cx = Math.floor(rand() * COLS);
+    const cy = Math.floor(rand() * ROWS);
+    const radius = 1 + Math.floor(3 * rand());
+    for (let dy = -radius; dy <= radius; dy++) {
+      for (let dx = -radius; dx <= radius; dx++) {
+        const x = cx + dx;
+        const y = cy + dy;
+        if (x < 0 || y < 0 || x >= COLS || y >= ROWS) continue;
+        const dist = Math.hypot(dx, dy);
+        if (dist <= radius + 0.3 && rand() >= 0.35 * (dist / (radius + 0.5))) {
+          cellMap.set(`${x}:${y}`, Math.floor(rand() * SHADES.length));
+        }
+      }
+    }
+  }
+
+  containers.forEach((container, idx) => {
+    if (container.dataset.gridBuilt === 'true') return;
+    container.dataset.gridBuilt = 'true';
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('class', 'nualt-shaded-grid-svg');
+
+    const patternId = `nualt-shaded-grid-pat-${idx}`;
+    const defs = document.createElementNS(SVG_NS, 'defs');
+    const pattern = document.createElementNS(SVG_NS, 'pattern');
+    pattern.setAttribute('id', patternId);
+    pattern.setAttribute('width', String(CELL));
+    pattern.setAttribute('height', String(CELL));
+    pattern.setAttribute('patternUnits', 'userSpaceOnUse');
+
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', `M ${CELL} 0 L 0 0 0 ${CELL}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', 'color-mix(in srgb, currentColor 11%, transparent)');
+    path.setAttribute('stroke-width', '1');
+    pattern.appendChild(path);
+    defs.appendChild(pattern);
+    svg.appendChild(defs);
+
+    const g = document.createElementNS(SVG_NS, 'g');
+    cellMap.forEach((shadeIdx, key) => {
+      const [x, y] = key.split(':').map(Number);
+      const rect = document.createElementNS(SVG_NS, 'rect');
+      rect.setAttribute('x', String(x * CELL));
+      rect.setAttribute('y', String(y * CELL));
+      rect.setAttribute('width', String(CELL));
+      rect.setAttribute('height', String(CELL));
+      rect.setAttribute('fill', SHADES[shadeIdx]);
+      g.appendChild(rect);
+    });
+    svg.appendChild(g);
+
+    const bgRect = document.createElementNS(SVG_NS, 'rect');
+    bgRect.setAttribute('width', '100%');
+    bgRect.setAttribute('height', '100%');
+    bgRect.setAttribute('fill', `url(#${patternId})`);
+    svg.appendChild(bgRect);
+
+    container.insertBefore(svg, container.firstChild);
+  });
+}
+
+/* ==========================================================================
+   4. NUALT TETRISBORDER LIVE SLIDING PIXEL BLOCKS (Module 942048)
+   Exact decompiled algorithm from Nualt:
+   - Populates horizontal or vertical border strips with 0.95x0.95 SVG rects
+   - Continuously slides random blocks into empty orthogonal neighbors
+     over 400 + 200 * Math.random() ms with cubic-bezier(0.45, 0, 0.2, 1)
+   ========================================================================== */
+function initTetrisBorders(): void {
+  const borders = document.querySelectorAll<HTMLElement>('[data-tetris-border]');
+  if (!borders.length) return;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const DIRS: [number, number][] = [
+    [1, 0],
+    [-1, 0],
+    [0, 1],
+    [0, -1],
+  ];
+
+  borders.forEach((container) => {
+    if (container.dataset.tetrisBorderBound === 'true') return;
+    container.dataset.tetrisBorderBound = 'true';
+
+    const mode = container.getAttribute('data-tetris-border') || 'cta';
+    const isVertical = mode === 'gutter';
+    const cols = isVertical ? 3 : 24;
+    const rows = isVertical ? 18 : 2;
+    const lanes = 2;
+
+    // Seed initial cell coordinates using Nualt's checkerboard + random density
+    const initialCells: { x: number; y: number }[] = [];
+    let s = isVertical ? 37 : 19;
+    const nextR = (): number => {
+      s = (16807 * s) % 2147483647;
+      return s / 2147483647;
+    };
+
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        if ((x + y) % 2 === 0 || nextR() < 0.18) {
+          initialCells.push({ x, y });
+        }
+      }
+    }
+
+    container.innerHTML = '';
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${cols} ${rows}`);
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('class', 'tetris-border-svg');
+
+    const rects: SVGRectElement[] = initialCells.map(({ x, y }) => {
+      const r = document.createElementNS(SVG_NS, 'rect');
+      r.setAttribute('x', String(x + 0.025));
+      r.setAttribute('y', String(y + 0.025));
+      r.setAttribute('width', '0.95');
+      r.setAttribute('height', '0.95');
+      r.setAttribute('fill', 'currentColor');
+      svg.appendChild(r);
+      return r;
+    });
+
+    container.appendChild(svg);
+
+    if (isLiteMotion()) return;
+
+    const coords = initialCells.map((c) => ({ ...c }));
+    const occupied = new Set(coords.map((c) => `${c.x},${c.y}`));
+    const movingIndices = new Set<number>();
+    let isVisible = false;
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          isVisible = entry.isIntersecting;
+        });
+      },
+      { threshold: 0.02 }
+    );
+    io.observe(container);
+
+    function runLane(): void {
+      if (!isVisible) {
+        setTimeout(runLane, 350);
+        return;
+      }
+
+      const candidates: { idx: number; nx: number; ny: number }[] = [];
+      for (let i = 0; i < coords.length; i++) {
+        if (movingIndices.has(i)) continue;
+        const { x, y } = coords[i];
+        for (const [dx, dy] of DIRS) {
+          const nx = x + dx;
+          const ny = y + dy;
+          if (nx >= 0 && nx < cols && ny >= 0 && ny < rows && !occupied.has(`${nx},${ny}`)) {
+            candidates.push({ idx: i, nx, ny });
+          }
+        }
+      }
+
+      if (!candidates.length) {
+        setTimeout(runLane, 250);
+        return;
+      }
+
+      const pick = candidates[Math.floor(Math.random() * candidates.length)];
+      const prev = coords[pick.idx];
+      const rectEl = rects[pick.idx];
+
+      occupied.delete(`${prev.x},${prev.y}`);
+      occupied.add(`${pick.nx},${pick.ny}`);
+      coords[pick.idx] = { x: pick.nx, y: pick.ny };
+      movingIndices.add(pick.idx);
+
+      const anim = rectEl.animate(
+        [
+          { transform: 'translate(0px, 0px)' },
+          { transform: `translate(${pick.nx - prev.x}px, ${pick.ny - prev.y}px)` },
+        ],
+        {
+          duration: 400 + 200 * Math.random(),
+          easing: 'cubic-bezier(0.45, 0, 0.2, 1)',
+        }
+      );
+
+      anim.onfinish = () => {
+        rectEl.setAttribute('x', String(pick.nx + 0.025));
+        rectEl.setAttribute('y', String(pick.ny + 0.025));
+        movingIndices.delete(pick.idx);
+        setTimeout(runLane, 90 + 180 * Math.random());
+      };
+    }
+
+    for (let l = 0; l < lanes; l++) {
+      setTimeout(runLane, l * 220);
+    }
+  });
+}
+
+/* ==========================================================================
+   5. RADIAL 8PX PIXEL-MATRIX BUTTON WAVE (Exact Nualt Button Transition Matrix)
+   - Instant opacity 0 -> 1 snap at var(--delay) (up to 420ms)
+   - 9x9px cells on an 8px grid so there are zero sub-pixel seams
+   - Reverse wave on pointerleave via calc(0.42s - var(--delay))
    ========================================================================== */
 function initPixelButtons(): void {
   if (isLiteMotion()) return;
@@ -503,8 +798,6 @@ function initPixelButtons(): void {
       fill.setAttribute('aria-hidden', 'true');
       btn.insertBefore(fill, btn.firstChild);
     }
-
-    let isHovered = false;
 
     function buildRipple(clientX?: number, clientY?: number): void {
       const rect = btn.getBoundingClientRect();
@@ -533,7 +826,7 @@ function initPixelButtons(): void {
         const col = i % cols;
         const row = Math.floor(i / cols);
         const dist = Math.hypot(col - centerCol, row - centerRow);
-        const delay = Math.round((dist / maxHypot) * 360);
+        const delay = Math.round((dist / maxHypot) * 420);
 
         const span = document.createElement('span');
         span.style.left = `${col * 8}px`;
@@ -553,30 +846,52 @@ function initPixelButtons(): void {
         clearTimeout(leaveTimer);
         leaveTimer = null;
       }
-      fill!.classList.remove('is-leaving');
-      btn.classList.add('has-pixel-hover');
+      btn.classList.remove('has-pixel-hover');
       buildRipple(e.clientX, e.clientY);
+      // Flush layout so newly inserted spans start at opacity: 0 before transitioning to opacity: 1
+      void fill!.offsetWidth;
+      btn.classList.add('has-pixel-hover');
     });
 
-    btn.addEventListener('pointerleave', () => {
+    btn.addEventListener('pointerleave', (e: PointerEvent) => {
+      if (e.pointerType === 'touch') return;
+      // Recompute delays from exit point so the reverse wave radiates from where the cursor left
+      buildRipple(e.clientX, e.clientY);
+      btn.classList.add('has-pixel-hover');
+      void fill!.offsetWidth;
       btn.classList.remove('has-pixel-hover');
-      fill!.classList.add('is-leaving');
+
       leaveTimer = window.setTimeout(() => {
-        fill!.innerHTML = '';
-        fill!.classList.remove('is-leaving');
-      }, 300);
+        if (!btn.classList.contains('has-pixel-hover')) {
+          fill!.innerHTML = '';
+        }
+        leaveTimer = null;
+      }, 440);
     });
 
     btn.addEventListener('focus', () => {
       if (btn.matches(':focus-visible')) {
         buildRipple();
+        void fill!.offsetWidth;
+        btn.classList.add('has-pixel-hover');
       }
+    });
+
+    btn.addEventListener('blur', () => {
+      btn.classList.remove('has-pixel-hover');
     });
   });
 }
 
 /* ==========================================================================
-   4. HERO LIVE FALLING TETRIS / TELEMETRY BLOCK MATRIX
+   6. HERO LIVE FALLING TETRIS / TELEMETRY BLOCK MATRIX
+   Exact Nualt deterministic 4-column lane tiling algorithm (module 275682):
+   - Uses Nualt's 4 complementary shapes (O, L, J, I4) paired per 4-column lane:
+     * O (2x2 at dx=0) + O (2x2 at dx=2) -> solid 4x2 block
+     * L ([[0,0],[0,1],[1,1],[2,1]] at dx=0) + J ([[0,0],[1,0],[2,0],[2,1]] at dx=1) -> solid 4x2 block
+     * I4 (4x1 at dx=0) + I4 (4x1 at dx=0) -> solid 4x2 block
+   - Interleaves Lane 0 (cols 0..3) and Lane 1 (cols 4..7) so there are NEVER
+     unfillable gaps, pieces NEVER overflow, and a row ONLY clears when 100% full (8/8 cells)!
    ========================================================================== */
 interface TetrominoDef {
   cells: [number, number][];
@@ -584,66 +899,79 @@ interface TetrominoDef {
   dashed?: boolean;
 }
 
-const TETROMINOES: TetrominoDef[] = [
-  // O piece
-  {
-    cells: [
-      [0, 0],
-      [1, 0],
-      [0, 1],
-      [1, 1],
-    ],
-    fillOpacity: 0.85,
-  },
-  // T piece
-  {
-    cells: [
-      [0, 0],
-      [1, 0],
-      [2, 0],
-      [1, 1],
-    ],
-    fillOpacity: 0.42,
-  },
-  // L piece
-  {
-    cells: [
-      [0, 0],
-      [0, 1],
-      [1, 1],
-      [2, 1],
-    ],
-    fillOpacity: 0.85,
-  },
-  // I piece (3-block compact bar for 8-col board)
-  {
-    cells: [
-      [0, 0],
-      [1, 0],
-      [2, 0],
-    ],
-    fillOpacity: 0.55,
-  },
-  // S piece
-  {
-    cells: [
-      [1, 0],
-      [2, 0],
-      [0, 1],
-      [1, 1],
-    ],
-    fillOpacity: 0.65,
-  },
-  // Z piece
-  {
-    cells: [
-      [0, 0],
-      [1, 0],
-      [1, 1],
-      [2, 1],
-    ],
-    fillOpacity: 0.85,
-  },
+const SHAPE_O: TetrominoDef = {
+  cells: [
+    [0, 0],
+    [1, 0],
+    [0, 1],
+    [1, 1],
+  ],
+  fillOpacity: 0.85,
+};
+
+const SHAPE_L: TetrominoDef = {
+  cells: [
+    [0, 0],
+    [0, 1],
+    [1, 1],
+    [2, 1],
+  ],
+  fillOpacity: 0.65,
+};
+
+const SHAPE_J: TetrominoDef = {
+  cells: [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [2, 1],
+  ],
+  fillOpacity: 0.85,
+};
+
+const SHAPE_I4: TetrominoDef = {
+  cells: [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [3, 0],
+  ],
+  fillOpacity: 0.55,
+};
+
+interface ScheduledDrop {
+  def: TetrominoDef;
+  col: number;
+}
+
+const LANE_0_PAIRS: [ScheduledDrop, ScheduledDrop][] = [
+  [
+    { def: SHAPE_O, col: 0 },
+    { def: SHAPE_O, col: 2 },
+  ],
+  [
+    { def: SHAPE_L, col: 0 },
+    { def: SHAPE_J, col: 1 },
+  ],
+  [
+    { def: SHAPE_I4, col: 0 },
+    { def: SHAPE_I4, col: 0 },
+  ],
+];
+
+const LANE_1_PAIRS: [ScheduledDrop, ScheduledDrop][] = [
+  [
+    { def: SHAPE_L, col: 4 },
+    { def: SHAPE_J, col: 5 },
+  ],
+  [
+    { def: SHAPE_O, col: 4 },
+    { def: SHAPE_O, col: 6 },
+  ],
+  [
+    { def: SHAPE_I4, col: 4 },
+    { def: SHAPE_I4, col: 4 },
+  ],
 ];
 
 function initHeroTetris(): void {
@@ -659,6 +987,29 @@ function initHeroTetris(): void {
   // Remove static fallback
   const fallback = boardGroup.querySelector('[data-tetris-fallback]');
   if (fallback) fallback.remove();
+
+  // Render persistent 8x5 blueprint slot outlines behind falling blocks
+  if (!boardGroup.querySelector('[data-tetris-slots]')) {
+    const slotGroup = document.createElementNS(SVG_NS, 'g');
+    slotGroup.setAttribute('data-tetris-slots', '');
+    for (let r = 0; r < ROWS; r++) {
+      for (let c = 0; c < COLS; c++) {
+        const slot = document.createElementNS(SVG_NS, 'rect');
+        slot.setAttribute('x', String(c * STEP));
+        slot.setAttribute('y', String(r * STEP));
+        slot.setAttribute('width', String(CELL_SIZE));
+        slot.setAttribute('height', String(CELL_SIZE));
+        slot.setAttribute('fill', 'currentColor');
+        slot.setAttribute('fill-opacity', '0.03');
+        slot.setAttribute('stroke', 'currentColor');
+        slot.setAttribute('stroke-opacity', '0.16');
+        slot.setAttribute('stroke-width', '0.9');
+        slot.setAttribute('stroke-dasharray', '2 2');
+        slotGroup.appendChild(slot);
+      }
+    }
+    boardGroup.appendChild(slotGroup);
+  }
 
   interface GridCell {
     rect: SVGRectElement;
@@ -686,24 +1037,43 @@ function initHeroTetris(): void {
     return rect;
   }
 
-  // Seed initial bottom rows so the matrix looks populated immediately
-  const initialSeeds: [number, number, number][] = [
-    [0, 4, 0],
-    [1, 4, 0],
-    [2, 4, 1],
-    [4, 4, 2],
-    [5, 4, 2],
-    [6, 4, 4],
-    [0, 3, 3],
-    [1, 3, 5],
-    [5, 3, 0],
-  ];
-  for (const [c, r, tIdx] of initialSeeds) {
-    const def = TETROMINOES[tIdx % TETROMINOES.length];
-    grid[r][c] = {
-      rect: createBlockRect(c, r, def),
-      fillOpacity: def.fillOpacity,
+  // Initial settled state (Exact Nualt pattern):
+  // - Lane 0 (cols 0..3) has a completed 4x2 block at rows 3 & 4 (O@0 + O@2)
+  // - Lane 1 (cols 4..7) has the first half of Pair 0 (L@4) settled at rows 3 & 4
+  for (const [dx, dy] of SHAPE_O.cells) {
+    grid[3 + dy][0 + dx] = {
+      rect: createBlockRect(0 + dx, 3 + dy, SHAPE_O),
+      fillOpacity: SHAPE_O.fillOpacity,
     };
+    grid[3 + dy][2 + dx] = {
+      rect: createBlockRect(2 + dx, 3 + dy, SHAPE_O),
+      fillOpacity: SHAPE_O.fillOpacity,
+    };
+  }
+  for (const [dx, dy] of SHAPE_L.cells) {
+    grid[3 + dy][4 + dx] = {
+      rect: createBlockRect(4 + dx, 3 + dy, SHAPE_L),
+      fillOpacity: SHAPE_L.fillOpacity,
+    };
+  }
+
+  // Deterministic interleaved drop queue:
+  // Each 4-step cycle drops:
+  //   0: p0[0] (starts next 4x2 block on Lane 0 at rows 1..2)
+  //   1: p1[1] (completes Lane 1 at rows 3..4 -> triggers 100% full 8/8 row clear!)
+  //   2: p0[1] (completes Lane 0 at rows 3..4)
+  //   3: nextP1[0] (starts next 4x2 block on Lane 1 at rows 3..4)
+  let lane0PairIdx = 1;
+  let lane1PairIdx = 0;
+  const dropQueue: ScheduledDrop[] = [];
+
+  function refillQueue(): void {
+    const p0 = LANE_0_PAIRS[lane0PairIdx % LANE_0_PAIRS.length];
+    const p1 = LANE_1_PAIRS[lane1PairIdx % LANE_1_PAIRS.length];
+    const nextP1 = LANE_1_PAIRS[(lane1PairIdx + 1) % LANE_1_PAIRS.length];
+    dropQueue.push(p0[0], p1[1], p0[1], nextP1[0]);
+    lane0PairIdx++;
+    lane1PairIdx++;
   }
 
   let activePiece: {
@@ -713,7 +1083,6 @@ function initHeroTetris(): void {
     rects: SVGRectElement[];
   } | null = null;
 
-  let pieceCounter = 0;
   let isClearing = false;
   let isVisible = true;
   let lastTick = performance.now();
@@ -739,32 +1108,12 @@ function initHeroTetris(): void {
   }
 
   function spawnPiece(): void {
-    const def = TETROMINOES[pieceCounter % TETROMINOES.length];
-    pieceCounter++;
-    const maxDx = Math.max(...def.cells.map((c) => c[0]));
-
-    // Pick a column with lowest stack height to keep gameplay balanced
-    let bestCol = (pieceCounter * 3) % (COLS - maxDx);
-    let bestFreeDepth = -1;
-    for (let candidate = 0; candidate <= COLS - 1 - maxDx; candidate++) {
-      let depth = 0;
-      while (depth < ROWS && canMoveTo(def.cells, candidate, depth)) {
-        depth++;
-      }
-      if (depth > bestFreeDepth) {
-        bestFreeDepth = depth;
-        bestCol = candidate;
-      }
+    if (dropQueue.length === 0) {
+      refillQueue();
     }
-
-    if (!canMoveTo(def.cells, bestCol, 0)) {
-      // Board reached top: flash-clear bottom two rows to keep continuous telemetry flow
-      clearRows([ROWS - 1, ROWS - 2]);
-      return;
-    }
-
-    const rects = def.cells.map(([dx, dy]) => createBlockRect(bestCol + dx, dy, def));
-    activePiece = { def, col: bestCol, row: 0, rects };
+    const next = dropQueue.shift()!;
+    const rects = next.def.cells.map(([dx, dy]) => createBlockRect(next.col + dx, dy, next.def));
+    activePiece = { def: next.def, col: next.col, row: 0, rects };
   }
 
   function clearRows(rowsToClear: number[]): void {
@@ -782,6 +1131,7 @@ function initHeroTetris(): void {
       }
     }
 
+    // Exact Nualt 780ms line-clear flash keyframe
     dyingRects.forEach((rect) => {
       rect.animate(
         [
@@ -790,14 +1140,14 @@ function initHeroTetris(): void {
           { opacity: 0.85, offset: 0.7 },
           { opacity: 0 },
         ],
-        { duration: 480, easing: 'ease-in-out', fill: 'forwards' }
+        { duration: 780, easing: 'ease-in-out', fill: 'forwards' }
       );
     });
 
     setTimeout(() => {
       dyingRects.forEach((r) => r.remove());
 
-      // Shift remaining rows down
+      // Shift remaining rows down cleanly
       for (const clearedRow of uniqueRows) {
         for (let r = clearedRow; r > 0; r--) {
           for (let c = 0; c < COLS; c++) {
@@ -813,14 +1163,14 @@ function initHeroTetris(): void {
       }
 
       isClearing = false;
-    }, 470);
+    }, 770);
   }
 
   function stepTetris(now: number): void {
     requestAnimationFrame(stepTetris);
     if (!isVisible || isClearing) return;
 
-    const interval = 230 / getScrollBoost();
+    const interval = 240 / getScrollBoost();
     if (now - lastTick < interval) return;
     lastTick = now;
 
@@ -852,22 +1202,16 @@ function initHeroTetris(): void {
       });
       activePiece = null;
 
-      // Check for full or near-full rows (7+ of 8 cells filled) to trigger Nualt line-clear flash
+      // ONLY clear rows that are 100% FULL (all 8 of 8 cells occupied: grid[r].every(cell !== null))
       const completedRows: number[] = [];
       for (let r = 0; r < ROWS; r++) {
-        const filledCount = grid[r].filter((cell) => cell !== null).length;
-        if (filledCount >= COLS - 1) {
+        if (grid[r].every((cell) => cell !== null)) {
           completedRows.push(r);
         }
       }
 
-      // Also if top row (row 0 or 1) has blocks, clear bottom row to keep cycle alive
-      const topOccupied =
-        grid[0].some((cell) => cell !== null) || grid[1].some((cell) => cell !== null);
       if (completedRows.length > 0) {
         clearRows(completedRows);
-      } else if (topOccupied) {
-        clearRows([ROWS - 1]);
       }
     }
   }
@@ -876,7 +1220,8 @@ function initHeroTetris(): void {
 }
 
 /* ==========================================================================
-   5. LIVE 2D CANVAS BEZIER HEX STREAMS & DATA PACKET BUSES (Nualt MethodFlow)
+   7. LIVE 2D CANVAS BEZIER HEX STREAMS & DATA PACKET BUSES (Nualt MethodFlow)
+   Includes progressive De Casteljau cubic-bezier subdivision (1.76s entrance)
    ========================================================================== */
 interface Point2D {
   x: number;
@@ -893,6 +1238,34 @@ function evalCubicBezier(t: number, p0: Point2D, p1: Point2D, p2: Point2D, p3: P
     x: uuu * p0.x + 3 * uu * t * p1.x + 3 * u * tt * p2.x + ttt * p3.x,
     y: uuu * p0.y + 3 * uu * t * p1.y + 3 * u * tt * p2.y + ttt * p3.y,
   };
+}
+
+// De Casteljau subdivision for partial cubic-bezier drawing [0, progress]
+function strokePartialCubicBezier(
+  ctx: CanvasRenderingContext2D,
+  p0: Point2D,
+  p1: Point2D,
+  p2: Point2D,
+  p3: Point2D,
+  progress: number
+): void {
+  const t = Math.max(0, Math.min(1, progress));
+  if (t <= 0.001) return;
+  const lerp = (a: Point2D, b: Point2D, s: number): Point2D => ({
+    x: a.x + (b.x - a.x) * s,
+    y: a.y + (b.y - a.y) * s,
+  });
+  const q0 = lerp(p0, p1, t);
+  const q1 = lerp(p1, p2, t);
+  const q2 = lerp(p2, p3, t);
+  const r0 = lerp(q0, q1, t);
+  const r1 = lerp(q1, q2, t);
+  const s0 = lerp(r0, r1, t);
+
+  ctx.beginPath();
+  ctx.moveTo(p0.x, p0.y);
+  ctx.bezierCurveTo(q0.x, q0.y, r0.x, r0.y, s0.x, s0.y);
+  ctx.stroke();
 }
 
 function attachPipelineStreamCanvas(
@@ -958,7 +1331,8 @@ function attachPipelineStreamCanvas(
 
   let width = 0;
   let height = 0;
-  let isVisible = true;
+  let isVisible = false;
+  let drawStartTime: number | null = null;
   let lastFrame = performance.now();
 
   function resize(): void {
@@ -981,7 +1355,12 @@ function attachPipelineStreamCanvas(
     (entries) => {
       entries.forEach((e) => {
         isVisible = e.isIntersecting;
-        if (isVisible) lastFrame = performance.now();
+        if (isVisible) {
+          lastFrame = performance.now();
+          if (drawStartTime === null) {
+            drawStartTime = lastFrame;
+          }
+        }
       });
     },
     { threshold: 0.05 }
@@ -994,6 +1373,11 @@ function attachPipelineStreamCanvas(
 
     const dt = Math.min((now - lastFrame) / 1000, 0.08) * getScrollBoost();
     lastFrame = now;
+
+    // Nualt MethodFlow 1.76s progressive curve draw
+    const elapsedDraw = drawStartTime !== null ? (now - drawStartTime) / 1760 : 1;
+    const rawDraw = Math.max(0, Math.min(1, elapsedDraw));
+    const drawProgress = 1 - Math.pow(1 - rawDraw, 3);
 
     ctx!.clearRect(0, 0, width, height);
 
@@ -1029,81 +1413,82 @@ function attachPipelineStreamCanvas(
       ]);
     }
 
-    // Draw dashed Bezier fan-in and fan-out lines
+    // Draw dashed Bezier fan-in and fan-out lines progressively via De Casteljau
     ctx!.save();
     ctx!.strokeStyle = strokeColor;
     ctx!.globalAlpha = 0.28;
     ctx!.lineWidth = 1;
     ctx!.setLineDash([2, 3]);
 
+    const leftProg = Math.min(1, drawProgress * 1.45);
     for (const [p0, p1, p2, p3] of leftCurves) {
-      ctx!.beginPath();
-      ctx!.moveTo(p0.x, p0.y);
-      ctx!.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
-      ctx!.stroke();
+      strokePartialCubicBezier(ctx!, p0, p1, p2, p3, leftProg);
     }
 
+    const rightProg = Math.max(0, Math.min(1, (drawProgress - 0.25) / 0.75));
     for (const [p0, p1, p2, p3] of rightCurves) {
-      ctx!.beginPath();
-      ctx!.moveTo(p0.x, p0.y);
-      ctx!.bezierCurveTo(p1.x, p1.y, p2.x, p2.y, p3.x, p3.y);
-      ctx!.stroke();
+      strokePartialCubicBezier(ctx!, p0, p1, p2, p3, rightProg);
     }
     ctx!.restore();
 
     // Update & draw streaming hexadecimal characters along left fan-in curves
-    ctx!.save();
-    ctx!.fillStyle = strokeColor;
-    ctx!.font = '600 10px "IBM Plex Mono", monospace';
-    ctx!.textAlign = 'center';
-    ctx!.textBaseline = 'middle';
+    if (leftProg > 0.25) {
+      ctx!.save();
+      ctx!.fillStyle = strokeColor;
+      ctx!.font = '600 10px "IBM Plex Mono", monospace';
+      ctx!.textAlign = 'center';
+      ctx!.textBaseline = 'middle';
 
-    for (const hp of hexParticles) {
-      hp.t += hp.speed * dt;
-      if (hp.t >= 1) {
-        hp.t %= 1;
-        hp.char = HEX_CHARS[Math.floor(Math.random() * HEX_CHARS.length)];
+      for (const hp of hexParticles) {
+        hp.t += hp.speed * dt;
+        if (hp.t >= 1) {
+          hp.t %= 1;
+          hp.char = HEX_CHARS[Math.floor(Math.random() * HEX_CHARS.length)];
+        }
+        if (hp.t > leftProg) continue;
+        const [p0, p1, p2, p3] = leftCurves[hp.curveIdx];
+        const pt = evalCubicBezier(hp.t, p0, p1, p2, p3);
+        const alpha = hp.t < 0.15 ? hp.t / 0.15 : hp.t > 0.85 ? (1 - hp.t) / 0.15 : 1;
+        ctx!.globalAlpha = alpha * 0.78;
+        ctx!.fillText(hp.char, pt.x, pt.y);
       }
-      const [p0, p1, p2, p3] = leftCurves[hp.curveIdx];
-      const pt = evalCubicBezier(hp.t, p0, p1, p2, p3);
-      const alpha = hp.t < 0.15 ? hp.t / 0.15 : hp.t > 0.85 ? (1 - hp.t) / 0.15 : 1;
-      ctx!.globalAlpha = alpha * 0.78;
-      ctx!.fillText(hp.char, pt.x, pt.y);
+      ctx!.restore();
     }
-    ctx!.restore();
 
     // Update & draw 4x4 square data packets along inter-stage buses & right fan-out
-    ctx!.save();
-    ctx!.fillStyle = strokeColor;
-    for (const pkt of packets) {
-      pkt.t += pkt.speed * dt;
-      if (pkt.t >= 1) {
-        pkt.t %= 1;
-        // Subtle pulse on output cells when a bus2 packet finishes
-        if (pkt.segment === 'bus2' && options.pulseOutputCells && options.pulseOutputCells.length) {
-          const targetCell =
-            options.pulseOutputCells[Math.floor(Math.random() * options.pulseOutputCells.length)];
-          targetCell?.animate([{ opacity: 1 }, { opacity: 0.35 }, { opacity: 1 }], {
-            duration: 360,
-            easing: 'ease-out',
-          });
+    if (drawProgress > 0.35) {
+      ctx!.save();
+      ctx!.fillStyle = strokeColor;
+      for (const pkt of packets) {
+        pkt.t += pkt.speed * dt;
+        if (pkt.t >= 1) {
+          pkt.t %= 1;
+          if (pkt.segment === 'bus2' && options.pulseOutputCells && options.pulseOutputCells.length) {
+            const targetCell =
+              options.pulseOutputCells[Math.floor(Math.random() * options.pulseOutputCells.length)];
+            targetCell?.animate([{ opacity: 1 }, { opacity: 0.35 }, { opacity: 1 }], {
+              duration: 360,
+              easing: 'ease-out',
+            });
+          }
         }
-      }
 
-      let pt: Point2D;
-      if (pkt.segment === 'bus1') {
-        pt = { x: xBus1Start + (xBus1End - xBus1Start) * pkt.t, y: cy };
-      } else if (pkt.segment === 'bus2') {
-        pt = { x: xBus2Start + (xBus2End - xBus2Start) * pkt.t, y: cy };
-      } else {
-        const [p0, p1, p2, p3] = rightCurves[pkt.curveIdx];
-        pt = evalCubicBezier(pkt.t, p0, p1, p2, p3);
-      }
+        let pt: Point2D;
+        if (pkt.segment === 'bus1') {
+          pt = { x: xBus1Start + (xBus1End - xBus1Start) * pkt.t, y: cy };
+        } else if (pkt.segment === 'bus2') {
+          pt = { x: xBus2Start + (xBus2End - xBus2Start) * pkt.t, y: cy };
+        } else {
+          if (pkt.t > rightProg) continue;
+          const [p0, p1, p2, p3] = rightCurves[pkt.curveIdx];
+          pt = evalCubicBezier(pkt.t, p0, p1, p2, p3);
+        }
 
-      ctx!.globalAlpha = 0.92;
-      ctx!.fillRect(pt.x - 2.5, pt.y - 2.5, 5, 5);
+        ctx!.globalAlpha = 0.92;
+        ctx!.fillRect(pt.x - 2.5, pt.y - 2.5, 5, 5);
+      }
+      ctx!.restore();
     }
-    ctx!.restore();
   }
 
   requestAnimationFrame(render);
@@ -1136,7 +1521,7 @@ function initPipelineCanvases(): void {
 }
 
 /* ==========================================================================
-   6. ISOMETRIC 2.5D LAYER ASSEMBLY & CONTINUOUS LEVITATION (assembleIso)
+   8. ISOMETRIC 2.5D LAYER ASSEMBLY & CONTINUOUS LEVITATION (assembleIso)
    ========================================================================== */
 function initIsometricAssemblies(): void {
   const groups = document.querySelectorAll<SVGGElement>('[data-iso-assembly]');
@@ -1187,7 +1572,7 @@ function initIsometricAssemblies(): void {
 }
 
 /* ==========================================================================
-   7. PRODUCTION PIPELINES CASE ROWS & FALLING ISOMETRIC STAT CUBES
+   9. PRODUCTION PIPELINES CASE ROWS & FALLING ISOMETRIC STAT CUBES
    ========================================================================== */
 function initCaseStudyRows(): void {
   const rows = document.querySelectorAll<HTMLElement>('[data-case-row]');
@@ -1202,7 +1587,7 @@ function initCaseStudyRows(): void {
     if (row.classList.contains('is-revealed')) return;
     row.classList.add('is-revealed');
 
-    // Animate the 3 Isometric Stat Cubes dropping from above (Nualt WorkEntrance)
+    // Animate the 3 Isometric Stat Cubes dropping from above (Nualt WorkEntrance / CaseStatCubes)
     const cubes = Array.from(row.querySelectorAll<SVGGElement>('[data-stat-cube]'));
     cubes.forEach((cube, idx) => {
       const drop = cube.animate(
@@ -1267,7 +1652,7 @@ function initCaseStudyRows(): void {
 }
 
 /* ==========================================================================
-   8. WORKSTATION OS WINDOW SEPARATION & LIVE CANVAS DEPENDENCY TREE
+   10. WORKSTATION OS WINDOW SEPARATION & LIVE CANVAS DEPENDENCY TREE
    ========================================================================== */
 function initOsWindowAndTree(): void {
   const wrap = document.querySelector<HTMLElement>('[data-os-window-wrap]');
@@ -1470,7 +1855,7 @@ function initOsWindowAndTree(): void {
 }
 
 /* ==========================================================================
-   9. BLUEPRINT FRAME TRACES, COUNTER ROLL-UPS & SMOOTH ACCORDIONS
+   11. BLUEPRINT FRAME TRACES, COUNTER ROLL-UPS & SMOOTH ACCORDIONS
    ========================================================================== */
 function initBlueprintFramesAndAccordions(): void {
   // Number Count-Up for Hero Pixel Stats (TOP 13, 152,714+)
@@ -1505,7 +1890,7 @@ function initBlueprintFramesAndAccordions(): void {
     }
   });
 
-  // Dossier Frame, Trajectory Ledger & Discipline Rows
+  // Dossier Frame, Trajectory Ledger & FAQ/System Notes Sections
   const revealBlocks = document.querySelectorAll<HTMLElement>(
     '[data-dossier-frame], [data-ledger-frame], [data-faq-section]'
   );
@@ -1605,7 +1990,9 @@ function initBlueprintFramesAndAccordions(): void {
 }
 
 /* ==========================================================================
-   10. LIVE SELF-CORRECTING TYPEWRITER CODE WINDOW, BENTO WAVE & FOOTER RISE
+   12. LIVE SELF-CORRECTING TYPEWRITER CODE WINDOW, BENTO WAVE & FOOTER RISE
+   Exact Nualt CtaCodeTyping cadence: 22ms per character, 80ms per backspace,
+   400ms/600ms realistic thinking pauses, plus CtaIconsHint (150ms -> 1350ms)
    ========================================================================== */
 interface CodeToken {
   text: string;
@@ -1643,8 +2030,8 @@ function initContactAnimations(): void {
     codePre.classList.add('code-pre-live');
 
     // Exact Nualt-style sequence with 2 realistic engineering self-corrections:
-    // Correction 1: latencyBudget: "300ms" -> pause -> backspace 7 -> "<5ms"
-    // Correction 2: hallucinationRate: 0.24 -> pause -> backspace 4 -> 0.0
+    // Correction 1: workMode: "On-site" -> pause 400ms -> backspace 9 (80ms/char) -> "HCMC | Remote"
+    // Correction 2: availability: "2027" -> pause 600ms -> backspace 6 (80ms/char) -> "Late 2026"
     const scriptOps: TypewriterOp[] = [
       {
         type: 'tokens',
@@ -1689,35 +2076,37 @@ function initContactAnimations(): void {
           { text: '({\n    ' },
           { text: 'email', cls: 'c-prop' },
           { text: ': ' },
-          { text: '"thuanmm0426@gmail.com"', cls: 'c-str' },
+          { text: '"thuannm0426@gmail.com"', cls: 'c-str' },
           { text: ',\n    ' },
           { text: 'phone', cls: 'c-prop' },
           { text: ': ' },
           { text: '"+84 819-786-704"', cls: 'c-str' },
           { text: ',\n    ' },
-          { text: 'latencyBudget', cls: 'c-prop' },
+          { text: 'workMode', cls: 'c-prop' },
           { text: ': ' },
-          { text: '"300ms"', cls: 'c-str' },
+          { text: '"On-site"', cls: 'c-str' },
         ],
       },
-      { type: 'pause', ms: 420 },
-      { type: 'delete', count: 7 }, // deletes "300ms"
+      { type: 'pause', ms: 400 },
+      { type: 'delete', count: 9 }, // deletes "On-site"
+      { type: 'pause', ms: 260 },
       {
         type: 'tokens',
         list: [
-          { text: '"<5ms"', cls: 'c-str' },
+          { text: '"HCMC | Remote"', cls: 'c-str' },
           { text: ',\n    ' },
-          { text: 'hallucinationRate', cls: 'c-prop' },
+          { text: 'availability', cls: 'c-prop' },
           { text: ': ' },
-          { text: '0.24', cls: 'c-num' },
+          { text: '"2027"', cls: 'c-str' },
         ],
       },
-      { type: 'pause', ms: 450 },
-      { type: 'delete', count: 4 }, // deletes 0.24
+      { type: 'pause', ms: 600 },
+      { type: 'delete', count: 6 }, // deletes "2027"
+      { type: 'pause', ms: 260 },
       {
         type: 'tokens',
         list: [
-          { text: '0.0', cls: 'c-num' },
+          { text: '"Late 2026"', cls: 'c-str' },
           { text: ',\n  });\n}' },
         ],
       },
@@ -1749,7 +2138,7 @@ function initContactAnimations(): void {
       let deleteRemaining = -1;
       let currentSpan: HTMLElement | null = null;
       let currentTextNode: Text | null = null;
-      let nextActionAt = performance.now() + 140;
+      let nextActionAt = performance.now() + 180;
 
       function advanceOneAction(now: number): boolean {
         if (opIdx >= scriptOps.length) return false;
@@ -1774,12 +2163,12 @@ function initContactAnimations(): void {
             deleteRemaining--;
             currentSpan = null;
             currentTextNode = null;
-            nextActionAt = now + 55;
+            nextActionAt = now + 80; // Exact Nualt 80ms backspace cadence
             return true;
           }
           deleteRemaining = -1;
           opIdx++;
-          nextActionAt = now + 110;
+          nextActionAt = now + 120;
           return true;
         }
 
@@ -1790,7 +2179,7 @@ function initContactAnimations(): void {
           charIdx = 0;
           currentSpan = null;
           currentTextNode = null;
-          nextActionAt = now + 6;
+          nextActionAt = now + 18;
           return true;
         }
 
@@ -1819,14 +2208,14 @@ function initContactAnimations(): void {
           charIdx = 0;
         }
 
-        nextActionAt += 5.5;
+        nextActionAt = now + 22; // Exact Nualt 22ms typing cadence
         return true;
       }
 
       function frame(now: number): void {
         if (runId !== activeRunId) return;
         let safety = 0;
-        while (now >= nextActionAt && opIdx < scriptOps.length && safety < 24) {
+        while (now >= nextActionAt && opIdx < scriptOps.length && safety < 12) {
           safety++;
           if (!advanceOneAction(now)) break;
         }
@@ -1872,7 +2261,7 @@ function initContactAnimations(): void {
     });
   }
 
-  // 2. Social Bento Row Viewport-Entry Spring Wave Hint (Nualt CtaIconsHint)
+  // 2. Social Bento Row Viewport-Entry Spring Wave Hint (Exact Nualt CtaIconsHint: 150ms -> 1350ms)
   if (bentoGrid) {
     const cells = bentoGrid.querySelectorAll<HTMLElement>('[data-bento-cell]');
     const bentoIo = new IntersectionObserver(
@@ -1882,8 +2271,8 @@ function initContactAnimations(): void {
           cells.forEach((cell, idx) => {
             setTimeout(() => {
               cell.setAttribute('data-hint', 'true');
-              setTimeout(() => cell.removeAttribute('data-hint'), 650);
-            }, 220 + idx * 150);
+              setTimeout(() => cell.removeAttribute('data-hint'), 1200);
+            }, 150 + idx * 140);
           });
           bentoIo.unobserve(bentoGrid);
         });
@@ -1914,6 +2303,8 @@ function initContactAnimations(): void {
    ========================================================================== */
 function initAllAnimations(): void {
   initSmoothScroll();
+  initShadedGrids();
+  initTetrisBorders();
   initLoaderCover();
   initScrollVelocityTracker();
   initSectionAndHeadingEntrances();

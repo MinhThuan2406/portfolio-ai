@@ -2,7 +2,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security issue in this repository, please report it privately via email to **<thuanmm0426@gmail.com>** rather than opening a public GitHub issue. Include:
+If you discover a security issue in this repository, please report it privately via email to **<thuannm0426@gmail.com>** rather than opening a public GitHub issue. Include:
 
 - A description of the vulnerability and its potential impact.
 - Steps to reproduce or the affected file/line locations.

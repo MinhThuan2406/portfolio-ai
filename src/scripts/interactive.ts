@@ -4,7 +4,7 @@ function initCopyEmail(): void {
   if (!copyBtn || !copyLabel) return;
 
   copyBtn.addEventListener('click', async () => {
-    const email = copyBtn.getAttribute('data-email') || 'thuanmm0426@gmail.com';
+    const email = copyBtn.getAttribute('data-email') || 'thuannm0426@gmail.com';
     try {
       await navigator.clipboard.writeText(email);
       copyLabel.textContent = 'COPIED TO CLIPBOARD ✓';
@@ -97,9 +97,6 @@ function initKeyboardShortcuts(): void {
           targetEl.scrollIntoView({ behavior: 'smooth' });
         }
       }
-    } else if (key === 't') {
-      const themeToggle = document.getElementById('theme-toggle');
-      themeToggle?.click();
     }
   });
 }

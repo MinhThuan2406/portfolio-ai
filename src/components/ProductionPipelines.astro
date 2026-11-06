@@ -13,9 +13,9 @@ import { projects } from "../data/portfolio";
       </div>
       <div class="section-header-right">
         <p class="section-lead" data-section-lead>
-          Shipped during engineering internships at <strong>ITP (VNU-HCM)</strong> and <strong>HIPTECH</strong>.
-          Every metric below is backed by real Apache JMeter stress tests, production MySQL/PostgreSQL tables,
-          and containerized vector endpoints.
+          Built during engineering internships at <strong>ITP (VNU-HCM)</strong> and <strong>HIPTECH</strong>,
+          focusing on asynchronous telemetry ingestion, vector search services, and data validation pipelines
+          tested with Apache JMeter, MySQL/PostgreSQL, and Docker.
         </p>
       </div>
     </div>
@@ -38,6 +38,14 @@ import { projects } from "../data/portfolio";
                 role="img"
                 aria-label={`Key benchmark metrics for ${project.title}`}
               >
+                <svg data-work-grid class="case-iso-grid-bg" aria-hidden="true">
+                  <defs>
+                    <pattern id={`case-iso-grid-${project.index}`} width="64" height="36.950417" patternUnits="userSpaceOnUse">
+                      <path d="M0 0 64 36.950417M0 36.950417 64 0" fill="none" stroke="currentColor" stroke-opacity="0.14" stroke-width="1"></path>
+                    </pattern>
+                  </defs>
+                  <rect width="100%" height="100%" fill={`url(#case-iso-grid-${project.index})`}></rect>
+                </svg>
                 <svg
                   class="stat-cubes-svg"
                   viewBox="0 0 380 155"

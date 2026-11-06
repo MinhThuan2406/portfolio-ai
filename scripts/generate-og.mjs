@@ -74,7 +74,7 @@ const svg = `
   <line x1="80" y1="545" x2="1120" y2="545" stroke="#d6d9df" stroke-width="1"/>
   <g transform="translate(80, 570)">
     <text font-family="'Courier New', monospace" font-size="11.5" fill="#5e6470" letter-spacing="1">HO CHI MINH CITY · VIETNAM</text>
-    <text x="1040" y="0" text-anchor="end" font-family="'Courier New', monospace" font-size="11.5" fill="#1c52b0" letter-spacing="1">THUANMM0426@GMAIL.COM</text>
+    <text x="1040" y="0" text-anchor="end" font-family="'Courier New', monospace" font-size="11.5" fill="#1c52b0" letter-spacing="1">THUANNM0426@GMAIL.COM</text>
   </g>
 </svg>
 `;

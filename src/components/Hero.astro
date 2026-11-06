@@ -41,8 +41,8 @@ import IconArrow from "./IconArrow.astro";
               <IconArrow width={12} height={12} />
             </span>
           </button>
-          <a class="btn-blueprint-ghost mono" href="mailto:thuanmm0426@gmail.com">
-            <span>thuanmm0426@gmail.com</span>
+          <a class="btn-blueprint-ghost mono" href="mailto:thuannm0426@gmail.com">
+            <span>thuannm0426@gmail.com</span>
             <IconArrow width={11} height={11} />
           </a>
         </div>
@@ -56,12 +56,14 @@ import IconArrow from "./IconArrow.astro";
   </div>
 
   <!-- Tier 2: Full-Bleed Cobalt Blueprint Board (.on-blue) -->
-  <div class="hero-blueprint on-blue" data-nav-blue>
+  <div class="hero-blueprint on-blue" data-nav-blue data-hero-panel>
+    <div class="shaded-grid-layer" data-shaded-grid aria-hidden="true"></div>
+    <span class="hero-boundary-h" data-hero-boundary="horizontal" aria-hidden="true"></span>
     <div class="frame-container grid-24 hero-blueprint-grid">
       <!-- Left: Isometric Pixel & Vector Transformation Matrix -->
-      <div class="hero-matrix-col" data-hero-boundary>
+      <div class="hero-matrix-col" data-hero-boundary="vertical">
         <div class="matrix-header mono">
-          <span>FIG 00.1 // DETERMINISTIC RETRIEVAL &amp; TELEMETRY PIPELINE</span>
+          <span>FIG 00.1 // HYBRID RETRIEVAL &amp; TELEMETRY PIPELINE</span>
           <span class="matrix-status">
             <i class="status-beacon" aria-hidden="true"></i>
             ONLINE · HCMC / REMOTE
@@ -106,30 +108,32 @@ import IconArrow from "./IconArrow.astro";
                 fill="currentColor"
                 fill-opacity="0.04"
               />
-              <!-- Live Tetris / Telemetry Block Matrix (8 cols x 5 rows of 14px blocks) -->
-              <g id="hero-tetris-board" data-hero-tetris transform="translate(14, 14)">
-                <!-- Clean Formed Tetromino Fallback (Replaced dynamically by live physics engine when motion is full) -->
+              <!-- Live Tetris / Telemetry Block Matrix (8 cols x 5 rows of 14px blocks, centered with 15px side margins) -->
+              <g id="hero-tetris-board" data-hero-tetris transform="translate(15, 14)">
+                <!-- Clean Formed Tetromino Fallback (8 full columns 0..7) -->
                 <g data-tetris-fallback>
-                  <!-- Bottom Row (Row 4, y=64) -->
+                  <!-- Bottom Row (Row 4, y=64, cols 0..7) -->
                   <rect x="0" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
                   <rect x="16" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
                   <rect x="32" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.55" stroke="currentColor" stroke-width="1.1" />
                   <rect x="48" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.55" stroke="currentColor" stroke-width="1.1" />
-                  <rect x="64" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.55" stroke="currentColor" stroke-width="1.1" />
                   <rect x="80" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
                   <rect x="96" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="112" y="64" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
 
-                  <!-- Row 3 (y=48) -->
+                  <!-- Row 3 (y=48, cols 0..7) -->
                   <rect x="0" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
                   <rect x="16" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
-                  <rect x="48" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="1.1" />
-                  <rect x="64" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.4" stroke="currentColor" stroke-width="1.1" />
-                  <rect x="80" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="32" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.42" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="80" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.65" stroke="currentColor" stroke-width="1.1" />
                   <rect x="96" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="112" y="48" width="14" height="14" fill="currentColor" fill-opacity="0.85" stroke="currentColor" stroke-width="1.1" />
 
                   <!-- Row 2 (y=32) -->
-                  <rect x="48" y="32" width="14" height="14" fill="currentColor" fill-opacity="0.65" stroke="currentColor" stroke-width="1.1" />
-                  <rect x="64" y="32" width="14" height="14" fill="currentColor" fill-opacity="0.65" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="16" y="32" width="14" height="14" fill="currentColor" fill-opacity="0.65" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="32" y="32" width="14" height="14" fill="currentColor" fill-opacity="0.65" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="96" y="32" width="14" height="14" fill="currentColor" fill-opacity="0.55" stroke="currentColor" stroke-width="1.1" />
+                  <rect x="112" y="32" width="14" height="14" fill="currentColor" fill-opacity="0.55" stroke="currentColor" stroke-width="1.1" />
                 </g>
               </g>
 
@@ -282,7 +286,7 @@ import IconArrow from "./IconArrow.astro";
                 y="46"
                 fill="currentColor"
                 font-family="var(--font-pixel)"
-                font-size="15">100%</text
+                font-size="14">TOP-K</text
               >
               <text
                 x="96"
@@ -290,7 +294,7 @@ import IconArrow from "./IconArrow.astro";
                 fill="currentColor"
                 font-family="var(--font-mono)"
                 font-size="9"
-                opacity="0.8">RECALL</text
+                opacity="0.8">RERANKED</text
               >
 
               <text
@@ -300,7 +304,7 @@ import IconArrow from "./IconArrow.astro";
                 font-family="var(--font-mono)"
                 font-size="10"
                 letter-spacing="0.08em"
-                opacity="0.8">VERIFIED OUTPUT</text
+                opacity="0.8">GROUNDED OUTPUT</text
               >
               <text
                 x="16"
@@ -308,7 +312,7 @@ import IconArrow from "./IconArrow.astro";
                 fill="currentColor"
                 font-family="var(--font-sans)"
                 font-weight="600"
-                font-size="12">Zero Hallucination</text
+                font-size="12">Cited Page &amp; Part IDs</text
               >
               <text
                 x="16"
@@ -316,7 +320,7 @@ import IconArrow from "./IconArrow.astro";
                 fill="currentColor"
                 font-family="var(--font-mono)"
                 font-size="10"
-                opacity="0.8">&lt;5ms Intent Router</text
+                opacity="0.8">Async FastAPI Router</text
               >
             </g>
           </svg>
@@ -327,7 +331,7 @@ import IconArrow from "./IconArrow.astro";
           <span class="strip-sep">·</span>
           <span>BACKEND: FASTAPI (UVLOOP) &amp; SPRING BOOT</span>
           <span class="strip-sep">·</span>
-          <span>VERIFICATION: APACHE JMETER &amp; DOCKER</span>
+          <span>BENCHMARKING: APACHE JMETER &amp; DOCKER</span>
         </div>
       </div>
 
@@ -357,17 +361,26 @@ import IconArrow from "./IconArrow.astro";
           <span class="ledger-sub mono">Handled student interaction traffic with &lt;120ms p95 MySQL write latency under 500 concurrent users.</span>
         </div>
 
-        <div class="ledger-cell ledger-cell-cta" data-ledger-cell>
-          <div class="ledger-availability mono">
-            <span class="status-beacon" aria-hidden="true"></span>
-            <span>OPEN TO ON-SITE &amp; REMOTE ROLES (LATE 2026)</span>
+        <div class="ledger-cell ledger-cell-cta" data-ledger-cell data-hero-cta-content>
+          <div class="ledger-cta-row">
+            <a class="hero-pixel-arrow-btn" href="#work" aria-label="Scroll to featured work" data-hero-arrow>
+              <svg viewBox="0 0 12 12" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true" class="nualt-pixel-arrow">
+                <path d="M0 0H8V2H4V3H5V4H6V5H7V6H8V7H9V8H10V9H11V10H12V12H10V11H9V10H8V9H7V8H6V7H5V6H4V5H3V4H2V8H0Z"></path>
+              </svg>
+            </a>
+            <div class="ledger-cta-body">
+              <div class="ledger-availability mono">
+                <span class="status-beacon" aria-hidden="true"></span>
+                <span>OPEN TO ON-SITE &amp; REMOTE ROLES (LATE 2026)</span>
+              </div>
+              <a class="ledger-action-link mono drawn-link" href="#contact">
+                <span>GET IN TOUCH</span>
+                <span class="btn-arrow-wrap" aria-hidden="true">
+                  <IconArrow width={12} height={12} />
+                </span>
+              </a>
+            </div>
           </div>
-          <a class="ledger-action-link mono" href="#contact">
-            <span>GET IN TOUCH</span>
-            <span class="btn-arrow-wrap" aria-hidden="true">
-              <IconArrow width={12} height={12} />
-            </span>
-          </a>
         </div>
       </aside>
     </div>

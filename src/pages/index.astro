@@ -19,31 +19,14 @@ import CvModal from "../components/CvModal.astro";
     <meta name="theme-color" content="#f4f2e8" id="meta-theme-color" />
     <script is:inline>
       (function () {
-        let stored = null;
-        try {
-          const raw = localStorage.getItem('theme');
-          if (raw === 'dark' || raw === 'light') {
-            stored = raw;
-          }
-        } catch {
-          // Ignore storage access errors in restricted privacy contexts
-        }
-        // Default to Warm Drafting Ivory ('light' blueprint polarity) unless explicitly toggled
-        const theme = stored ? stored : 'light';
-        document.documentElement.setAttribute('data-theme', theme);
-        const meta = document.getElementById('meta-theme-color');
-        if (meta) {
-          meta.setAttribute('content', theme === 'dark' ? '#071324' : '#f4f2e8');
-        }
-
         // Default to full motion mode
-        document.documentElement.setAttribute('data-motion', 'full');
+        document.documentElement.setAttribute("data-motion", "full");
 
         // Initialize loader flag (Nualt pattern)
-        document.documentElement.setAttribute('data-loader', '');
+        document.documentElement.setAttribute("data-loader", "");
       })();
     </script>
-    <title>Nguyen Minh Thuan · High-Throughput Backends &amp; Search Systems</title>
+    <title>Nguyen Thuan · Portfolio</title>
     <meta
       name="description"
       content="Engineering portfolio of Nguyen Minh Thuan. Building reliable RAG pipelines over unstructured technical documents, low-latency event telemetry, and resilient backend services."
@@ -53,10 +36,34 @@ import CvModal from "../components/CvModal.astro";
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
     <!-- Preload Exact Nualt Production Fonts (Yellix, Inter, Geist Pixel, IBM Plex Mono) -->
-    <link rel="preload" href="/fonts/yellix.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/geist-pixel.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/ibm-plex-mono.woff2" as="font" type="font/woff2" crossorigin />
+    <link
+      rel="preload"
+      href="/fonts/yellix.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/inter.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/geist-pixel.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/ibm-plex-mono.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
 
     <!-- Open Graph / LinkedIn / Facebook / Zalo -->
     <meta property="og:type" content="website" />
@@ -99,7 +106,7 @@ import CvModal from "../components/CvModal.astro";
           "@type": "Person",
           "name": "Nguyen Minh Thuan",
           "jobTitle": "AI Engineer & Backend Engineer",
-          "email": "thuanmm0426@gmail.com",
+          "email": "thuannm0426@gmail.com",
           "telephone": "+84819786704",
           "alumniOf": {
             "@type": "CollegeOrUniversity",
@@ -140,7 +147,6 @@ import CvModal from "../components/CvModal.astro";
     <ContactHandshake />
     <CvModal />
 
-    <script src="../scripts/theme.ts"></script>
     <script src="../scripts/navigation.ts"></script>
     <script src="../scripts/interactive.ts"></script>
     <script src="../scripts/animations.ts"></script>

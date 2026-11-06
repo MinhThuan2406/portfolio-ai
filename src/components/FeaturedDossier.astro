@@ -76,6 +76,7 @@ import IconArrow from "./IconArrow.astro";
           class="dossier-diagram-col on-blue"
           aria-label="Isometric architecture diagram and benchmark metrics for Digital Cockpit Copilot"
         >
+          <div class="shaded-grid-layer" data-shaded-grid aria-hidden="true"></div>
           <figcaption class="diagram-topbar mono">
             <span>FIG 01.1 // IN-COCKPIT RETRIEVAL ARCHITECTURE</span>
             <span>ANDROID AUTOMOTIVE OS</span>
@@ -274,7 +275,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.8">76% → 100% Accuracy</text
+                  opacity="0.8">Top-K Context Filtering</text
                 >
               </g>
 
@@ -284,7 +285,7 @@ import IconArrow from "./IconArrow.astro";
                 <polygon points="416,108 424,112 416,116" fill="currentColor" />
               </g>
 
-              <!-- Node 3: FastAPI Async Router (<5ms) & Cited Voice Output -->
+              <!-- Node 3: FastAPI Async Router & Cited Voice Output -->
               <g transform="translate(426, 44)" data-iso-assembly>
                 <g data-iso-layer="2">
                   <rect
@@ -306,7 +307,7 @@ import IconArrow from "./IconArrow.astro";
                     text-anchor="middle"
                     fill="currentColor"
                     font-family="var(--font-pixel)"
-                    font-size="18">&lt;5ms</text
+                    font-size="15">ASYNC</text
                   >
                   <text
                     x="57"
@@ -315,7 +316,7 @@ import IconArrow from "./IconArrow.astro";
                     fill="currentColor"
                     font-family="var(--font-mono)"
                     font-size="9"
-                    opacity="0.85">ASYNC ROUTER</text
+                    opacity="0.85">INTENT ROUTER</text
                   >
                 </g>
                 <text
@@ -334,7 +335,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.8">Exact Page &amp; Fuse ID</text
+                  opacity="0.8">Page &amp; Fuse ID Citations</text
                 >
               </g>
 
@@ -355,7 +356,7 @@ import IconArrow from "./IconArrow.astro";
                   y="24"
                   fill="currentColor"
                   font-family="var(--font-pixel)"
-                  font-size="16">100%</text
+                  font-size="15">TOP 13</text
                 >
                 <text
                   x="14"
@@ -363,7 +364,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.85">DIAGNOSTIC RECALL</text
+                  opacity="0.85">OF 300+ HACKATHON TEAMS</text
                 >
 
                 <rect
@@ -381,7 +382,7 @@ import IconArrow from "./IconArrow.astro";
                   y="24"
                   fill="currentColor"
                   font-family="var(--font-pixel)"
-                  font-size="16">&lt;5ms</text
+                  font-size="15">RRF + CE</text
                 >
                 <text
                   x="192"
@@ -389,7 +390,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.85">INTENT CLASSIFICATION</text
+                  opacity="0.85">HYBRID RERANKING</text
                 >
 
                 <rect
@@ -407,7 +408,7 @@ import IconArrow from "./IconArrow.astro";
                   y="24"
                   fill="currentColor"
                   font-family="var(--font-pixel)"
-                  font-size="16">84 DOCS</text
+                  font-size="15">84 DOCS</text
                 >
                 <text
                   x="370"
@@ -459,7 +460,9 @@ import IconArrow from "./IconArrow.astro";
                 <summary class="blueprint-summary">
                   <span class="summary-code mono">[{note.code}]</span>
                   <span class="summary-title">{note.title}</span>
-                  <span class="summary-plus mono" aria-hidden="true">+</span>
+                  <svg viewBox="0 0 12 12" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true" class="summary-plus-svg">
+                    <path d="M5 0H7V5H12V7H7V12H5V7H0V5H5Z"></path>
+                  </svg>
                 </summary>
                 <div class="details-body">
                   <p>{note.content}</p>

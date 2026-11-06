@@ -45,9 +45,9 @@ export const featuredDossier = {
   badge: 'TEAM LEAD · JUL 2026 – AUG 2026',
   recognition: 'FPT Automotive Hackathon · Top 13 Finalist nationwide (300+ teams)',
   title: 'In-Cockpit Vehicle Copilot',
-  subtitle: 'Diagnosing Vehicle Manuals Without The Guesswork',
+  subtitle: 'Hybrid RAG & Spatial OCR for Automotive Service Manuals',
   summary:
-    'When a driver asks about an active dashboard warning light at 80 km/h, the system cannot afford a slow response or an invented answer. We built an embedded voice assistant for Android Automotive OS designed to query 84 dense vehicle service manuals with verifiable page and part-number citations.',
+    'Built during the FPT Automotive Hackathon 2026: an embedded voice assistant prototype for Android Automotive OS designed to query 84 dense vehicle service manuals and return grounded page and part-number citations.',
   breakdown: [
     {
       num: '01',
@@ -62,25 +62,25 @@ export const featuredDossier = {
     {
       num: '03',
       label: 'Within Cockpit Latency Budget',
-      text: 'Cross-encoders introduced roughly 25–40ms of latency on local hardware. To keep voice interaction seamless, we implemented an asynchronous FastAPI router (<5ms) to classify driver intent immediately while prefetching candidate manual chunks in parallel.',
+      text: 'Cross-encoders add extra inference latency on local hardware. To keep voice interaction responsive, we implemented an asynchronous FastAPI router to classify driver intent early while prefetching candidate manual chunks in parallel.',
     },
   ],
   evidence: [
     {
       label: 'PRACTICAL CHALLENGE',
-      value: 'Schematics and fuse tables caused diagnostic lookups to miss 24% of initial test queries',
+      value: 'Pinout schematics and multi-column fuse tables broke standard text-only chunking',
     },
     {
       label: 'ENGINEERING SOLUTION',
       value: 'RapidOCR spatial reconstruction paired with hybrid BM25 + dense ChromaDB and RRF',
     },
     {
-      label: 'BENCHMARK OUTCOME',
-      value: 'Eliminated the 24% retrieval failure rate with exact page and pinout citations',
+      label: 'GROUNDED CITATIONS',
+      value: 'Responses return verifiable manual page numbers, fuse codes, and pinout references',
     },
     {
       label: 'VOICE INTENT ROUTER',
-      value: 'Asynchronous FastAPI intent classification <5ms on cockpit runtime',
+      value: 'Asynchronous FastAPI intent routing with parallel chunk prefetching',
       isLive: true,
     },
   ],
@@ -89,7 +89,7 @@ export const featuredDossier = {
       code: 'A',
       title: 'The practical challenge: Manuals are packed with diagrams & fuse tables',
       content:
-        'Automotive technical manuals are not clean prose. They are packed with pinout schematics, torque tables, and multi-column fuse layouts. Standard text splitters and dense embeddings destroyed table structures and completely missed labels inside diagrams—causing diagnostic lookups to fail in 24% of our initial test queries.',
+        'Automotive technical manuals are not clean prose. They are packed with pinout schematics, torque tables, and multi-column fuse layouts. Standard text splitters and dense embeddings destroyed table structures and missed labels inside diagrams during diagnostic lookups.',
       defaultOpen: true,
     },
     {
@@ -100,9 +100,9 @@ export const featuredDossier = {
     },
     {
       code: 'C',
-      title: 'Keeping within the cockpit latency budget: Decoupled intent routing (<5ms)',
+      title: 'Keeping within the cockpit latency budget: Decoupled intent routing',
       content:
-        'Cross-encoders introduced roughly 25–40ms of latency on local hardware. To keep voice interaction seamless, we implemented an asynchronous FastAPI router (<5ms) to classify driver intent immediately while prefetching candidate manual chunks in parallel.',
+        'Cross-encoders add extra inference overhead on local hardware. To keep voice interaction responsive, we implemented an asynchronous FastAPI router to classify driver intent early while prefetching candidate manual chunks in parallel.',
     },
   ] as SystemNote[],
 };
@@ -120,7 +120,7 @@ export const projects: Project[] = [
     metrics: [
       { value: '152k+', label: 'xAPI events streamed' },
       { value: '<120ms', label: 'p95 MySQL write latency' },
-      { value: '500', label: 'Concurrent users verified' },
+      { value: '500', label: 'JMeter virtual users' },
     ],
   },
   {
@@ -130,12 +130,12 @@ export const projects: Project[] = [
     role: 'AI ENGINEER INTERN · HIPTECH',
     period: 'JUN 2025 – JAN 2026',
     description:
-      'Built a semantic search and recommendation service covering a catalog of 50,000+ hardware SKUs. Orchestrated stateful agent workflows using LangGraph to handle user clarification turns and hardware compatibility checks. Integrated Milvus vector database with E5 embeddings, maintaining average semantic query turnaround times below 250ms on live endpoints with 99.5% containerized uptime.',
+      'Built a semantic search and recommendation service covering a catalog of 50,000+ hardware SKUs. Orchestrated stateful agent workflows using LangGraph to handle user clarification turns and hardware compatibility checks. Integrated Milvus vector database with E5 embeddings, maintaining average semantic query turnaround times below 250ms across containerized FastAPI endpoints.',
     systems: ['PYTHON', 'LANGGRAPH', 'MILVUS', 'E5 EMBEDDINGS', 'FASTAPI', 'DOCKER'],
     metrics: [
       { value: '50k+', label: 'Hardware catalog SKUs' },
       { value: '<250ms', label: 'Average query latency' },
-      { value: '99.5%', label: 'Containerized uptime' },
+      { value: 'Milvus', label: 'E5 vector indexing' },
     ],
   },
   {
@@ -148,9 +148,9 @@ export const projects: Project[] = [
       'Designed an automated ingestion pipeline to audit incoming supplier specification sheets before records entered the production catalog. Implemented strict schema validation and anomaly detection using Pydantic v2 and PostgreSQL to catch malformed units, conflicting pinout specs, and duplicate SKUs—preventing corrupted supplier data from reaching production search indexes.',
     systems: ['PYTHON', 'POSTGRESQL', 'PYDANTIC V2', 'ANOMALY DETECTION', 'DOCKER'],
     metrics: [
-      { value: '100%', label: 'Schema gate coverage' },
-      { value: '0', label: 'Corrupted catalog writes' },
-      { value: '24/7', label: 'Automated spec ingestion' },
+      { value: 'Pydantic', label: 'Strict v2 schema gates' },
+      { value: ' Dedupe', label: 'SKU & pinout audit' },
+      { value: 'Batch', label: 'PostgreSQL staging' },
     ],
   },
 ];
