@@ -10,7 +10,7 @@
     "sync:cv": "node scripts/sync-cv.mjs"
   },
   "dependencies": {
-    "astro": "^5.0.0"
+    "astro": "^7.4.5"
   },
   "devDependencies": {
     "simple-icons": "^16.35.0"
