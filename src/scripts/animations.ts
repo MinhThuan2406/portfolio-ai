@@ -1,20 +1,3 @@
-/**
- * NGUYEN MINH THUAN · PAGE-WIDE ARCHITECTURAL BLUEPRINT ANIMATION ENGINE
- * Exact decompiled choreography & interactive effects from Nualt (https://nualt.fr/en):
- *  0. Nualt HomeLoaderCover (3 Tetris Piece Slots + Step-Rotation + Hard Drop + Curtain Lowering)
- *  1. Native Momentum Smooth Scroll (Clean zero-dependency Inertia Scroll)
- *  2. Global Scroll-Velocity Accelerator (1x -> 3.5x stream & tetris boost)
- *  3. Nualt RollingText Dual-Glyph Character Slot-Machine Reels & Section Rule Clip-Path Wipes
- *  4. Nualt ShadedGrid Deterministic Clustered Blueprint Grid Generator
- *  5. Nualt TetrisBorder Live Sliding Pixel Blocks (CTA Strip & Footer Gutter)
- *  6. Nualt Radial 8px Pixel-Matrix Button Wave (Instant Opacity Snap, Zero Seams)
- *  7. Live Hero Falling Tetris / Telemetry Block Matrix (O, T, L, I, S, Z)
- *  8. Live 2D Canvas De Casteljau Cubic-Bezier Hex Streams & Data Packet Buses
- *  9. Isometric 2.5D Layer Assembly & Phase-Shifted Levitation
- * 10. Case-Study Blueprint Wipe & Falling Isometric Stat Cubes
- * 11. Workstation OS Window Hachure Shadow Separation & Live Canvas Dependency Tree
- * 12. Live Self-Correcting Typewriter Code Window (22ms/80ms), Bento Hint & Footer Watermark Rise
- */
 
 interface SmoothScrollState {
   targetY: number;
@@ -24,8 +7,8 @@ interface SmoothScrollState {
 }
 
 const smoothScroll: SmoothScrollState = {
-  targetY: typeof window !== 'undefined' ? window.scrollY : 0,
-  currentY: typeof window !== 'undefined' ? window.scrollY : 0,
+  targetY: 0,
+  currentY: 0,
   isLocked: false,
   isMoving: false,
 };
@@ -33,8 +16,13 @@ const smoothScroll: SmoothScrollState = {
 function initSmoothScroll(): void {
   if (isLiteMotion()) return;
 
-  smoothScroll.targetY = window.scrollY;
-  smoothScroll.currentY = window.scrollY;
+  if ('scrollRestoration' in history) {
+    history.scrollRestoration = 'manual';
+  }
+  window.scrollTo(0, 0);
+
+  smoothScroll.targetY = 0;
+  smoothScroll.currentY = 0;
 
   function updateScroll(): void {
     if (smoothScroll.isLocked) {
@@ -64,10 +52,8 @@ function initSmoothScroll(): void {
     }
   }
 
-  // Expose on window for keyboard navigation & external triggers
   (window as unknown as { __smoothScrollTo?: (y: number) => void }).__smoothScrollTo = smoothScrollTo;
 
-  // Intercept all in-page anchor clicks for smooth momentum navigation
   document.addEventListener('click', (e: MouseEvent) => {
     const link = (e.target as HTMLElement)?.closest<HTMLAnchorElement>('a[href^="#"]');
     if (!link) return;
@@ -153,136 +139,156 @@ function lockScroll(locked: boolean): void {
   }
 }
 
-/* ==========================================================================
-   0. NUALT HOMELOADERCOVER (Pixel Tetris Pieces Drop + Curtain Lowering)
-   Exact decompiled choreography from Nualt (https://nualt.fr/en):
-   - Pieces are visible from start, hovering at translate: 0 -64px
-   - Slot 0 starts at 180deg (T-piece)
-   - Slot 1 starts at 90deg (Z-piece)
-   - Slot 2 starts at 270deg (L-piece)
-   - Discrete 80ms 90deg step-rotation: mimics arcade Tetris button press
-   - Hard drop into slot: translate: "0 -64px" -> "0 0" in 200ms with cubic-bezier(.55, 0, 1, .45)
-   - Curtain drop to [data-hero-panel] top: 800ms with cubic-bezier(.76, 0, .24, 1), delay 350ms
-   ========================================================================== */
 function initLoaderCover(): void {
   const cover = document.getElementById('home-loader-cover');
-  const logo = document.getElementById('loader-logo');
-  const slotsContainer = document.getElementById('loader-slots');
-  if (!cover) return;
+  const stage = document.getElementById('loader-stage');
+  const glyphs = cover?.querySelectorAll<SVGGElement>('.loader-glyph');
+  const counterEl = document.getElementById('loader-counter');
+  const progressBar = document.getElementById('loader-progress-bar');
+
+  if (!cover || !stage || !glyphs || glyphs.length === 0) return;
 
   if (isLiteMotion()) {
     document.documentElement.removeAttribute('data-loader');
+    cover.classList.add('is-dismissed');
     cover.style.display = 'none';
+    triggerHeroReveal();
     return;
   }
 
-  // Freeze smooth scroll while loader is active
   lockScroll(true);
 
-  const pieces = Array.from(document.querySelectorAll<HTMLElement>('[data-piece]'));
-  if (pieces.length < 3) return;
+  const letterData: {
+    glyph: SVGGElement;
+    stroke: SVGPathElement;
+    fill: SVGPathElement;
+    length: number;
+  }[] = [];
 
-  // Nualt initial piece rotation configs
-  const pieceConfigs = [
-    { turn: 180 }, // Slot 0
-    { turn: 90 },  // Slot 1
-    { turn: 270 }, // Slot 2
-  ];
-
-  // Set initial visible state
-  pieces.forEach((p, idx) => {
-    p.style.translate = '0 -64px';
-    p.style.rotate = `${pieceConfigs[idx].turn}deg`;
-    p.style.opacity = '1';
+  glyphs.forEach((glyph) => {
+    const stroke = glyph.querySelector<SVGPathElement>('.glyph-stroke');
+    const fill = glyph.querySelector<SVGPathElement>('.glyph-fill');
+    if (stroke && fill) {
+      let len = 0;
+      try {
+        len = Math.ceil(stroke.getTotalLength() || 1200);
+      } catch {
+        len = 1200;
+      }
+      stroke.style.strokeDasharray = `${len}`;
+      stroke.style.strokeDashoffset = `${len}`;
+      fill.style.opacity = '0';
+      letterData.push({ glyph, stroke, fill, length: len });
+    }
   });
 
-  const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-  const easeDrop = 'cubic-bezier(.55, 0, 1, .45)';
-
-  // Exact Nualt M(e) piece animation function:
-  async function animatePiece(idx: number): Promise<void> {
-    const el = pieces[idx];
-    if (!el) return;
-
-    // Discrete 80ms steps of 90deg rotation to 360deg (authentic arcade Tetris rotation)
-    for (let r = pieceConfigs[idx].turn; r < 360; r += 90) {
-      await sleep(80);
-      el.style.rotate = `${r + 90}deg`;
-    }
-
-    // Brief pause before hard-drop
-    await sleep(80);
-
-    // Hard drop straight into slot (200ms with cubic-bezier(.55, 0, 1, .45))
-    const drop = el.animate(
-      [
-        { translate: '0 -64px' },
-        { translate: '0 0' },
-      ],
-      { duration: 200, easing: easeDrop, fill: 'forwards' }
-    );
-    await drop.finished;
-    el.style.translate = '0 0';
-  }
-
-  // Execute sequence: Piece 0 -> Piece 1 -> Piece 2 with clean realistic cadence
   (async () => {
-    // Small initial breath (160ms) while page loads
-    await sleep(160);
+    let cancelled = false;
+    try {
+      const strokeDuration = 520;
+      const fillDuration = 320;
+      const stagger = 70;
+      const totalLetters = letterData.length;
+      const totalAnimationTime = (totalLetters - 1) * stagger + strokeDuration + 200;
 
-    // Piece 0 (T-piece: 180 -> 270 -> 360, then drop)
-    await animatePiece(0);
-    await sleep(120);
+      const startTime = performance.now();
+      const counterDuration = totalAnimationTime + 200;
 
-    // Piece 1 (Z-piece: 90 -> 180 -> 270 -> 360, then drop)
-    await animatePiece(1);
-    await sleep(120);
+      const updateCounter = (now: number) => {
+        const elapsed = now - startTime;
+        const rawProgress = Math.min(1, elapsed / counterDuration);
+        const eased = 1 - Math.pow(1 - rawProgress, 3.2);
+        const percent = Math.min(100, Math.floor(eased * 100));
 
-    // Piece 2 (L-piece: 270 -> 360, then drop)
-    await animatePiece(2);
+        if (counterEl) {
+          counterEl.textContent = `${String(percent).padStart(3, '0')}%`;
+        }
+        if (progressBar) {
+          progressBar.style.transform = `scaleX(${eased.toFixed(4)})`;
+        }
 
-    // 120ms pause after all 3 docked (exact Nualt timing)
-    await sleep(120);
+        if (rawProgress < 1 && !cancelled) {
+          requestAnimationFrame(updateCounter);
+        } else if (counterEl && progressBar) {
+          counterEl.textContent = '100%';
+          progressBar.style.transform = 'scaleX(1)';
+        }
+      };
+      requestAnimationFrame(updateCounter);
 
-    const heroPanel = document.querySelector<HTMLElement>('[data-hero-panel]');
-    const panelTop = heroPanel ? Math.max(0, heroPanel.getBoundingClientRect().top) : window.innerHeight;
-    const dropDistance = panelTop > 120 ? `${panelTop}px` : '100vh';
+      const animPromises: Promise<Animation>[] = [];
 
-    // Exit logo and slots downward
-    if (logo) {
-      logo.animate(
-        [{ transform: 'translateY(0)' }, { transform: 'translateY(110%)' }],
-        { duration: 350, easing: easeDrop, fill: 'forwards' }
+      letterData.forEach(({ stroke, fill, length }, i) => {
+        const delay = i * stagger;
+
+        const strokeAnim = stroke.animate(
+          [
+            { strokeDashoffset: `${length}`, opacity: 0.2 },
+            { strokeDashoffset: '0', opacity: 1 },
+          ],
+          {
+            duration: strokeDuration,
+            delay,
+            easing: 'cubic-bezier(0.22, 1, 0.36, 1)',
+            fill: 'forwards',
+          }
+        );
+        animPromises.push(strokeAnim.finished);
+
+        const fillDelay = delay + Math.floor(strokeDuration * 0.55);
+        const fillAnim = fill.animate(
+          [
+            { opacity: 0 },
+            { opacity: 1 },
+          ],
+          {
+            duration: fillDuration,
+            delay: fillDelay,
+            easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+            fill: 'forwards',
+          }
+        );
+        animPromises.push(fillAnim.finished);
+      });
+
+      await Promise.all(animPromises);
+
+      await new Promise((r) => setTimeout(r, 420));
+
+      cover.style.pointerEvents = 'none';
+
+      const exitEasing = 'cubic-bezier(0.76, 0, 0.24, 1)';
+      const stageExit = stage.animate(
+        [
+          { transform: 'translateY(0)', opacity: 1 },
+          { transform: 'translateY(-24px)', opacity: 0 },
+        ],
+        { duration: 520, easing: 'cubic-bezier(0.4, 0, 0.2, 1)', fill: 'forwards' }
       );
-    }
-    if (slotsContainer) {
-      slotsContainer.animate(
-        [{ transform: 'translateY(0)' }, { transform: `translateY(${Math.round(window.innerHeight * 0.6)}px)` }],
-        { duration: 450, easing: easeDrop, fill: 'forwards' }
+
+      const coverExit = cover.animate(
+        [
+          { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1 },
+          { clipPath: 'inset(0% 0% 100% 0%)', opacity: 0.95 },
+        ],
+        { duration: 720, easing: exitEasing, fill: 'forwards' }
       );
-    }
 
-    // Curtain drop: translateY(0) -> translateY(dropDistance), then fade out smoothly
-    const curtain = cover.animate(
-      [
-        { transform: 'translateY(0)', opacity: 1 },
-        { transform: `translateY(${dropDistance})`, opacity: 1, offset: 0.88 },
-        { transform: 'translateY(100vh)', opacity: 0 },
-      ],
-      { duration: 820, delay: 350, easing: 'cubic-bezier(.76, 0, .24, 1)', fill: 'forwards' }
-    );
+      setTimeout(() => {
+        document.documentElement.removeAttribute('data-loader');
+        lockScroll(false);
+        triggerHeroReveal();
+      }, 260);
 
-    // At 630ms: trigger hero reveal and unlock scroll (exact Nualt handoff)
-    setTimeout(() => {
-      document.documentElement.setAttribute('data-loader', 'open');
+      await Promise.all([stageExit.finished, coverExit.finished]);
+    } catch {
+      cancelled = true;
+    } finally {
       document.documentElement.removeAttribute('data-loader');
       lockScroll(false);
-      triggerHeroReveal();
-    }, 630);
-
-    await curtain.finished;
-    cover.classList.add('is-dismissed');
-    cover.style.display = 'none';
+      cover.classList.add('is-dismissed');
+      cover.style.display = 'none';
+    }
   })();
 }
 
@@ -297,7 +303,6 @@ function triggerHeroReveal(): void {
     el.classList.add('is-revealed');
   });
 
-  // Exact Nualt [data-hero-tetris] upward slide
   if (heroTetris) {
     heroTetris.animate(
       [
@@ -308,7 +313,6 @@ function triggerHeroReveal(): void {
     );
   }
 
-  // Exact Nualt Hairline Boundary Clip-Path wipes
   document.querySelectorAll<HTMLElement>('[data-hero-boundary="vertical"]').forEach((el) => {
     el.animate(
       [{ clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0 0 0 0)' }],
@@ -330,9 +334,6 @@ function isLiteMotion(): boolean {
   return false;
 }
 
-/* ==========================================================================
-   1. GLOBAL SCROLL VELOCITY TRACKER (Accelerates Canvas Streams & Tetris)
-   ========================================================================== */
 let scrollVelocity = 0;
 let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0;
 let lastScrollTime = typeof performance !== 'undefined' ? performance.now() : 0;
@@ -365,16 +366,6 @@ function getScrollBoost(): number {
   return Math.min(3.5, 1 + effectiveVel / 850);
 }
 
-/* ==========================================================================
-   2. NUALT ROLLINGTEXT DUAL-GLYPH CHARACTER SLOT-MACHINE REELS & ENTRANCES
-   Exact decompiled Nualt RollingText formula:
-   - Splits words into .rolling-word and characters into .rolling-char > .rolling-reel
-   - Each .rolling-reel holds two stacked <span data-g> copies of the character
-   - Deterministic per-character timing:
-     --d: 0.5 * (1 + ((7 * i) % 5) * 0.09) s
-     --x1: 0.32 + ((3 * i) % 5) * 0.055
-     --delay: i * 0.014 s
-   ========================================================================== */
 function splitHeadingIntoCharacterReels(heading: HTMLElement): HTMLElement[] {
   if (heading.dataset.reelsSplit === 'true') {
     return Array.from(heading.querySelectorAll<HTMLElement>('.rolling-reel'));
@@ -450,14 +441,12 @@ function initSectionAndHeadingEntrances(): void {
 
   headings.forEach((h) => splitHeadingIntoCharacterReels(h));
 
-  // If loader cover is not present, reveal hero immediately
   if (!document.getElementById('home-loader-cover')) {
     requestAnimationFrame(() => {
       triggerHeroReveal();
     });
   }
 
-  // Scroll-triggered section headers with Nualt horizontal rule clipPath wipe
   const sectionHeaders = document.querySelectorAll<HTMLElement>('[data-section-header]');
   function revealSectionHeader(container: HTMLElement): void {
     if (container.classList.contains('is-revealed')) return;
@@ -479,7 +468,6 @@ function initSectionAndHeadingEntrances(): void {
 
   sectionHeaders.forEach((sec) => headerObserver.observe(sec));
 
-  // Fallback scroll listener so fast jumps / anchor navigation never skip a section header
   function checkSkippedHeaders(): void {
     const triggerY = window.innerHeight * 0.92;
     sectionHeaders.forEach((container) => {
@@ -491,7 +479,6 @@ function initSectionAndHeadingEntrances(): void {
   window.addEventListener('scroll', checkSkippedHeaders, { passive: true });
   checkSkippedHeaders();
 
-  // Nualt Horizontal .on-blue Section Curtain Expansion ([data-blue-expand])
   const blueSections = document.querySelectorAll<HTMLElement>('[data-blue-expand]');
   blueSections.forEach((sec) => {
     let expanded = false;
@@ -520,7 +507,6 @@ function initSectionAndHeadingEntrances(): void {
     blueIo.observe(sec);
   });
 
-  // Contact copy & title entrance
   const contactStage = document.querySelector<HTMLElement>('.contact-copy-col');
   if (contactStage) {
     const contactObserver = new IntersectionObserver(
@@ -542,13 +528,6 @@ function initSectionAndHeadingEntrances(): void {
   }
 }
 
-/* ==========================================================================
-   3. NUALT SHADEDGRID GENERATOR (Deterministic Clustered Blueprint Grid)
-   Exact decompiled algorithm from Nualt module 439972:
-   - 40x40px SVG <pattern> grid lines
-   - Seed = 11 PRNG (t = 16807 * t % 2147483647) generating 14 organic cell clusters
-   - 6 color-mix(in srgb, currentColor X%, transparent) shades
-   ========================================================================== */
 function initShadedGrids(): void {
   const containers = document.querySelectorAll<HTMLElement>('[data-shaded-grid]');
   if (!containers.length) return;
@@ -561,7 +540,6 @@ function initShadedGrids(): void {
     (pct) => `color-mix(in srgb, currentColor ${pct}%, transparent)`
   );
 
-  // Run exact Nualt PRNG once to produce deterministic cell shades
   let seed = 11;
   const rand = (): number => {
     seed = (16807 * seed) % 2147483647;
@@ -634,13 +612,6 @@ function initShadedGrids(): void {
   });
 }
 
-/* ==========================================================================
-   4. NUALT TETRISBORDER LIVE SLIDING PIXEL BLOCKS (Module 942048)
-   Exact decompiled algorithm from Nualt:
-   - Populates horizontal or vertical border strips with 0.95x0.95 SVG rects
-   - Continuously slides random blocks into empty orthogonal neighbors
-     over 400 + 200 * Math.random() ms with cubic-bezier(0.45, 0, 0.2, 1)
-   ========================================================================== */
 function initTetrisBorders(): void {
   const borders = document.querySelectorAll<HTMLElement>('[data-tetris-border]');
   if (!borders.length) return;
@@ -663,7 +634,6 @@ function initTetrisBorders(): void {
     const rows = isVertical ? 18 : 2;
     const lanes = 2;
 
-    // Seed initial cell coordinates using Nualt's checkerboard + random density
     const initialCells: { x: number; y: number }[] = [];
     let s = isVertical ? 37 : 19;
     const nextR = (): number => {
@@ -774,17 +744,11 @@ function initTetrisBorders(): void {
   });
 }
 
-/* ==========================================================================
-   5. RADIAL 8PX PIXEL-MATRIX BUTTON WAVE (Exact Nualt Button Transition Matrix)
-   - Instant opacity 0 -> 1 snap at var(--delay) (up to 420ms)
-   - 9x9px cells on an 8px grid so there are zero sub-pixel seams
-   - Reverse wave on pointerleave via calc(0.42s - var(--delay))
-   ========================================================================== */
 function initPixelButtons(): void {
   if (isLiteMotion()) return;
 
   const buttons = document.querySelectorAll<HTMLElement>(
-    '[data-pixel-btn], .nav-link, .header-cv, .header-cta, .header-github'
+    '[data-pixel-btn], .social-bento-cell, .nav-link, .header-cv, .header-cta, .header-github'
   );
 
   buttons.forEach((btn) => {
@@ -848,14 +812,12 @@ function initPixelButtons(): void {
       }
       btn.classList.remove('has-pixel-hover');
       buildRipple(e.clientX, e.clientY);
-      // Flush layout so newly inserted spans start at opacity: 0 before transitioning to opacity: 1
       void fill!.offsetWidth;
       btn.classList.add('has-pixel-hover');
     });
 
     btn.addEventListener('pointerleave', (e: PointerEvent) => {
       if (e.pointerType === 'touch') return;
-      // Recompute delays from exit point so the reverse wave radiates from where the cursor left
       buildRipple(e.clientX, e.clientY);
       btn.classList.add('has-pixel-hover');
       void fill!.offsetWidth;
@@ -883,16 +845,6 @@ function initPixelButtons(): void {
   });
 }
 
-/* ==========================================================================
-   6. HERO LIVE FALLING TETRIS / TELEMETRY BLOCK MATRIX
-   Exact Nualt deterministic 4-column lane tiling algorithm (module 275682):
-   - Uses Nualt's 4 complementary shapes (O, L, J, I4) paired per 4-column lane:
-     * O (2x2 at dx=0) + O (2x2 at dx=2) -> solid 4x2 block
-     * L ([[0,0],[0,1],[1,1],[2,1]] at dx=0) + J ([[0,0],[1,0],[2,0],[2,1]] at dx=1) -> solid 4x2 block
-     * I4 (4x1 at dx=0) + I4 (4x1 at dx=0) -> solid 4x2 block
-   - Interleaves Lane 0 (cols 0..3) and Lane 1 (cols 4..7) so there are NEVER
-     unfillable gaps, pieces NEVER overflow, and a row ONLY clears when 100% full (8/8 cells)!
-   ========================================================================== */
 interface TetrominoDef {
   cells: [number, number][];
   fillOpacity: number;
@@ -982,13 +934,11 @@ function initHeroTetris(): void {
   const COLS = 8;
   const ROWS = 5;
   const CELL_SIZE = 14;
-  const STEP = 16; // 14px + 2px gap
+  const STEP = 16;
 
-  // Remove static fallback
   const fallback = boardGroup.querySelector('[data-tetris-fallback]');
   if (fallback) fallback.remove();
 
-  // Render persistent 8x5 blueprint slot outlines behind falling blocks
   if (!boardGroup.querySelector('[data-tetris-slots]')) {
     const slotGroup = document.createElementNS(SVG_NS, 'g');
     slotGroup.setAttribute('data-tetris-slots', '');
@@ -1037,9 +987,6 @@ function initHeroTetris(): void {
     return rect;
   }
 
-  // Initial settled state (Exact Nualt pattern):
-  // - Lane 0 (cols 0..3) has a completed 4x2 block at rows 3 & 4 (O@0 + O@2)
-  // - Lane 1 (cols 4..7) has the first half of Pair 0 (L@4) settled at rows 3 & 4
   for (const [dx, dy] of SHAPE_O.cells) {
     grid[3 + dy][0 + dx] = {
       rect: createBlockRect(0 + dx, 3 + dy, SHAPE_O),
@@ -1057,12 +1004,6 @@ function initHeroTetris(): void {
     };
   }
 
-  // Deterministic interleaved drop queue:
-  // Each 4-step cycle drops:
-  //   0: p0[0] (starts next 4x2 block on Lane 0 at rows 1..2)
-  //   1: p1[1] (completes Lane 1 at rows 3..4 -> triggers 100% full 8/8 row clear!)
-  //   2: p0[1] (completes Lane 0 at rows 3..4)
-  //   3: nextP1[0] (starts next 4x2 block on Lane 1 at rows 3..4)
   let lane0PairIdx = 1;
   let lane1PairIdx = 0;
   const dropQueue: ScheduledDrop[] = [];
@@ -1131,7 +1072,6 @@ function initHeroTetris(): void {
       }
     }
 
-    // Exact Nualt 780ms line-clear flash keyframe
     dyingRects.forEach((rect) => {
       rect.animate(
         [
@@ -1147,7 +1087,6 @@ function initHeroTetris(): void {
     setTimeout(() => {
       dyingRects.forEach((r) => r.remove());
 
-      // Shift remaining rows down cleanly
       for (const clearedRow of uniqueRows) {
         for (let r = clearedRow; r > 0; r--) {
           for (let c = 0; c < COLS; c++) {
@@ -1187,7 +1126,6 @@ function initHeroTetris(): void {
         activePiece!.rects[idx].setAttribute('y', String((activePiece!.row + dy) * STEP));
       });
     } else {
-      // Lock piece into grid
       activePiece.def.cells.forEach(([dx, dy], idx) => {
         const c = activePiece!.col + dx;
         const r = activePiece!.row + dy;
@@ -1202,7 +1140,6 @@ function initHeroTetris(): void {
       });
       activePiece = null;
 
-      // ONLY clear rows that are 100% FULL (all 8 of 8 cells occupied: grid[r].every(cell !== null))
       const completedRows: number[] = [];
       for (let r = 0; r < ROWS; r++) {
         if (grid[r].every((cell) => cell !== null)) {
@@ -1219,10 +1156,6 @@ function initHeroTetris(): void {
   requestAnimationFrame(stepTetris);
 }
 
-/* ==========================================================================
-   7. LIVE 2D CANVAS BEZIER HEX STREAMS & DATA PACKET BUSES (Nualt MethodFlow)
-   Includes progressive De Casteljau cubic-bezier subdivision (1.76s entrance)
-   ========================================================================== */
 interface Point2D {
   x: number;
   y: number;
@@ -1240,7 +1173,6 @@ function evalCubicBezier(t: number, p0: Point2D, p1: Point2D, p2: Point2D, p3: P
   };
 }
 
-// De Casteljau subdivision for partial cubic-bezier drawing [0, progress]
 function strokePartialCubicBezier(
   ctx: CanvasRenderingContext2D,
   p0: Point2D,
@@ -1374,7 +1306,6 @@ function attachPipelineStreamCanvas(
     const dt = Math.min((now - lastFrame) / 1000, 0.08) * getScrollBoost();
     lastFrame = now;
 
-    // Nualt MethodFlow 1.76s progressive curve draw
     const elapsedDraw = drawStartTime !== null ? (now - drawStartTime) / 1760 : 1;
     const rawDraw = Math.max(0, Math.min(1, elapsedDraw));
     const drawProgress = 1 - Math.pow(1 - rawDraw, 3);
@@ -1392,7 +1323,6 @@ function attachPipelineStreamCanvas(
     const xBus2End = width * (options.midNode2RatioX + 0.11);
     const xExit = width * options.rightExitRatioX;
 
-    // Build left fan-in and right fan-out Bezier control points
     const leftCurves: [Point2D, Point2D, Point2D, Point2D][] = [];
     const rightCurves: [Point2D, Point2D, Point2D, Point2D][] = [];
 
@@ -1413,7 +1343,6 @@ function attachPipelineStreamCanvas(
       ]);
     }
 
-    // Draw dashed Bezier fan-in and fan-out lines progressively via De Casteljau
     ctx!.save();
     ctx!.strokeStyle = strokeColor;
     ctx!.globalAlpha = 0.28;
@@ -1431,7 +1360,6 @@ function attachPipelineStreamCanvas(
     }
     ctx!.restore();
 
-    // Update & draw streaming hexadecimal characters along left fan-in curves
     if (leftProg > 0.25) {
       ctx!.save();
       ctx!.fillStyle = strokeColor;
@@ -1455,7 +1383,6 @@ function attachPipelineStreamCanvas(
       ctx!.restore();
     }
 
-    // Update & draw 4x4 square data packets along inter-stage buses & right fan-out
     if (drawProgress > 0.35) {
       ctx!.save();
       ctx!.fillStyle = strokeColor;
@@ -1520,9 +1447,6 @@ function initPipelineCanvases(): void {
   }
 }
 
-/* ==========================================================================
-   8. ISOMETRIC 2.5D LAYER ASSEMBLY & CONTINUOUS LEVITATION (assembleIso)
-   ========================================================================== */
 function initIsometricAssemblies(): void {
   const groups = document.querySelectorAll<SVGGElement>('[data-iso-assembly]');
   if (!groups.length || isLiteMotion()) return;
@@ -1571,9 +1495,6 @@ function initIsometricAssemblies(): void {
   groups.forEach((g) => io.observe(g));
 }
 
-/* ==========================================================================
-   9. PRODUCTION PIPELINES CASE ROWS & FALLING ISOMETRIC STAT CUBES
-   ========================================================================== */
 function initCaseStudyRows(): void {
   const rows = document.querySelectorAll<HTMLElement>('[data-case-row]');
   if (!rows.length) return;
@@ -1587,7 +1508,6 @@ function initCaseStudyRows(): void {
     if (row.classList.contains('is-revealed')) return;
     row.classList.add('is-revealed');
 
-    // Animate the 3 Isometric Stat Cubes dropping from above (Nualt WorkEntrance / CaseStatCubes)
     const cubes = Array.from(row.querySelectorAll<SVGGElement>('[data-stat-cube]'));
     cubes.forEach((cube, idx) => {
       const drop = cube.animate(
@@ -1616,7 +1536,6 @@ function initCaseStudyRows(): void {
       };
     });
 
-    // Stagger copy blocks on the right
     const copies = row.querySelectorAll<HTMLElement>('[data-case-copy], [data-cube-metric]');
     copies.forEach((el, idx) => {
       el.style.transitionDelay = `${160 + idx * 75}ms`;
@@ -1651,9 +1570,6 @@ function initCaseStudyRows(): void {
   );
 }
 
-/* ==========================================================================
-   10. WORKSTATION OS WINDOW SEPARATION & LIVE CANVAS DEPENDENCY TREE
-   ========================================================================== */
 function initOsWindowAndTree(): void {
   const wrap = document.querySelector<HTMLElement>('[data-os-window-wrap]');
   const canvas = document.querySelector<HTMLCanvasElement>('canvas[data-os-tree-canvas]');
@@ -1675,7 +1591,6 @@ function initOsWindowAndTree(): void {
     treeStarted = true;
     wrap!.classList.add('is-revealed');
 
-    // Stagger the 4 architectural layer columns and their leaf modules
     const nodes = wrap!.querySelectorAll<HTMLElement>('[data-tree-node]');
     nodes.forEach((node, nIdx) => {
       node.style.transitionDelay = `${360 + nIdx * 110}ms`;
@@ -1687,7 +1602,6 @@ function initOsWindowAndTree(): void {
       });
     });
 
-    // Animate branchProgress 0 -> 1 over 850ms
     const start = performance.now();
     function growBranches(now: number): void {
       const elapsed = now - start;
@@ -1811,7 +1725,6 @@ function initOsWindowAndTree(): void {
     ctx!.setLineDash([2, 3]);
     ctx!.globalAlpha = 0.55;
 
-    // Draw orthogonal branches from rootX -> busY -> each column center -> height
     for (const cx of colCenters) {
       ctx!.beginPath();
       ctx!.moveTo(rootX, 0);
@@ -1827,17 +1740,14 @@ function initOsWindowAndTree(): void {
       }
       ctx!.stroke();
 
-      // Draw junction squares
       if (branchProgress >= 0.95) {
         ctx!.fillRect(cx - 2.5, height - 5, 5, 5);
       }
     }
 
-    // Root origin square
     ctx!.fillRect(rootX - 3, 0, 6, 5);
     ctx!.restore();
 
-    // Stream live 4x4 telemetry packets along the orthogonal branches
     if (branchProgress >= 0.95) {
       ctx!.save();
       ctx!.fillStyle = color;
@@ -1854,11 +1764,7 @@ function initOsWindowAndTree(): void {
   requestAnimationFrame(renderTree);
 }
 
-/* ==========================================================================
-   11. BLUEPRINT FRAME TRACES, COUNTER ROLL-UPS & SMOOTH ACCORDIONS
-   ========================================================================== */
 function initBlueprintFramesAndAccordions(): void {
-  // Number Count-Up for Hero Pixel Stats (TOP 13, 152,714+)
   const counters = document.querySelectorAll<HTMLElement>('[data-count-target]');
   if (!isLiteMotion()) {
     counters.forEach((el) => {
@@ -1880,7 +1786,6 @@ function initBlueprintFramesAndAccordions(): void {
     });
   }
 
-  // Hero Ledger Cells stagger
   const ledgerCells = document.querySelectorAll<HTMLElement>('[data-ledger-cell]');
   ledgerCells.forEach((cell, idx) => {
     if (isLiteMotion()) {
@@ -1890,7 +1795,6 @@ function initBlueprintFramesAndAccordions(): void {
     }
   });
 
-  // Dossier Frame, Trajectory Ledger & FAQ/System Notes Sections
   const revealBlocks = document.querySelectorAll<HTMLElement>(
     '[data-dossier-frame], [data-ledger-frame], [data-faq-section]'
   );
@@ -1943,7 +1847,6 @@ function initBlueprintFramesAndAccordions(): void {
     );
   }
 
-  // Smooth Web Animations API Accordion for <details class="blueprint-details">
   const detailsList = document.querySelectorAll<HTMLDetailsElement>('details.blueprint-details');
   detailsList.forEach((details) => {
     const summary = details.querySelector<HTMLElement>('summary');
@@ -1989,11 +1892,6 @@ function initBlueprintFramesAndAccordions(): void {
   });
 }
 
-/* ==========================================================================
-   12. LIVE SELF-CORRECTING TYPEWRITER CODE WINDOW, BENTO WAVE & FOOTER RISE
-   Exact Nualt CtaCodeTyping cadence: 22ms per character, 80ms per backspace,
-   400ms/600ms realistic thinking pauses, plus CtaIconsHint (150ms -> 1350ms)
-   ========================================================================== */
 interface CodeToken {
   text: string;
   cls?: string;
@@ -2009,7 +1907,6 @@ function initContactAnimations(): void {
   const typingStage = document.getElementById('cta-code-typing');
   const codePre = document.getElementById('cta-code-pre');
   const replayBtn = document.getElementById('replay-typing-btn');
-  const bentoGrid = document.querySelector<HTMLElement>('[data-cta-icons]');
   const footerWrap = document.querySelector<HTMLElement>('[data-footer-logo-wrap]');
   const footerLogo = document.querySelector<HTMLElement>('[data-footer-logo]');
 
@@ -2019,9 +1916,7 @@ function initContactAnimations(): void {
     return;
   }
 
-  // 1. Code Window Shadow Separation & Live Self-Correcting Typewriter (Nualt CtaCodeTyping)
   if (codeWrap && typingStage && codePre) {
-    // Create a hidden layout-locking sizer clone so card height never jumps during typing
     const sizer = codePre.cloneNode(true) as HTMLElement;
     sizer.removeAttribute('id');
     sizer.className = 'code-pre code-pre-sizer mono';
@@ -2029,16 +1924,13 @@ function initContactAnimations(): void {
     typingStage.insertBefore(sizer, codePre);
     codePre.classList.add('code-pre-live');
 
-    // Exact Nualt-style sequence with 2 realistic engineering self-corrections:
-    // Correction 1: workMode: "On-site" -> pause 400ms -> backspace 9 (80ms/char) -> "HCMC | Remote"
-    // Correction 2: availability: "2027" -> pause 600ms -> backspace 6 (80ms/char) -> "Late 2026"
     const scriptOps: TypewriterOp[] = [
       {
         type: 'tokens',
         list: [
           { text: 'interface', cls: 'c-kw' },
           { text: ' ' },
-          { text: 'EngineerProfile', cls: 'c-type' },
+          { text: 'Profile', cls: 'c-type' },
           { text: ' {\n  ' },
           { text: 'candidate', cls: 'c-prop' },
           { text: ': ' },
@@ -2048,13 +1940,13 @@ function initContactAnimations(): void {
           { text: ': ' },
           { text: '"B.S. Computer Science & Engineering (VNU-HCM)"', cls: 'c-str' },
           { text: ';\n  ' },
-          { text: 'focus', cls: 'c-prop' },
+          { text: 'interests', cls: 'c-prop' },
           { text: ': [' },
-          { text: '"Hybrid RAG & Vector Search"', cls: 'c-str' },
+          { text: '"RAG Pipelines"', cls: 'c-str' },
           { text: ', ' },
-          { text: '"FastAPI / uvloop"', cls: 'c-str' },
+          { text: '"Vector Databases"', cls: 'c-str' },
           { text: ', ' },
-          { text: '"Async Telemetry"', cls: 'c-str' },
+          { text: '"LLM Inference & APIs"', cls: 'c-str' },
           { text: '];\n}\n\n' },
           { text: 'export async function', cls: 'c-kw' },
           { text: ' ' },
@@ -2062,47 +1954,23 @@ function initContactAnimations(): void {
           { text: '(\n  ' },
           { text: 'role', cls: 'c-prop' },
           { text: ': ' },
-          { text: '"AI Engineer"', cls: 'c-str' },
-          { text: ' | ' },
-          { text: '"Backend Engineer"', cls: 'c-str' },
+          { text: '`${"Fresher" | "Junior"} ${"AI" | "Backend"} Engineer`', cls: 'c-str' },
           { text: '\n) {\n  ' },
           { text: 'return await', cls: 'c-kw' },
           { text: ' ' },
-          { text: 'dispatchOffer', cls: 'c-fn' },
+          { text: 'dispatchContact', cls: 'c-fn' },
           { text: '({\n    ' },
           { text: 'email', cls: 'c-prop' },
           { text: ': ' },
           { text: '"thuannm0426@gmail.com"', cls: 'c-str' },
           { text: ',\n    ' },
-          { text: 'phone', cls: 'c-prop' },
+          { text: 'location', cls: 'c-prop' },
           { text: ': ' },
-          { text: '"+84 819-786-704"', cls: 'c-str' },
-          { text: ',\n    ' },
-          { text: 'workMode', cls: 'c-prop' },
-          { text: ': ' },
-          { text: '"On-site"', cls: 'c-str' },
-        ],
-      },
-      { type: 'pause', ms: 400 },
-      { type: 'delete', count: 9 }, // deletes "On-site"
-      { type: 'pause', ms: 260 },
-      {
-        type: 'tokens',
-        list: [
           { text: '"HCMC | Remote"', cls: 'c-str' },
           { text: ',\n    ' },
-          { text: 'availability', cls: 'c-prop' },
+          { text: 'status', cls: 'c-prop' },
           { text: ': ' },
-          { text: '"2027"', cls: 'c-str' },
-        ],
-      },
-      { type: 'pause', ms: 600 },
-      { type: 'delete', count: 6 }, // deletes "2027"
-      { type: 'pause', ms: 260 },
-      {
-        type: 'tokens',
-        list: [
-          { text: '"Late 2026"', cls: 'c-str' },
+          { text: '"Open to opportunities (Late 2026)"', cls: 'c-str' },
           { text: ',\n  });\n}' },
         ],
       },
@@ -2159,7 +2027,7 @@ function initContactAnimations(): void {
             deleteRemaining--;
             currentSpan = null;
             currentTextNode = null;
-            nextActionAt = now + 80; // Exact Nualt 80ms backspace cadence
+            nextActionAt = now + 80;
             return true;
           }
           deleteRemaining = -1;
@@ -2168,7 +2036,6 @@ function initContactAnimations(): void {
           return true;
         }
 
-        // op.type === 'tokens'
         if (tokenIdx >= op.list.length) {
           opIdx++;
           tokenIdx = 0;
@@ -2204,7 +2071,7 @@ function initContactAnimations(): void {
           charIdx = 0;
         }
 
-        nextActionAt = now + 22; // Exact Nualt 22ms typing cadence
+        nextActionAt = now + 22;
         return true;
       }
 
@@ -2257,28 +2124,6 @@ function initContactAnimations(): void {
     });
   }
 
-  // 2. Social Bento Row Viewport-Entry Spring Wave Hint (Exact Nualt CtaIconsHint: 150ms -> 1350ms)
-  if (bentoGrid) {
-    const cells = bentoGrid.querySelectorAll<HTMLElement>('[data-bento-cell]');
-    const bentoIo = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          cells.forEach((cell, idx) => {
-            setTimeout(() => {
-              cell.setAttribute('data-hint', 'true');
-              setTimeout(() => cell.removeAttribute('data-hint'), 1200);
-            }, 150 + idx * 140);
-          });
-          bentoIo.unobserve(bentoGrid);
-        });
-      },
-      { threshold: 0.6 }
-    );
-    bentoIo.observe(bentoGrid);
-  }
-
-  // 3. Rising Architectural Footer Watermark ([data-footer-logo])
   if (footerWrap && footerLogo) {
     const footerIo = new IntersectionObserver(
       (entries) => {
@@ -2294,9 +2139,6 @@ function initContactAnimations(): void {
   }
 }
 
-/* ==========================================================================
-   MASTER BOOTSTRAP
-   ========================================================================== */
 function initAllAnimations(): void {
   initSmoothScroll();
   initShadedGrids();

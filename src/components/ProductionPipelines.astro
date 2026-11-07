@@ -4,28 +4,24 @@ import { projects } from "../data/portfolio";
 
 <section class="pipelines-section" id="pipelines" aria-labelledby="pipelines-heading">
   <div class="frame-container">
-    <!-- 24-Column Section Header (No Eyebrow Kicker above H2!) -->
     <div class="grid-24 section-header-grid" data-section-header>
       <div class="section-header-left">
         <h2 id="pipelines-heading" class="section-title" data-rolling-title>
-          Production systems &amp; internship experience.
+          Hands-on projects and internship contributions.
         </h2>
       </div>
       <div class="section-header-right">
         <p class="section-lead" data-section-lead>
-          Built during engineering internships at <strong>ITP (VNU-HCM)</strong> and <strong>HIPTECH</strong>,
-          focusing on asynchronous telemetry ingestion, vector search services, and data validation pipelines
-          tested with Apache JMeter, MySQL/PostgreSQL, and Docker.
+          Focused on asynchronous telemetry pipelines, vector search integration,
+          and database optimization during internships at <strong>ITP (VNU-HCM)</strong> and <strong>HIPTECH</strong>.
         </p>
       </div>
     </div>
 
-    <!-- Nualt Case-Study Row Pattern: Dashed Blueprint Dividers + Falling Isometric Stat Cubes -->
     <div class="pipeline-rows">
       {
         projects.map((project) => (
           <article class="pipeline-case-row grid-24" data-case-row>
-            <!-- Left 10 Columns: Isometric 2.5D Stat Cubes + Metric Breakdown -->
             <div class="case-cubes-col" data-case-panel>
               <div class="case-index-header mono">
                 <span class="case-index-pixel">{project.index}</span>
@@ -53,7 +49,6 @@ import { projects } from "../data/portfolio";
                   xmlns="http://www.w3.org/2000/svg"
                   aria-hidden="true"
                 >
-                  <!-- Isometric Floor Grid -->
                   <line
                     x1="12"
                     y1="138"
@@ -73,7 +68,6 @@ import { projects } from "../data/portfolio";
                     stroke-dasharray="2 4"
                   />
 
-                  <!-- Cube 1 (Left) -->
                   <g transform="translate(14, 24)">
                     <g data-stat-cube="0">
                       <polygon
@@ -108,7 +102,6 @@ import { projects } from "../data/portfolio";
                     </g>
                   </g>
 
-                  <!-- Cube 2 (Center - Elevated) -->
                   <g transform="translate(138, 10)">
                     <g data-stat-cube="1">
                       <polygon
@@ -143,7 +136,6 @@ import { projects } from "../data/portfolio";
                     </g>
                   </g>
 
-                  <!-- Cube 3 (Right) -->
                   <g transform="translate(262, 28)">
                     <g data-stat-cube="2">
                       <polygon
@@ -190,7 +182,6 @@ import { projects } from "../data/portfolio";
               </div>
             </div>
 
-            <!-- Right 13 Columns (col-start-12): Project Narrative & Systems Tags -->
             <div class="case-content-col">
               <div class="case-role-bar mono" data-case-copy>
                 <span class="case-role-badge">{project.role}</span>
@@ -216,7 +207,7 @@ import { projects } from "../data/portfolio";
     </div>
 
     <p class="section-footnote mono">
-      * METRICS BENCHMARKED ACROSS APACHE JMETER SUITES, PRODUCTION SERVICE RUNTIMES, AND DATABASE AUDIT LOGS.
+      * BENCHMARKED UNDER LOAD SIMULATION, PRODUCTION SERVICE RUNTIMES, AND DATABASE METRIC AUDITS.
     </p>
   </div>
 </section>

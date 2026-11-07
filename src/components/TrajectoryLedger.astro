@@ -5,7 +5,6 @@ import IconArrow from "./IconArrow.astro";
 
 <section class="trajectory-section" id="background" aria-labelledby="trajectory-heading">
   <div class="frame-container">
-    <!-- 24-Column Section Header (No Eyebrow Kicker above H2!) -->
     <div class="grid-24 section-header-grid" data-section-header>
       <div class="section-header-left">
         <h2 id="trajectory-heading" class="section-title" data-rolling-title>
@@ -14,14 +13,11 @@ import IconArrow from "./IconArrow.astro";
       </div>
       <div class="section-header-right">
         <p class="section-lead" data-section-lead>
-          Academic foundations at <strong>International University (VNU-HCM)</strong>, industry
-          internships at <strong>HIPTECH</strong> and <strong>ITP</strong>, and national hackathon
-          leadership culminating in production-grade systems and open-source contributions.
+          Academic foundation at <strong>International University (VNU-HCM)</strong>, industry internships at <strong>HIPTECH</strong> and <strong>ITP</strong>, and national hackathon leadership in automotive AI prototypes.
         </p>
       </div>
     </div>
 
-    <!-- Nualt Numbered Exposed Blueprint Frame (00 to 04) -->
     <div class="trajectory-ledger-frame" data-ledger-frame>
       {
         checkpoints.map((cp) => (
@@ -34,7 +30,6 @@ import IconArrow from "./IconArrow.astro";
               { "trajectory-row-highlight on-blue": cp.isHighlight },
             ]}
           >
-            <!-- Left 6 Columns: Pixel Index & Time Window (border-r) -->
             <div class="trajectory-index-col" data-row-head>
               <span class="trajectory-pixel-num">{cp.index}</span>
               <div class="trajectory-period-meta mono">
@@ -43,7 +38,6 @@ import IconArrow from "./IconArrow.astro";
               </div>
             </div>
 
-            <!-- Right 18 Columns: Milestone Title, Narrative & Optional Action -->
             <div class="trajectory-content-col" data-row-body>
               <div class="trajectory-content-inner">
                 <h3 class="trajectory-title">{cp.title}</h3>

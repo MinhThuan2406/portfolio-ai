@@ -5,23 +5,22 @@ import IconArrow from "./IconArrow.astro";
 
 <section class="dossier-section" id="work" aria-labelledby="dossier-heading">
   <div class="frame-container">
-    <!-- 24-Column Blueprint Section Header (No Eyebrow Kicker above H2!) -->
     <div class="grid-24 section-header-grid" data-section-header>
       <div class="section-header-left">
         <h2 id="dossier-heading" class="section-title" data-rolling-title>
-          Featured project: In-cockpit vehicle copilot.
+          Featured project: In-cockpit technical assistant prototype.
         </h2>
       </div>
       <div class="section-header-right">
         <p class="section-lead" data-section-lead>
-          Engineered for the <strong>FPT Automotive Hackathon 2026</strong> (Top 13 Finalist nationwide out of 300+ teams).
-          An embedded voice assistant on Android Automotive OS designed to query 84 dense vehicle service manuals
-          with exact spatial and part-number citations.
+          Developed for the <strong>FPT Automotive Hackathon 2026</strong>. An
+          embedded voice assistant prototype on Android Automotive OS designed
+          to help query 84 dense vehicle service manuals with grounded page and
+          fuse citations.
         </p>
       </div>
     </div>
 
-    <!-- Framed Blueprint Dossier Card -->
     <article class="dossier-frame" data-dossier-frame>
       <div class="dossier-topbar mono">
         <div class="dossier-meta-left">
@@ -31,12 +30,25 @@ import IconArrow from "./IconArrow.astro";
         <div class="dossier-meta-right">
           <span>{featuredDossier.badge}</span>
           <span class="meta-sep">/</span>
-          <span class="dossier-highlight-badge">{featuredDossier.recognition}</span>
+          <span class="dossier-highlight-badge"
+            >{featuredDossier.recognition}</span
+          >
+          <span class="meta-sep">/</span>
+          <a
+            class="dossier-org-link"
+            href="https://github.com/WheelchairTeam-FPTautomotive"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span>GITHUB REPOS</span>
+            <span class="btn-arrow-wrap" aria-hidden="true">
+              <IconArrow width={10} height={10} />
+            </span>
+          </a>
         </div>
       </div>
 
       <div class="grid-24 dossier-body-grid">
-        <!-- Left 12 Columns: Narrative + 3-Step Engineering Breakdown -->
         <div class="dossier-narrative-col">
           <h3 class="dossier-project-title" data-dossier-copy>
             {featuredDossier.title}
@@ -63,7 +75,7 @@ import IconArrow from "./IconArrow.astro";
 
           <div class="dossier-cta-row" data-dossier-copy>
             <a class="blueprint-inline-link mono" href="#project-notes">
-              <span>VIEW DETAILED ARCHITECTURE NOTES [A–C]</span>
+              <span>ARCHITECTURAL NOTES [A–C]</span>
               <span class="btn-arrow-wrap" aria-hidden="true">
                 <IconArrow width={11} height={11} />
               </span>
@@ -71,105 +83,107 @@ import IconArrow from "./IconArrow.astro";
           </div>
         </div>
 
-        <!-- Right 12 Columns: Isometric 2.5D System Architecture & Stat Cubes (.on-blue) -->
         <figure
           class="dossier-diagram-col on-blue"
-          aria-label="Isometric architecture diagram and benchmark metrics for Digital Cockpit Copilot"
+          aria-label="Architecture diagram for In-Cockpit Vehicle Copilot"
         >
-          <div class="shaded-grid-layer" data-shaded-grid aria-hidden="true"></div>
+          <div class="shaded-grid-layer" data-shaded-grid aria-hidden="true">
+          </div>
           <figcaption class="diagram-topbar mono">
-            <span>FIG 01.1 // IN-COCKPIT RETRIEVAL ARCHITECTURE</span>
+            <span>FIG 01.1 // RETRIEVAL PIPELINE OVERVIEW</span>
             <span>ANDROID AUTOMOTIVE OS</span>
           </figcaption>
 
           <div class="diagram-canvas">
-            <!-- Live Nualt-style Bezier Hex Stream & Data Packet Canvas -->
-            <canvas class="pipeline-stream-canvas" data-dossier-stream aria-hidden="true"></canvas>
+            <canvas
+              class="pipeline-stream-canvas"
+              data-dossier-stream
+              aria-hidden="true"></canvas>
 
             <svg
               class="dossier-iso-svg"
-              viewBox="0 0 560 320"
+              viewBox="0 0 560 215"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              <!-- Isometric Reference Grid Lines -->
-              <g stroke="currentColor" stroke-opacity="0.16" stroke-width="1" stroke-dasharray="3 3">
-                <line x1="20" y1="70" x2="540" y2="70" />
-                <line x1="20" y1="160" x2="540" y2="160" />
-                <line x1="20" y1="250" x2="540" y2="250" />
-                <line x1="150" y1="20" x2="150" y2="300" />
-                <line x1="360" y1="20" x2="360" y2="300" />
+              <g
+                stroke="currentColor"
+                stroke-opacity="0.16"
+                stroke-width="1"
+                stroke-dasharray="3 3"
+              >
+                <line x1="20" y1="70" x2="540" y2="70"></line>
+                <line x1="20" y1="155" x2="540" y2="155"></line>
+                <line x1="150" y1="20" x2="150" y2="205"></line>
+                <line x1="360" y1="20" x2="360" y2="205"></line>
               </g>
 
-              <!-- Node 1: 84 Service Manuals + RapidOCR Spatial Parser (Stacked Isometric Slabs) -->
               <g transform="translate(26, 42)" data-iso-assembly>
-                <!-- Bottom Slab -->
                 <g data-iso-layer="0">
                   <polygon
                     points="75,44 140,76 75,108 10,76"
                     fill="currentColor"
                     fill-opacity="0.12"
                     stroke="currentColor"
-                    stroke-width="1.3"
-                  />
+                    stroke-width="1.3"></polygon>
                   <polygon
                     points="10,76 75,108 75,124 10,92"
                     fill="currentColor"
                     fill-opacity="0.08"
                     stroke="currentColor"
-                    stroke-width="1.3"
-                  />
+                    stroke-width="1.3"></polygon>
                   <polygon
                     points="75,108 140,76 140,92 75,124"
                     fill="currentColor"
                     fill-opacity="0.22"
                     stroke="currentColor"
-                    stroke-width="1.3"
-                  />
+                    stroke-width="1.3"></polygon>
                 </g>
 
-                <!-- Middle Slab -->
                 <g data-iso-layer="1">
                   <polygon
                     points="75,24 140,56 75,88 10,56"
                     fill="currentColor"
                     fill-opacity="0.16"
                     stroke="currentColor"
-                    stroke-width="1.3"
-                  />
+                    stroke-width="1.3"></polygon>
                   <polygon
                     points="10,56 75,88 75,104 10,72"
                     fill="currentColor"
                     fill-opacity="0.1"
                     stroke="currentColor"
-                    stroke-width="1.3"
-                  />
+                    stroke-width="1.3"></polygon>
                   <polygon
                     points="75,88 140,56 140,72 75,104"
                     fill="currentColor"
                     fill-opacity="0.26"
                     stroke="currentColor"
-                    stroke-width="1.3"
-                  />
+                    stroke-width="1.3"></polygon>
                 </g>
 
-                <!-- Top Slab -->
                 <g data-iso-layer="2">
                   <polygon
                     points="75,4 140,36 75,68 10,36"
-                    fill="currentColor"
-                    fill-opacity="0.22"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  />
+                    fill="#f4f2e8"
+                    stroke="#f4f2e8"
+                    stroke-width="1.5"></polygon>
+                  <polygon
+                    points="75,12 126,36 75,60 24,36"
+                    stroke="#0755b5"
+                    stroke-opacity="0.35"
+                    stroke-width="1"
+                    stroke-dasharray="2 2"
+                    fill="none"></polygon>
                   <text
                     x="75"
                     y="40"
                     text-anchor="middle"
-                    fill="currentColor"
-                    font-family="var(--font-pixel)"
-                    font-size="14">84 PDF</text
+                    fill="#0755b5"
+                    font-family="var(--font-mono)"
+                    font-weight="700"
+                    font-size="10.5"
+                    letter-spacing="0.04em">84 PDF files</text
                   >
                 </g>
 
@@ -180,7 +194,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-weight="600"
-                  font-size="10">MANUAL INGESTION</text
+                  font-size="10">84 PDF MANUALS</text
                 >
                 <text
                   x="75"
@@ -189,17 +203,17 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.8">RapidOCR Table &amp; Pinout</text
+                  opacity="0.8">RapidOCR Table Extraction</text
                 >
               </g>
 
-              <!-- Connector 1 -> 2 -->
               <g stroke="currentColor" stroke-width="1.5">
-                <line x1="172" y1="112" x2="218" y2="112" stroke-dasharray="4 4" />
-                <polygon points="218,108 226,112 218,116" fill="currentColor" />
+                <line x1="172" y1="112" x2="218" y2="112" stroke-dasharray="4 4"
+                ></line>
+                <polygon points="218,108 226,112 218,116" fill="currentColor"
+                ></polygon>
               </g>
 
-              <!-- Node 2: Central Hybrid Search + Cross-Encoder RRF Cube -->
               <g transform="translate(226, 30)" data-iso-assembly>
                 <g data-iso-layer="1">
                   <polygon
@@ -207,15 +221,13 @@ import IconArrow from "./IconArrow.astro";
                     fill="currentColor"
                     fill-opacity="0.1"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                  />
+                    stroke-width="1.5"></polygon>
                   <polygon
                     points="76,84 142,48 142,120 76,156"
                     fill="currentColor"
                     fill-opacity="0.28"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                  />
+                    stroke-width="1.5"></polygon>
                   <text
                     x="43"
                     y="108"
@@ -237,25 +249,25 @@ import IconArrow from "./IconArrow.astro";
                 <g data-iso-layer="2">
                   <polygon
                     points="76,12 142,48 76,84 10,48"
-                    fill="currentColor"
-                    fill-opacity="0.2"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                  />
+                    fill="#f4f2e8"
+                    stroke="#f4f2e8"
+                    stroke-width="1.5"></polygon>
                   <polygon
-                    points="76,28 116,50 76,72 36,50"
-                    stroke="currentColor"
+                    points="76,20 128,48 76,76 24,48"
+                    stroke="#0755b5"
+                    stroke-opacity="0.35"
                     stroke-width="1"
-                    stroke-dasharray="3 3"
-                  />
+                    stroke-dasharray="2 2"
+                    fill="none"></polygon>
                   <text
                     x="76"
-                    y="53"
+                    y="52"
                     text-anchor="middle"
-                    fill="currentColor"
+                    fill="#0755b5"
                     font-family="var(--font-mono)"
                     font-weight="700"
-                    font-size="10">HYBRID RRF</text
+                    font-size="11"
+                    letter-spacing="0.06em">HYBRID RRF</text
                   >
                 </g>
 
@@ -275,17 +287,17 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.8">Top-K Context Filtering</text
+                  opacity="0.8">Top-K Filtering</text
                 >
               </g>
 
-              <!-- Connector 2 -> 3 -->
               <g stroke="currentColor" stroke-width="1.5">
-                <line x1="374" y1="112" x2="416" y2="112" stroke-dasharray="4 4" />
-                <polygon points="416,108 424,112 416,116" fill="currentColor" />
+                <line x1="374" y1="112" x2="416" y2="112" stroke-dasharray="4 4"
+                ></line>
+                <polygon points="416,108 424,112 416,116" fill="currentColor"
+                ></polygon>
               </g>
 
-              <!-- Node 3: FastAPI Async Router & Cited Voice Output -->
               <g transform="translate(426, 44)" data-iso-assembly>
                 <g data-iso-layer="2">
                   <rect
@@ -296,11 +308,21 @@ import IconArrow from "./IconArrow.astro";
                     fill="currentColor"
                     fill-opacity="0.14"
                     stroke="currentColor"
-                    stroke-width="1.5"
-                  />
-                  <line x1="0" y1="36" x2="114" y2="36" stroke="currentColor" stroke-width="1.2" />
-                  <circle cx="12" cy="24" r="3" fill="currentColor" />
-                  <circle cx="22" cy="24" r="3" stroke="currentColor" stroke-width="1.2" />
+                    stroke-width="1.5"></rect>
+                  <line
+                    x1="0"
+                    y1="36"
+                    x2="114"
+                    y2="36"
+                    stroke="currentColor"
+                    stroke-width="1.2"></line>
+                  <circle cx="12" cy="24" r="3" fill="currentColor"></circle>
+                  <circle
+                    cx="22"
+                    cy="24"
+                    r="3"
+                    stroke="currentColor"
+                    stroke-width="1.2"></circle>
                   <text
                     x="57"
                     y="72"
@@ -316,7 +338,7 @@ import IconArrow from "./IconArrow.astro";
                     fill="currentColor"
                     font-family="var(--font-mono)"
                     font-size="9"
-                    opacity="0.85">INTENT ROUTER</text
+                    opacity="0.85">ROUTER</text
                   >
                 </g>
                 <text
@@ -326,7 +348,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-weight="600"
-                  font-size="10">CITED COCKPIT AUDIO</text
+                  font-size="10">GROUNDED RESPONSE</text
                 >
                 <text
                   x="57"
@@ -335,88 +357,7 @@ import IconArrow from "./IconArrow.astro";
                   fill="currentColor"
                   font-family="var(--font-mono)"
                   font-size="9"
-                  opacity="0.8">Page &amp; Fuse ID Citations</text
-                >
-              </g>
-
-              <!-- Bottom Metric Strip inside SVG -->
-              <g transform="translate(20, 246)">
-                <rect
-                  x="0"
-                  y="0"
-                  width="164"
-                  height="54"
-                  fill="currentColor"
-                  fill-opacity="0.1"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                />
-                <text
-                  x="14"
-                  y="24"
-                  fill="currentColor"
-                  font-family="var(--font-pixel)"
-                  font-size="15">TOP 13</text
-                >
-                <text
-                  x="14"
-                  y="42"
-                  fill="currentColor"
-                  font-family="var(--font-mono)"
-                  font-size="9"
-                  opacity="0.85">OF 300+ HACKATHON TEAMS</text
-                >
-
-                <rect
-                  x="178"
-                  y="0"
-                  width="164"
-                  height="54"
-                  fill="currentColor"
-                  fill-opacity="0.1"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                />
-                <text
-                  x="192"
-                  y="24"
-                  fill="currentColor"
-                  font-family="var(--font-pixel)"
-                  font-size="15">RRF + CE</text
-                >
-                <text
-                  x="192"
-                  y="42"
-                  fill="currentColor"
-                  font-family="var(--font-mono)"
-                  font-size="9"
-                  opacity="0.85">HYBRID RERANKING</text
-                >
-
-                <rect
-                  x="356"
-                  y="0"
-                  width="164"
-                  height="54"
-                  fill="currentColor"
-                  fill-opacity="0.1"
-                  stroke="currentColor"
-                  stroke-width="1.2"
-                />
-                <text
-                  x="370"
-                  y="24"
-                  fill="currentColor"
-                  font-family="var(--font-pixel)"
-                  font-size="15">84 DOCS</text
-                >
-                <text
-                  x="370"
-                  y="42"
-                  fill="currentColor"
-                  font-family="var(--font-mono)"
-                  font-size="9"
-                  opacity="0.85">SCHEMATICS INDEXED</text
+                  opacity="0.8">Page &amp; Part Number Citations</text
                 >
               </g>
             </svg>
@@ -424,7 +365,6 @@ import IconArrow from "./IconArrow.astro";
         </figure>
       </div>
 
-      <!-- 4-Cell Exposed Blueprint Evidence Bar -->
       <div class="dossier-evidence-grid">
         {
           featuredDossier.evidence.map((item) => (
@@ -440,28 +380,38 @@ import IconArrow from "./IconArrow.astro";
       </div>
     </article>
 
-    <!-- System Notes Accordion (Nualt FAQ / Technical Spec Pattern with Dashed Dividers) -->
     <div class="notes-block" id="project-notes" data-faq-section>
       <div class="grid-24 notes-grid">
         <div class="notes-intro-col" data-faq-head>
           <h3 class="notes-heading">
-            Inside the system: How we solved technical manual retrieval.
+            What I learned: Solving tabular &amp; schematic retrieval
           </h3>
           <p class="notes-subcopy">
-            Standard vector databases assume every document is clean prose. Automotive service
-            manuals are pinout schematics, torque matrices, and multi-column fuse tables.
+            Standard RAG pipelines usually assume clean, continuous prose.
+            Automotive manuals, however, consist mostly of wiring pinouts,
+            torque values, and fuse tables.
           </p>
         </div>
 
         <div class="notes-accordion-col" data-faq-group>
           {
             featuredDossier.notes.map((note) => (
-              <details class="blueprint-details" open={note.defaultOpen} data-faq-item>
+              <details
+                class="blueprint-details"
+                open={note.defaultOpen}
+                data-faq-item
+              >
                 <summary class="blueprint-summary">
                   <span class="summary-code mono">[{note.code}]</span>
                   <span class="summary-title">{note.title}</span>
-                  <svg viewBox="0 0 12 12" fill="currentColor" shape-rendering="crispEdges" aria-hidden="true" class="summary-plus-svg">
-                    <path d="M5 0H7V5H12V7H7V12H5V7H0V5H5Z"></path>
+                  <svg
+                    viewBox="0 0 12 12"
+                    fill="currentColor"
+                    shape-rendering="crispEdges"
+                    aria-hidden="true"
+                    class="summary-plus-svg"
+                  >
+                    <path d="M5 0H7V5H12V7H7V12H5V7H0V5H5Z" />
                   </svg>
                 </summary>
                 <div class="details-body">

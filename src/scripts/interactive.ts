@@ -22,7 +22,22 @@ function initCvModal(): void {
   const backdrop = document.getElementById('cv-modal-backdrop');
   const closeBtn = document.getElementById('cv-modal-close');
   const modalBody = document.getElementById('cv-modal-body');
+  const downloadBtn = document.getElementById('cv-download-btn');
+  const newTabBtn = document.getElementById('cv-newtab-btn');
   if (!modal) return;
+
+  downloadBtn?.addEventListener('click', () => {
+    const a = document.createElement('a');
+    a.href = '/cv.pdf';
+    a.download = 'Nguyen_Minh_Thuan_Resume.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  });
+
+  newTabBtn?.addEventListener('click', () => {
+    window.open('/cv.pdf', '_blank', 'noopener,noreferrer');
+  });
 
   function openModal(): void {
     modal!.classList.add('is-open');
@@ -57,45 +72,31 @@ function initCvModal(): void {
   });
 }
 
-function initKeyboardShortcuts(): void {
-  const sectionMap: Record<string, string> = {
-    '1': '#work',
-    '2': '#pipelines',
-    '3': '#practice',
-    '4': '#background',
-    '5': '#contact',
-  };
+function initBackToTop(): void {
+  const btn = document.getElementById('floating-back-to-top');
+  if (!btn) return;
 
-  window.addEventListener('keydown', (e: KeyboardEvent) => {
-    const activeEl = document.activeElement;
-    if (
-      activeEl instanceof HTMLElement &&
-      (activeEl.tagName === 'INPUT' ||
-        activeEl.tagName === 'TEXTAREA' ||
-        activeEl.isContentEditable)
-    ) {
-      return;
+  function updateVisibility(): void {
+    if (window.scrollY > 300) {
+      btn?.classList.add('is-visible');
+    } else {
+      btn?.classList.remove('is-visible');
     }
+  }
 
-    if (e.metaKey || e.ctrlKey || e.altKey) {
-      return;
+  window.addEventListener('scroll', updateVisibility, { passive: true });
+  updateVisibility();
+
+  btn.addEventListener('click', (e: MouseEvent) => {
+    e.preventDefault();
+    const smoothFn = (window as unknown as { __smoothScrollTo?: (y: number) => void }).__smoothScrollTo;
+    if (typeof smoothFn === 'function') {
+      smoothFn(0);
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-
-    const key = e.key.toLowerCase();
-
-    if (Object.prototype.hasOwnProperty.call(sectionMap, key)) {
-      const targetEl = document.querySelector<HTMLElement>(sectionMap[key]);
-      if (targetEl) {
-        const smoothFn = (window as unknown as { __smoothScrollTo?: (y: number) => void }).__smoothScrollTo;
-        if (typeof smoothFn === 'function') {
-          const navHeight =
-            parseInt(getComputedStyle(document.documentElement).getPropertyValue('--navbar-height')) || 49;
-          const destY = Math.max(0, targetEl.getBoundingClientRect().top + window.scrollY - navHeight);
-          smoothFn(destY);
-        } else {
-          targetEl.scrollIntoView({ behavior: 'smooth' });
-        }
-      }
+    if (history.pushState) {
+      history.pushState(null, '', '#top');
     }
   });
 }
@@ -103,7 +104,7 @@ function initKeyboardShortcuts(): void {
 function initAll(): void {
   initCopyEmail();
   initCvModal();
-  initKeyboardShortcuts();
+  initBackToTop();
 }
 
 if (document.readyState === 'loading') {

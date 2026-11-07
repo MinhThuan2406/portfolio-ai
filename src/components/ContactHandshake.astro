@@ -8,23 +8,34 @@ import IconArrow from "./IconArrow.astro";
   data-nav-blue
   aria-labelledby="contact-heading"
 >
-  <!-- Upper Contact Handshake Stage -->
   <div class="contact-stage">
+    <div
+      class="footer-checkerboard-gutter"
+      data-tetris-border="gutter"
+      aria-hidden="true"
+    >
+    </div>
     <div class="frame-container grid-24 contact-grid">
-      <!-- Left 11 Columns: Direct Engineering Callout & Primary Actions (No Eyebrow Kicker above H2!) -->
       <div class="contact-copy-col">
         <h2 id="contact-heading" class="contact-title" data-rolling-title>
-          Let&rsquo;s build dependable systems.
+          Let&rsquo;s connect.
         </h2>
 
         <p class="contact-lead" data-contact-appear>
-          I&rsquo;m graduating in late 2026 and am actively looking for <strong>AI Engineer</strong> or <strong>Backend Engineer</strong>
-          positions in Ho Chi Minh City or remote.
-          If your team is dealing with tough retrieval quality issues, data extraction from messy formats, or high-throughput API bottlenecks, my inbox is open.
+          I&rsquo;m completing my degree in late 2026 and looking for
+          opportunities as a
+          <strong>Junior</strong> or <strong
+            >Fresher AI Engineer / Backend Engineer</strong
+          >. I&rsquo;m eager to learn, receive code reviews, and contribute to
+          production services.
         </p>
 
         <div class="contact-cta-group" data-contact-appear>
-          <a class="btn-inverted-solid" href="mailto:thuannm0426@gmail.com" data-pixel-btn>
+          <a
+            class="btn-inverted-solid"
+            href="mailto:thuannm0426@gmail.com"
+            data-pixel-btn
+          >
             <span class="btn-label">thuannm0426@gmail.com</span>
             <span class="btn-arrow-wrap" aria-hidden="true">
               <IconArrow width={12} height={12} />
@@ -50,15 +61,15 @@ import IconArrow from "./IconArrow.astro";
           </div>
           <div>
             <span class="direct-lbl">LOCATION:</span>
-            <span>HO CHI MINH CITY, VIETNAM (UTC+7)</span>
+            <span>HO CHI MINH CITY, VIETNAM (UTC + 7)</span>
           </div>
         </div>
       </div>
 
-      <!-- Right 12 Columns (col-start-13): Retro Code Window + Social Bento Grid -->
       <div class="contact-terminal-col">
         <div class="code-window-wrapper" data-code-window-wrap>
-          <div class="code-window-shadow" data-code-shadow aria-hidden="true"></div>
+          <div class="code-window-shadow" data-code-shadow aria-hidden="true">
+          </div>
 
           <div class="code-window" data-code-window>
             <div class="os-window-bar mono">
@@ -67,7 +78,9 @@ import IconArrow from "./IconArrow.astro";
                 <span class="os-dot"></span>
                 <span class="os-dot"></span>
               </div>
-              <span class="code-filename">handshake.ts — FastAPI / Agentic Systems</span>
+              <span class="code-filename"
+                >handshake.ts — AI &amp; Backend Engineering</span
+              >
               <button
                 type="button"
                 id="replay-typing-btn"
@@ -79,117 +92,88 @@ import IconArrow from "./IconArrow.astro";
             </div>
 
             <div class="code-typing-stage" id="cta-code-typing">
-              <pre class="code-pre mono" id="cta-code-pre" aria-label="TypeScript engineering profile specification"><code><span class="c-kw">interface</span> <span class="c-type">EngineerProfile</span> &#123;
+              <pre
+                class="code-pre mono"
+                id="cta-code-pre"
+                aria-label="TypeScript engineering profile specification"><code><span class="c-kw">interface</span> <span class="c-type">Profile</span> &#123;
   <span class="c-prop">candidate</span>: <span class="c-str">"Nguyen Minh Thuan"</span>;
-  <span class="c-prop">degree</span>: <span class="c-str">"B.S. Computer Science & Engineering (VNU-HCM)"</span>;
-  <span class="c-prop">focus</span>: [<span class="c-str">"Hybrid RAG & Vector Search"</span>, <span class="c-str">"FastAPI / uvloop"</span>, <span class="c-str">"Async Telemetry"</span>];
+  <span class="c-prop">degree</span>: <span class="c-str">"B.S. Computer Science & Engineering"</span>;
+  <span class="c-prop">interests</span>: [<span class="c-str">"RAG Pipelines"</span>, <span class="c-str">"Vector Databases"</span>, <span class="c-str">"LLM Inference & APIs"</span>];
 &#125;
 
 <span class="c-kw">export async function</span> <span class="c-fn">initiateHandshake</span>(
-  <span class="c-prop">role</span>: <span class="c-str">"AI Engineer"</span> | <span class="c-str">"Backend Engineer"</span>
+  <span class="c-prop">role</span>: <span class="c-str">`$&#123;"Fresher" | "Junior"&#125; $&#123;"AI" | "Backend"&#125; Engineer`</span>
 ) &#123;
-  <span class="c-kw">return await</span> <span class="c-fn">dispatchOffer</span>(&#123;
+  <span class="c-kw">return await</span> <span class="c-fn">dispatchContact</span>(&#123;
     <span class="c-prop">email</span>: <span class="c-str">"thuannm0426@gmail.com"</span>,
-    <span class="c-prop">phone</span>: <span class="c-str">"+84 819-786-704"</span>,
-    <span class="c-prop">workMode</span>: <span class="c-str">"HCMC | Remote"</span>,
-    <span class="c-prop">availability</span>: <span class="c-str">"Late 2026"</span>,
+    <span class="c-prop">location</span>: <span class="c-str">"HCMC | Remote"</span>,
+    <span class="c-prop">status</span>: <span class="c-str">"Open to opportunities (Late 2026)"</span>,
   &#125;);
 &#125;</code></pre>
             </div>
           </div>
         </div>
 
-        <!-- Nualt Live Sliding TetrisBorder Strip + 3-Cell Social & Channel Bento Row -->
         <div class="social-bento-frame">
-          <div class="cta-tetris-strip" data-tetris-border="cta" aria-hidden="true"></div>
+          <div
+            class="cta-tetris-strip"
+            data-tetris-border="cta"
+            aria-hidden="true"
+          >
+          </div>
           <div class="social-bento-grid mono" data-cta-icons>
-          <a
-            class="social-bento-cell"
-            data-bento-cell
-            href="https://github.com/MinhThuan2406"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span class="bento-channel">GITHUB // REPOS</span>
-            <strong class="bento-handle">
-              <span>@MinhThuan2406</span>
-              <span class="btn-arrow-wrap" aria-hidden="true">
-                <IconArrow width={12} height={12} />
-              </span>
-            </strong>
-          </a>
+            <a
+              class="social-bento-cell"
+              data-bento-cell
+              data-pixel-btn
+              href="https://github.com/MinhThuan2406"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="bento-channel">GITHUB // REPOS</span>
+              <strong class="bento-handle">
+                <span>github.com/MinhThuan2406</span>
+                <span class="btn-arrow-wrap" aria-hidden="true">
+                  <IconArrow width={12} height={12} />
+                </span>
+              </strong>
+            </a>
 
-          <a
-            class="social-bento-cell"
-            data-bento-cell
-            href="https://linkedin.com/in/nguyenthuan2406"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <span class="bento-channel">LINKEDIN // NETWORK</span>
-            <strong class="bento-handle">
-              <span>/in/nguyenthuan2406</span>
-              <span class="btn-arrow-wrap" aria-hidden="true">
-                <IconArrow width={12} height={12} />
-              </span>
-            </strong>
-          </a>
+            <a
+              class="social-bento-cell"
+              data-bento-cell
+              data-pixel-btn
+              href="https://linkedin.com/in/nguyenthuan2406"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span class="bento-channel">LINKEDIN // NETWORK</span>
+              <strong class="bento-handle">
+                <span>in/nguyenthuan2406</span>
+                <span class="btn-arrow-wrap" aria-hidden="true">
+                  <IconArrow width={12} height={12} />
+                </span>
+              </strong>
+            </a>
 
-          <button
-            type="button"
-            class="social-bento-cell"
-            data-bento-cell
-            data-open-cv
-            aria-label="View Resume PDF"
-          >
-            <span class="bento-channel">CURRICULUM VITAE</span>
-            <strong class="bento-handle">
-              <span>View Resume</span>
-              <span class="btn-arrow-wrap" aria-hidden="true">
-                <IconArrow width={12} height={12} />
-              </span>
-            </strong>
-          </button>
+            <button
+              type="button"
+              class="social-bento-cell"
+              data-bento-cell
+              data-pixel-btn
+              data-open-cv
+              aria-label="View Resume PDF"
+            >
+              <span class="bento-channel">CURRICULUM VITAE</span>
+              <strong class="bento-handle">
+                <span>CV (PDF)</span>
+                <span class="btn-arrow-wrap" aria-hidden="true">
+                  <IconArrow width={12} height={12} />
+                </span>
+              </strong>
+            </button>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Lower Blueprint Footer with Live Animated Nualt TetrisBorder Gutter -->
-  <div class="blueprint-footer-bar" data-footer>
-    <div class="footer-checkerboard-gutter" data-tetris-border="gutter" aria-hidden="true"></div>
-
-    <div class="footer-bar-main">
-      <div class="footer-col">
-        <span class="footer-lbl mono">ENGINEER</span>
-        <strong class="footer-val">NGUYEN MINH THUAN</strong>
-      </div>
-
-      <div class="footer-col">
-        <span class="footer-lbl mono">ARCHITECTURE</span>
-        <span class="footer-val mono">BUILT WITH ASTRO · FOCUSED ON PERFORMANCE &amp; CLARITY</span>
-      </div>
-
-      <div class="footer-col">
-        <span class="footer-lbl mono">SHORTCUTS</span>
-        <span class="footer-val mono">KEYS [1–5] JUMP SECTIONS</span>
-      </div>
-
-      <div class="footer-col footer-col-right">
-        <a class="back-to-top mono" href="#top">
-          <span>BACK TO TOP ↑</span>
-        </a>
-        <span class="footer-copy-year mono">© 2026 NGUYEN MINH THUAN</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Nualt Signature Rising Architectural Wordmark Banner -->
-  <div class="footer-watermark-band" data-footer-logo-wrap aria-hidden="true">
-    <div class="frame-container">
-      <div class="footer-watermark-inner" data-footer-logo>
-        <span class="watermark-title">THUAN.DEV</span>
       </div>
     </div>
   </div>

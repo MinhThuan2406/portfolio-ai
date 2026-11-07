@@ -1,190 +1,254 @@
 ---
-// Nualt Exact 100% HomeLoaderCover (3 Centered Tetris Slots + Bottom-Right Rising Logo)
+interface LetterGlyph {
+  char: string;
+  d: string;
+}
+
+const letters: LetterGlyph[] = [
+  { char: 'N', d: 'M60 40H131L524 602V40H600V740H529L136 179V740H60Z' },
+  { char: 'G', d: 'M1082 750Q1007 750 942.5 722.5Q878 695 830.5 645.5Q783 596 756.5 530.0Q730 464 730 387Q730 310 756.5 244.5Q783 179 830.5 131.0Q878 83 942.0 56.5Q1006 30 1081 30Q1160 30 1227.0 60.5Q1294 91 1339.0 143.5Q1384 196 1397 263H1313Q1299 214 1265.0 178.5Q1231 143 1183.5 123.0Q1136 103 1081 103Q1002 103 940.5 139.5Q879 176 843.5 240.0Q808 304 808 387Q808 470 844.0 536.0Q880 602 943.0 639.5Q1006 677 1086 677Q1163 677 1225.0 647.5Q1287 618 1321 566V434H1101V362H1397V592Q1356 665 1271.5 707.5Q1187 750 1082 750Z' },
+  { char: 'U', d: 'M1797 750Q1720 750 1659.5 714.5Q1599 679 1564.5 617.5Q1530 556 1530 478V40H1606V478Q1606 535 1631.0 580.0Q1656 625 1699.0 651.0Q1742 677 1797 677Q1852 677 1895.0 651.0Q1938 625 1963.0 580.0Q1988 535 1988 478V40H2063V478Q2063 556 2028.5 617.5Q1994 679 1934.0 714.5Q1874 750 1797 750Z' },
+  { char: 'Y', d: 'M2154 40H2245L2449 350L2650 40H2739L2486 426V740H2410V426Z' },
+  { char: 'E', d: 'M2839 40H3231V112H2915V330H3197V402H2915V668H3231V740H2839Z' },
+  { char: 'N', d: 'M3363 40H3434L3827 602V40H3903V740H3832L3439 179V740H3363Z' },
+  { char: 'T', d: 'M4627 740H4551V112H4321V40H4856V112H4627Z' },
+  { char: 'H', d: 'M5424 40H5499V740H5424V412H5030V740H4954V40H5030V340H5424Z' },
+  { char: 'U', d: 'M5930 750Q5853 750 5792.5 714.5Q5732 679 5697.5 617.5Q5663 556 5663 478V40H5739V478Q5739 535 5764.0 580.0Q5789 625 5832.0 651.0Q5875 677 5930 677Q5985 677 6028.0 651.0Q6071 625 6096.0 580.0Q6121 535 6121 478V40H6196V478Q6196 556 6161.5 617.5Q6127 679 6067.0 714.5Q6007 750 5930 750Z' },
+  { char: 'A', d: 'M6636 40 L6917 740H6834L6767 569H6436L6368 740H6287L6568 40ZM6464 498H6739L6602 151Z' },
+  { char: 'N', d: 'M7014 40H7085L7478 602V40H7554V740H7483L7090 179V740H7014Z' },
+];
 ---
 
 <div id="home-loader-cover" class="loader-cover" aria-hidden="true">
-  <!-- Dead Center: 3 Tetris Piece Slots ONLY -->
-  <div class="loader-slots" id="loader-slots">
-    <!-- Slot 0: T piece (cells: [[0,0],[1,0],[2,0],[1,1]], starts at 180deg) -->
-    <div class="loader-slot" style="--cells: 3;" data-slot="0">
-      <div class="slot-outline">
-        <svg viewBox="0 0 3 2" shape-rendering="crispEdges">
-          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-        </svg>
-      </div>
-      <div class="slot-piece" data-piece="0">
-        <svg viewBox="0 0 3 2" shape-rendering="crispEdges">
-          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
-        </svg>
-      </div>
+  <span class="loader-crosshair cross-tl mono" aria-hidden="true">+</span>
+  <span class="loader-crosshair cross-tr mono" aria-hidden="true">+</span>
+  <span class="loader-crosshair cross-bl mono" aria-hidden="true">+</span>
+  <span class="loader-crosshair cross-br mono" aria-hidden="true">+</span>
+
+  <div class="loader-stage" id="loader-stage">
+    <div class="loader-typography-wrap">
+      <svg
+        id="loader-name-svg"
+        class="loader-name-svg"
+        viewBox="0 0 7699 780"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label="NGUYEN THUAN"
+      >
+        {
+          letters.map((l, i) => (
+            <g class="loader-glyph" data-letter-index={i} data-char={l.char}>
+              <path
+                class="glyph-fill"
+                d={l.d}
+                fill="#0755b5"
+                opacity="0"
+              />
+              <path
+                class="glyph-stroke"
+                d={l.d}
+                fill="none"
+                stroke="#0755b5"
+                stroke-width="14"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </g>
+          ))
+        }
+      </svg>
     </div>
 
-    <!-- Slot 1: S piece (cells: [[1,0],[2,0],[0,1],[1,1]], starts at 90deg) -->
-    <div class="loader-slot" style="--cells: 3;" data-slot="1">
-      <div class="slot-outline">
-        <svg viewBox="0 0 3 2" shape-rendering="crispEdges">
-          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-        </svg>
+    <div class="loader-telemetry">
+      <div class="loader-telemetry-meta mono">
+        <span class="telemetry-label">SYS_INIT // NGUYEN THUAN</span>
+        <span id="loader-counter" class="telemetry-counter">000%</span>
       </div>
-      <div class="slot-piece" data-piece="1">
-        <svg viewBox="0 0 3 2" shape-rendering="crispEdges">
-          <rect x="1.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="2.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
-        </svg>
+      <div class="loader-progress-track">
+        <div id="loader-progress-bar" class="loader-progress-bar"></div>
       </div>
-    </div>
-
-    <!-- Slot 2: L piece (cells: [[0,0],[0,1],[1,1],[2,1]], starts at 270deg) -->
-    <div class="loader-slot" style="--cells: 3;" data-slot="2">
-      <div class="slot-outline">
-        <svg viewBox="0 0 3 2" shape-rendering="crispEdges">
-          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-          <rect x="2.06" y="1.06" width="0.88" height="0.88" fill="none" stroke="currentColor" stroke-width="0.045"></rect>
-        </svg>
-      </div>
-      <div class="slot-piece" data-piece="2">
-        <svg viewBox="0 0 3 2" shape-rendering="crispEdges">
-          <rect x="0.06" y="0.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="0.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="1.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
-          <rect x="2.06" y="1.06" width="0.88" height="0.88" fill="currentColor"></rect>
-        </svg>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bottom-Right Architectural Wordmark (Exact Nualt Placement & Rise Keyframe) -->
-  <div class="loader-logo-window">
-    <div class="loader-logo mono" id="loader-logo">
-      <span class="logo-name">THUAN</span><span class="logo-sub">.DEV</span>
     </div>
   </div>
 </div>
 
 <style>
+  :global(html[data-loader]),
+  :global(html[data-loader] body) {
+    overflow: hidden !important;
+  }
+
   .loader-cover {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 9999;
-    background-color: var(--cobalt, #0755b5);
-    color: var(--ivory, #f4f2e8);
-    display: grid;
-    place-content: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg, #f4f2e8);
+    background-image: radial-gradient(
+      rgba(7, 85, 181, 0.08) 1px,
+      transparent 1px
+    );
+    background-size: 32px 32px;
     user-select: none;
     pointer-events: all;
-    will-change: transform;
+    overflow: hidden;
+    will-change: clip-path, opacity;
   }
 
-  html[data-theme="dark"] .loader-cover {
-    background-color: #0b3c7c;
-    color: #f4f2e8;
-  }
-
-  /* Once dismissed, hide entirely */
   .loader-cover.is-dismissed {
     display: none !important;
     pointer-events: none !important;
   }
 
-  /* Exact Nualt Loader Slots CSS */
-  .loader-slots {
-    align-items: flex-end;
-    gap: 24px;
+  .loader-crosshair {
+    position: absolute;
+    font-size: 15px;
+    font-weight: 500;
+    color: #0755b5;
+    opacity: 0.38;
+    pointer-events: none;
+    line-height: 1;
+  }
+
+  .cross-tl {
+    top: 28px;
+    left: 28px;
+  }
+
+  .cross-tr {
+    top: 28px;
+    right: 28px;
+  }
+
+  .cross-bl {
+    bottom: 28px;
+    left: 28px;
+  }
+
+  .cross-br {
+    bottom: 28px;
+    right: 28px;
+  }
+
+  .loader-stage {
     display: flex;
-    will-change: transform;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 92vw;
+    max-width: 960px;
+    padding: 24px;
+    box-sizing: border-box;
+    will-change: transform, opacity;
   }
 
-  .loader-slot {
-    width: calc(var(--cells, 3) * 16px);
-    height: 32px;
-    display: block;
-    position: relative;
-  }
-
-  .loader-slot svg {
+  .loader-typography-wrap {
     width: 100%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .loader-name-svg {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
     display: block;
+    overflow: visible;
   }
 
-  .slot-outline {
-    position: absolute;
-    inset: 0;
-    opacity: 1;
+  .loader-glyph {
+    transform-origin: center center;
   }
 
-  .slot-piece {
-    position: absolute;
-    inset: 0;
-    translate: 0 -64px;
-    opacity: 1;
-    will-change: rotate, translate;
+  .glyph-stroke {
+    opacity: 0.95;
+    will-change: stroke-dashoffset;
   }
 
-  /* Initial rotations in Nualt */
-  .slot-piece[data-piece="0"] {
-    rotate: 180deg;
-  }
-  .slot-piece[data-piece="1"] {
-    rotate: 90deg;
-  }
-  .slot-piece[data-piece="2"] {
-    rotate: 270deg;
+  .glyph-fill {
+    will-change: opacity;
   }
 
-  /* Exact Nualt Logo Window in bottom-right corner */
-  .loader-logo-window {
-    position: absolute;
-    bottom: 2rem;
-    right: 4rem;
+  .loader-telemetry {
+    width: 100%;
+    max-width: 320px;
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .loader-telemetry-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #0755b5;
+  }
+
+  .telemetry-label {
+    opacity: 0.72;
+  }
+
+  .telemetry-counter {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    opacity: 0.95;
+  }
+
+  .loader-progress-track {
+    width: 100%;
+    height: 2px;
+    background: rgba(7, 85, 181, 0.14);
+    position: relative;
     overflow: hidden;
   }
 
-  .loader-logo {
-    display: flex;
-    align-items: baseline;
-    font-size: 1.35rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
+  .loader-progress-bar {
+    width: 100%;
+    height: 100%;
+    background: #0755b5;
+    transform-origin: left center;
+    transform: scaleX(0);
     will-change: transform;
-    animation: loaderLogoRise 0.7s cubic-bezier(0.32, 0, 0.12, 1) 0.15s both;
   }
 
-  @keyframes loaderLogoRise {
-    0% {
-      transform: translateY(100%);
+  @media (max-width: 767px) {
+    .cross-tl {
+      top: 16px;
+      left: 16px;
     }
-  }
+    .cross-tr {
+      top: 16px;
+      right: 16px;
+    }
+    .cross-bl {
+      bottom: 16px;
+      left: 16px;
+    }
+    .cross-br {
+      bottom: 16px;
+      right: 16px;
+    }
 
-  .logo-name {
-    font-family: var(--font-display, 'yellix', sans-serif);
-    font-size: 1.5rem;
-  }
+    .loader-stage {
+      width: 96vw;
+      padding: 16px;
+    }
 
-  .logo-sub {
-    font-family: var(--font-pixel);
-    font-size: 0.9rem;
-    opacity: 0.85;
-    margin-left: 0.2rem;
-  }
+    .loader-telemetry {
+      max-width: 240px;
+      margin-top: 28px;
+    }
 
-  @media (max-width: 768px) {
-    .loader-logo-window {
-      bottom: 1.5rem;
-      right: 1.5rem;
+    .loader-telemetry-meta {
+      font-size: 10px;
     }
   }
 </style>

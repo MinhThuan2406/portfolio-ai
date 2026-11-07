@@ -9,6 +9,7 @@ node_modules/
 .env
 .env.*
 !.env.example
+*.local
 *.pem
 *.key
 *.p12
@@ -18,14 +19,14 @@ node_modules/
 *.jks
 secrets/
 
-# IDE and OS
+# IDE and editors
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# Tooling, MCP, and agent runtime directories
+# Tooling and agent runtime directories
 .gemini/
 .agent/
 .agents/
@@ -36,12 +37,14 @@ secrets/
 .vercel/
 .netlify/
 port-for-references.txt
+quick-cmd.txt
 
 # Logs
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 
 # OS metadata
 .DS_Store

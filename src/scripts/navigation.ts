@@ -7,7 +7,6 @@ function initNavigation(): void {
     .map((id) => document.getElementById(id))
     .filter((el): el is HTMLElement => el !== null);
 
-  // Measure actual rendered navbar height and sync --navbar-height
   function syncNavbarHeight(): number {
     if (!header) return 49;
     const h = Math.round(header.getBoundingClientRect().height) || 49;
@@ -15,7 +14,6 @@ function initNavigation(): void {
     return h;
   }
 
-  // Reversible polarity check across all [data-nav-blue] surfaces
   function updateHeaderPolarity(): void {
     if (!header) return;
     const navMidY = Math.min(24, (header.getBoundingClientRect().height || 49) * 0.5);
@@ -32,7 +30,6 @@ function initNavigation(): void {
     header.setAttribute('data-nav-inverted', isOverBlue ? 'true' : 'false');
   }
 
-  // Highlight active section in header nav
   function updateActiveSection(): void {
     const probeY = window.innerHeight * 0.28;
     let activeId = '';
@@ -77,7 +74,6 @@ function initNavigation(): void {
   updateHeaderPolarity();
   updateActiveSection();
 
-  // Mobile menu toggle
   const menuBtn = document.getElementById('mobile-menu-toggle');
   const drawer = document.getElementById('mobile-nav-drawer');
   const menuLabel = menuBtn?.querySelector('.menu-label');

@@ -6,7 +6,6 @@ import IconArrow from "./IconArrow.astro";
   <div class="cv-modal-backdrop" id="cv-modal-backdrop"></div>
 
   <div class="cv-modal-window">
-    <!-- Top Header Bar -->
     <div class="cv-modal-header mono">
       <div class="cv-header-left">
         <div class="os-window-controls" aria-hidden="true">
@@ -18,26 +17,25 @@ import IconArrow from "./IconArrow.astro";
       </div>
 
       <div class="cv-header-actions">
-        <a
+        <button
+          type="button"
           class="cv-btn mono"
-          href="/cv.pdf"
-          download="Nguyen_Minh_Thuan_Resume.pdf"
+          id="cv-download-btn"
           aria-label="Download CV as PDF file"
         >
           <span class="btn-text">DOWNLOAD ↓</span>
-        </a>
-        <a
+        </button>
+        <button
+          type="button"
           class="cv-btn mono"
-          href="/cv.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
+          id="cv-newtab-btn"
           aria-label="Open CV PDF in new tab"
         >
           <span class="btn-text">NEW TAB</span>
           <span class="btn-arrow-wrap" aria-hidden="true">
             <IconArrow width={10} height={10} />
           </span>
-        </a>
+        </button>
         <button
           type="button"
           id="cv-modal-close"
@@ -49,7 +47,6 @@ import IconArrow from "./IconArrow.astro";
       </div>
     </div>
 
-    <!-- Main Document Viewer Body -->
     <div class="cv-modal-body" id="cv-modal-body">
       <div class="cv-pages-container">
         <div class="cv-page-card">
@@ -108,27 +105,25 @@ import IconArrow from "./IconArrow.astro";
   .cv-modal-backdrop {
     position: absolute;
     inset: 0;
-    background-color: rgba(244, 242, 232, 0.85);
+    background-color: rgba(14, 16, 19, 0.72);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
   }
 
   .cv-modal-window {
     position: relative;
-    z-index: 2;
+    z-index: 1;
     width: 100%;
-    max-width: 960px;
+    max-width: 920px;
     height: 90vh;
-    max-height: 1000px;
-    background-color: var(--bg);
-    color: var(--fg);
-    border: 1px solid var(--border-solid);
-    box-shadow: 0 24px 64px var(--border-strong);
     display: flex;
     flex-direction: column;
+    background-color: var(--bg);
+    border: 1px solid var(--border-solid);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
     overflow: hidden;
-    transform: scale(0.98) translateY(12px);
-    transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: scale(0.97) translateY(8px);
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .cv-modal.is-open .cv-modal-window {
@@ -139,10 +134,12 @@ import IconArrow from "./IconArrow.astro";
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 44px;
-    padding-inline: 1rem;
+    padding: 0.65rem 1rem;
+    background-color: var(--bg-alt);
     border-bottom: 1px solid var(--border-solid);
-    background-color: var(--surface-tint);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    user-select: none;
     flex-shrink: 0;
     gap: 1rem;
   }
@@ -155,9 +152,8 @@ import IconArrow from "./IconArrow.astro";
   }
 
   .cv-title {
-    font-size: 11px;
-    letter-spacing: 0.06em;
     font-weight: 600;
+    color: var(--fg);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -170,127 +166,122 @@ import IconArrow from "./IconArrow.astro";
     flex-shrink: 0;
   }
 
+  .cv-header-actions > :not(.cv-btn):not(.cv-close-btn),
+  .cv-header-actions [class*="savior"],
+  .cv-header-actions [id*="savior"],
+  .cv-header-actions [class*="idm"],
+  .cv-header-actions [id*="idm"],
+  .cv-header-actions img:not(.cv-page-img) {
+    display: none !important;
+  }
+
   .cv-btn,
   .cv-close-btn {
     display: inline-flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.35rem 0.65rem;
-    font-size: 11px;
+    padding: 0.32rem 0.65rem;
+    font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.05em;
     text-decoration: none;
-    color: var(--fg);
-    background: transparent;
     border: 1px solid var(--border-solid);
+    background-color: var(--bg);
+    color: var(--fg);
     cursor: pointer;
-    transition: background-color 0.15s ease, color 0.15s ease;
+    transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   }
 
-  .cv-btn:hover {
-    background-color: var(--surface-tint-hover);
-  }
-
-  .cv-close-btn {
+  .cv-btn:hover,
+  .cv-btn:focus-visible {
     background-color: var(--fg);
     color: var(--bg);
     border-color: var(--fg);
   }
 
-  .cv-close-btn:hover {
-    opacity: 0.9;
+  .cv-close-btn {
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--fg-muted);
+  }
+
+  .cv-close-btn:hover,
+  .cv-close-btn:focus-visible {
+    color: var(--fg);
+    background-color: rgba(0, 0, 0, 0.06);
+    border-color: var(--border-solid);
   }
 
   .cv-modal-body {
     flex: 1;
-    width: 100%;
-    height: 100%;
-    background-color: var(--dark-surface, #1e2025);
-    position: relative;
     overflow-y: auto;
     overflow-x: hidden;
     padding: 1.5rem 1rem 2.5rem;
+    background-color: rgba(5, 62, 135, 0.04);
     -webkit-overflow-scrolling: touch;
   }
 
   .cv-pages-container {
+    max-width: 820px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    width: 100%;
-    max-width: 820px;
-    margin-inline: auto;
+    gap: 1.5rem;
   }
 
   .cv-page-card {
-    width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
+    background-color: var(--bg);
+    border: 1px solid var(--border-solid);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
   .cv-page-meta {
-    font-size: 10px;
+    padding: 0.45rem 0.85rem;
+    font-size: 0.68rem;
+    font-weight: 600;
     letter-spacing: 0.08em;
-    color: var(--neutral-subtle, #a0a6b1);
-    text-align: right;
-    padding-inline: 0.25rem;
+    color: var(--fg-muted);
+    background-color: var(--bg-alt);
+    border-bottom: 1px solid var(--border-solid);
   }
 
   .cv-page-canvas {
     width: 100%;
+    line-height: 0;
     background-color: #ffffff;
-    border-radius: 2px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 1px 3px rgba(0, 0, 0, 0.2);
-    overflow: hidden;
   }
 
   .cv-page-img {
     width: 100%;
     height: auto;
     display: block;
-    user-select: none;
-    -webkit-user-drag: none;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 760px) {
     .cv-modal {
       padding: 0.5rem;
     }
-    .cv-modal-window {
-      height: 96vh;
-    }
-    .cv-modal-header {
-      padding-inline: 0.75rem;
-      gap: 0.5rem;
-    }
-    .cv-title {
-      font-size: 10px;
-      max-width: 160px;
-    }
-    .cv-header-actions {
-      gap: 0.35rem;
-    }
-    .cv-btn,
-    .cv-close-btn {
-      padding: 0.25rem 0.45rem;
-      font-size: 10px;
-    }
-    .cv-btn .btn-text {
-      display: inline;
-    }
-    .cv-modal-body {
-      padding: 1rem 0.5rem 2rem;
-    }
-    .cv-pages-container {
-      gap: 1.25rem;
-    }
-  }
 
-  @media (max-width: 480px) {
+    .cv-modal-window {
+      height: 95vh;
+    }
+
+    .cv-modal-header {
+      padding: 0.5rem 0.65rem;
+    }
+
     .cv-title {
       display: none;
+    }
+
+    .cv-modal-body {
+      padding: 0.75rem 0.5rem 1.5rem;
+    }
+
+    .cv-pages-container {
+      gap: 1rem;
     }
   }
 </style>
