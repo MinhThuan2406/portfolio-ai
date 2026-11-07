@@ -90,7 +90,6 @@ export const featuredDossier = {
       title: 'The Problem: Naive text splitting broke table structures',
       content:
         'Naive text splitting broke table structures across chunks, causing dense embedding models to lose exact alphanumeric part IDs.',
-      defaultOpen: true,
     },
     {
       code: 'B',
@@ -243,7 +242,7 @@ export const checkpoints: Checkpoint[] = [
     id: 'checkpoint-04',
     index: '04',
     period: 'LATE 2026 →',
-    badge: "WHAT'S NEXT",
+    badge: "WHAT'S NEXT?",
     title: 'Fresher / Junior AI & Backend Engineer',
     description:
       'Actively seeking opportunities in Ho Chi Minh City or remote to learn from experienced engineering teams, solve real data challenges, and grow.',

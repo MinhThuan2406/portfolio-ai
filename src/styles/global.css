@@ -362,10 +362,10 @@ svg[aria-hidden="true"],
 }
 
 .section-header-grid {
-  padding-bottom: clamp(1.75rem, 3vw, 2.5rem);
+  padding-bottom: clamp(1.25rem, 2.2vw, 1.75rem);
   border-bottom: 1px dashed var(--border-dashed);
-  margin-bottom: clamp(1.75rem, 3.5vw, 2.75rem);
-  align-items: start;
+  margin-bottom: clamp(1.5rem, 2.8vw, 2.25rem);
+  align-items: center;
 }
 
 .section-header-left {
@@ -949,7 +949,7 @@ svg[aria-hidden="true"],
 }
 
 .dossier-section {
-  padding-block: clamp(2.5rem, 4.5vw, 4rem);
+  padding-block: clamp(1.75rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--border-solid);
 }
 
@@ -1177,9 +1177,13 @@ svg[aria-hidden="true"],
 }
 
 .notes-block {
-  margin-top: clamp(2.5rem, 4.5vw, 4rem);
-  padding-top: clamp(2rem, 3.5vw, 3rem);
+  margin-top: clamp(2rem, 3.5vw, 2.75rem);
+  padding-top: clamp(1.5rem, 2.8vw, 2.25rem);
   border-top: 1px dashed var(--border-dashed);
+}
+
+.notes-grid {
+  align-items: center;
 }
 
 .notes-intro-col {
@@ -1264,7 +1268,7 @@ svg[aria-hidden="true"],
 }
 
 .pipelines-section {
-  padding-block: clamp(2.25rem, 4vw, 3.5rem);
+  padding-block: clamp(1.75rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--border-solid);
 }
 
@@ -1413,7 +1417,7 @@ svg[aria-hidden="true"],
 .architecture-section {
   position: relative;
   overflow: hidden;
-  padding-block: clamp(2.25rem, 4vw, 3.5rem);
+  padding-block: clamp(1.75rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--border-solid);
 }
 
@@ -1645,7 +1649,7 @@ svg[aria-hidden="true"],
 }
 
 .trajectory-section {
-  padding-block: clamp(2.5rem, 4.5vw, 4rem);
+  padding-block: clamp(1.75rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--border-solid);
 }
 
@@ -1731,7 +1735,7 @@ svg[aria-hidden="true"],
 
 .contact-stage {
   position: relative;
-  padding-block: clamp(2.5rem, 4.5vw, 4rem);
+  padding-block: clamp(1.75rem, 3vw, 2.5rem);
   border-bottom: 1px solid var(--border-solid);
 }
 

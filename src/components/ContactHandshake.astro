@@ -97,12 +97,14 @@ import IconArrow from "./IconArrow.astro";
                 id="cta-code-pre"
                 aria-label="TypeScript engineering profile specification"><code><span class="c-kw">interface</span> <span class="c-type">Profile</span> &#123;
   <span class="c-prop">candidate</span>: <span class="c-str">"Nguyen Minh Thuan"</span>;
-  <span class="c-prop">degree</span>: <span class="c-str">"B.S. Computer Science & Engineering"</span>;
-  <span class="c-prop">interests</span>: [<span class="c-str">"RAG Pipelines"</span>, <span class="c-str">"Vector Databases"</span>, <span class="c-str">"LLM Inference & APIs"</span>];
+  <span class="c-prop">degree</span>: <span class="c-str">"B.S. Computer Science &amp; Engineering (VNU-HCM)"</span>;
+  <span class="c-prop">interests</span>: [<span class="c-str">"RAG Pipelines"</span>, <span class="c-str">"Vector Databases"</span>, <span class="c-str">"LLM Inference &amp; APIs"</span>];
 &#125;
 
+<span class="c-kw">type</span> <span class="c-type">TargetRole</span> = <span class="c-str">`$&#123;"Fresher" | "Junior"&#125; $&#123;"AI" | "Backend"&#125; Engineer`</span>;
+
 <span class="c-kw">export async function</span> <span class="c-fn">initiateHandshake</span>(
-  <span class="c-prop">role</span>: <span class="c-str">`$&#123;"Fresher" | "Junior"&#125; $&#123;"AI" | "Backend"&#125; Engineer`</span>
+  <span class="c-prop">role</span>: <span class="c-type">TargetRole</span>
 ) &#123;
   <span class="c-kw">return await</span> <span class="c-fn">dispatchContact</span>(&#123;
     <span class="c-prop">email</span>: <span class="c-str">"thuannm0426@gmail.com"</span>,

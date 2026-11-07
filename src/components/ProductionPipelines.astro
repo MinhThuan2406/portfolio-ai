@@ -93,11 +93,12 @@ import { projects } from "../data/portfolio";
                       />
                       <text
                         x="52"
-                        y="35"
+                        y={project.metrics[0].value.length > 7 ? "34" : "35"}
                         text-anchor="middle"
                         fill="currentColor"
                         font-family="var(--font-pixel)"
-                        font-size="13">{project.metrics[0].value}</text
+                        font-size={project.metrics[0].value.length > 7 ? "10" : "13"}
+                        letter-spacing={project.metrics[0].value.length > 7 ? "-0.01em" : "normal"}>{project.metrics[0].value}</text
                       >
                     </g>
                   </g>
@@ -127,11 +128,12 @@ import { projects } from "../data/portfolio";
                       />
                       <text
                         x="52"
-                        y="35"
+                        y={project.metrics[1].value.length > 7 ? "34" : "35"}
                         text-anchor="middle"
                         fill="currentColor"
                         font-family="var(--font-pixel)"
-                        font-size="13">{project.metrics[1].value}</text
+                        font-size={project.metrics[1].value.length > 7 ? "10" : "13"}
+                        letter-spacing={project.metrics[1].value.length > 7 ? "-0.01em" : "normal"}>{project.metrics[1].value}</text
                       >
                     </g>
                   </g>
@@ -161,11 +163,12 @@ import { projects } from "../data/portfolio";
                       />
                       <text
                         x="52"
-                        y="35"
+                        y={project.metrics[2].value.length > 7 ? "34" : "35"}
                         text-anchor="middle"
                         fill="currentColor"
                         font-family="var(--font-pixel)"
-                        font-size="13">{project.metrics[2].value}</text
+                        font-size={project.metrics[2].value.length > 7 ? "10" : "13"}
+                        letter-spacing={project.metrics[2].value.length > 7 ? "-0.01em" : "normal"}>{project.metrics[2].value}</text
                       >
                     </g>
                   </g>
