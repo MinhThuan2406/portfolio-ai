@@ -167,6 +167,31 @@ The palette is derived from technical drafting paper, printer's ink, and mathema
 - **Control:** Native HTML `<details>` and `<summary>` elements with animated plus/minus icons (`transform: rotate(90deg)` transition).
 - **Content:** Strict 3-part retrospective structure: Problem, Architecture, Trade-offs & Limits.
 
+## Anti-AI-Slop Design Standards (20 Principles)
+
+To preserve the authentic engineering aesthetic and eliminate common AI-generated design clichés, apply these 20 rules across every layout and component:
+
+1. **Delete filler badges:** Purge arbitrary "AI-powered", "100% Secure", or decorative pill badges. Retain only concrete metadata (dates, official honors, system codes).
+2. **Drop redundant labels:** Do not label obvious content fields (e.g., prefixing emails with "EMAIL:" or roles with "ROLE:"). Let content types speak for themselves.
+3. **Unitalicize random words:** Ban random italicization in editorial headings and copy. Italics belong only to code keywords in syntax highlighters.
+4. **Mono only where needed:** Strictly enforce the *Monospace-for-Measurement Rule*. Restrict monospace to code, metrics, latency measurements, and system identifiers.
+5. **Use a design system:** Bind all styles to formal design tokens (`--bg`, `--fg`, `--font-heading`, `--font-body`, typography clamp scales). Reject hardcoded one-off values.
+6. **Show the actual product:** Favor real terminal traces, verified benchmark plots, actual schemas, and genuine UI screenshots over abstract 3D geometric shapes or generic illustrations.
+7. **Enlarge the main feature:** Provide asymmetrical prominence and visual gravity to the primary case study (`FeaturedDossier`) compared to secondary catalog rows.
+8. **Group with spacing:** Leverage Gestalt proximity and generous whitespace (`clamp(1.5rem, 2.8vw, 2.25rem)`) before adding dividing lines or borders.
+9. **Make headlines specific:** Write factual, informative headlines focused on technical mechanics ("Grounded retrieval experiments & practical backend development") instead of generic marketing buzzwords.
+10. **Emphasize the CTA:** Ensure primary calls-to-action stand out unambiguously through solid background contrast and directional vector glyphs.
+11. **Add an accent colour:** Maintain intentional color focus—utilizing Technical Cobalt Blue (`#0755b5` / `#1c52b0`) with Verification Green (`#15803d` / `#235841`) for status verification.
+12. **Keep icons consistent:** Standardize icon dimensions, stroke width (`1.6px`), line caps, and vector styles using unified components like `IconArrow.astro`.
+13. **Remove embellishments:** Restrict background grids and HUD elements to purposeful diagram containers. Avoid gratuitous decorative crosshairs, neon halos, or floating noise.
+14. **Inner radius = outer - padding:** When rounded containers are nested, calculate $R_{\text{inner}} = R_{\text{outer}} - \text{padding}$. When using sharp drafting aesthetics (radius 0), keep corners consistently squared.
+15. **Improve text contrast:** Guarantee full WCAG AA compliance (> 4.5:1). Audit opacity reductions on secondary monospace and diagram labels to prevent legibility drop-offs.
+16. **Wrap headlines properly:** Apply `text-wrap: balance` to all section headers and titles, and `text-wrap: pretty` to lead paragraphs to eliminate typographic widows.
+17. **Align by eye, not pixels:** Optically offset uppercase letters, numbers, and directional arrow vectors rather than depending blindly on container bounding boxes.
+18. **Use tabular nums:** Apply `font-variant-numeric: tabular-nums` to all numbers, benchmark tables, timestamps, and stat counters to eliminate visual jitter.
+19. **Add loading states:** Ensure asynchronous actions, modal displays, and page transitions have explicit loading, progress, or skeleton feedback.
+20. **Animate useful feedback:** Animate exclusively to communicate state transitions, interactive confirmations (e.g. "COPIED TO CLIPBOARD ✓"), or purposeful diagram data flows.
+
 ## Do's and Don'ts
 
 ### Do
